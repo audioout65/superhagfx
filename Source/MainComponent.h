@@ -26,6 +26,7 @@ private:
     void handleSlotClick (int channelIndex, int slotIndex);
     void openSlotEditor (int channelIndex, int slotIndex);
     void refreshSlotButtonText (int channelIndex, int slotIndex);
+    void loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex);
 
     std::array<AudioChannel, numChannels> channels;
     std::array<float, numChannels> displayedLevels {};
@@ -37,8 +38,6 @@ private:
     std::array<std::unique_ptr<juce::Slider>, numChannels> gainSliders;
 
     std::array<std::array<std::unique_ptr<SlotButton>, numSlotsPerChannel>, numChannels> slotButtons;
-
-    std::unique_ptr<juce::Component> currentEditorWindowContent;
 
     PluginManager pluginManager;
     juce::TextButton scanPluginsButton { "Scanner les plugins VST3" };

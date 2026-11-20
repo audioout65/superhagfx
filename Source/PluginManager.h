@@ -1,14 +1,6 @@
 #pragma once
 #include <JuceHeader.h>
 
-struct ScannedPlugin
-{
-    juce::String name;
-    juce::String manufacturer;
-    juce::String formatName;
-    juce::String fileOrIdentifier;
-};
-
 class PluginManager
 {
 public:
@@ -22,7 +14,6 @@ public:
        #endif
     }
 
-    // Charge le cache s'il existe. Retourne true si des plugins ont ete charges.
     bool loadCacheIfAvailable()
     {
         auto cacheFile = getCacheFile();
@@ -35,21 +26,7 @@ public:
         auto lines = juce::StringArray::fromLines (cacheFile.loadFileAsString());
 
         for (auto& line : lines)
-        {
-            if (line.startsWith ("PLUGIN|"))
-            {
-                auto parts = juce::StringArray::fromTokens (line, "|", "");
-                if (parts.size() >= 5)
-                {
-                    ScannedPlugin plugin;
-                    plugin.name             = parts[1];
-                    plugin.manufacturer     = parts[2];
-                    plugin.formatName       = parts[3];
-                    plugin.fileOrIdentifier = parts[4];
-                    scannedPlugins.push_back (plugin);
-                }
-            }
-        }
+            tryParseEncodedLine (line);
 
         DBG ("Cache charge : " << (int) scannedPlugins.size() << " plugins.");
         return ! scannedPlugins.empty();
@@ -87,8 +64,8 @@ public:
         saveCacheToDisk();
     }
 
-    const std::vector<ScannedPlugin>& getScannedPlugins() const { return scannedPlugins; }
-    const juce::StringArray& getFailedFiles() const             { return failedFiles; }
+    const std::vector<juce::PluginDescription>& getScannedPlugins() const { return scannedPlugins; }
+    const juce::StringArray& getFailedFiles() const                       { return failedFiles; }
 
     juce::AudioPluginFormatManager& getFormatManager() { return formatManager; }
 
@@ -105,16 +82,42 @@ private:
     {
         juce::String content;
 
-        for (auto& plugin : scannedPlugins)
+        for (auto& desc : scannedPlugins)
         {
-            content << "PLUGIN|" << plugin.name << "|" << plugin.manufacturer
-                    << "|" << plugin.formatName << "|" << plugin.fileOrIdentifier << "\n";
+            if (auto xml = desc.createXml())
+            {
+                auto xmlString = xml->toString();
+                auto encoded = juce::Base64::toBase64 (xmlString.toUTF8(), xmlString.getNumBytesAsUTF8());
+                content << "XMLDESC|" << encoded << "\n";
+            }
         }
 
         auto cacheFile = getCacheFile();
         cacheFile.replaceWithText (content);
 
         DBG ("Cache sauvegarde : " << cacheFile.getFullPathName());
+    }
+
+    void tryParseEncodedLine (const juce::String& line)
+    {
+        if (! line.startsWith ("XMLDESC|"))
+            return;
+
+        auto encoded = line.substring (8);
+
+        juce::MemoryOutputStream decodedStream;
+        if (! juce::Base64::convertFromBase64 (decodedStream, encoded))
+            return;
+
+        auto xmlString = decodedStream.toString();
+        auto xml = juce::parseXML (xmlString);
+
+        if (xml == nullptr)
+            return;
+
+        juce::PluginDescription desc;
+        if (desc.loadFromXml (*xml))
+            scannedPlugins.push_back (desc);
     }
 
     juce::File findWorkerExecutable() const
@@ -167,36 +170,24 @@ private:
         }
 
         auto lines = juce::StringArray::fromLines (output);
-        bool foundAny = false;
+        auto before = scannedPlugins.size();
 
         for (auto& line : lines)
-        {
-            if (line.startsWith ("PLUGIN|"))
-            {
-                auto parts = juce::StringArray::fromTokens (line, "|", "");
-                if (parts.size() >= 5)
-                {
-                    ScannedPlugin plugin;
-                    plugin.name             = parts[1];
-                    plugin.manufacturer     = parts[2];
-                    plugin.formatName       = parts[3];
-                    plugin.fileOrIdentifier = parts[4];
-                    scannedPlugins.push_back (plugin);
-                    foundAny = true;
-                    DBG ("Plugin valide : " << plugin.name);
-                }
-            }
-        }
+            tryParseEncodedLine (line);
 
-        if (! foundAny)
+        if (scannedPlugins.size() == before)
         {
             DBG ("Aucun plugin valide trouve dans ce fichier");
             failedFiles.add (fileOrId);
         }
+        else
+        {
+            for (auto i = before; i < scannedPlugins.size(); ++i)
+                DBG ("Plugin valide : " << scannedPlugins[i].name);
+        }
     }
 
     juce::AudioPluginFormatManager formatManager;
-    std::vector<ScannedPlugin> scannedPlugins;
+    std::vector<juce::PluginDescription> scannedPlugins;
     juce::StringArray failedFiles;
 };
-

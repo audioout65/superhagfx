@@ -95,6 +95,36 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
     menu.addSectionHeader ("Effets internes");
     menu.addItem (1, "Compressor");
 
+    const auto& plugins = pluginManager.getScannedPlugins();
+
+    if (! plugins.empty())
+    {
+        menu.addSeparator();
+        menu.addSectionHeader ("Plugins VST3 (" + juce::String ((int) plugins.size()) + ")");
+
+        // Regroupe les plugins par fabricant, tries alphabetiquement
+        std::map<juce::String, std::vector<int>> byManufacturer;
+
+        for (int i = 0; i < (int) plugins.size(); ++i)
+        {
+            auto manufacturer = plugins[(size_t) i].manufacturerName.isNotEmpty()
+                                    ? plugins[(size_t) i].manufacturerName
+                                    : juce::String ("Autre");
+            byManufacturer[manufacturer].push_back (i);
+        }
+
+        // IDs de menu : on decale de 1000 pour ne pas entrer en collision avec 1 et 2
+        for (auto& entry : byManufacturer)
+        {
+            juce::PopupMenu subMenu;
+
+            for (auto pluginIndex : entry.second)
+                subMenu.addItem (1000 + pluginIndex, plugins[(size_t) pluginIndex].name);
+
+            menu.addSubMenu (entry.first, subMenu);
+        }
+    }
+
     menu.addSeparator();
     menu.addItem (2, "Vider cet emplacement");
 
@@ -105,10 +135,40 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
         if (result == 1)
         {
             slot.loadInternalCompressor();
+            refreshSlotButtonText (channelIndex, slotIndex);
         }
         else if (result == 2)
         {
             slot.clear();
+            refreshSlotButtonText (channelIndex, slotIndex);
+        }
+        else if (result >= 1000)
+        {
+            loadVst3IntoSlot (channelIndex, slotIndex, result - 1000);
+        }
+    });
+}
+
+void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex)
+{
+    const auto& plugins = pluginManager.getScannedPlugins();
+
+    if (pluginListIndex < 0 || pluginListIndex >= (int) plugins.size())
+        return;
+
+    const auto& desc = plugins[(size_t) pluginListIndex];
+    auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+    slotButtons[(size_t) channelIndex][(size_t) slotIndex]->setButtonText ("Chargement...");
+
+    slot.loadVst3Async (desc, pluginManager.getFormatManager(),
+                        [this, channelIndex, slotIndex] (bool success, juce::String error)
+    {
+        if (! success)
+        {
+            DBG ("Echec du chargement VST3 : " << error);
+            slotButtons[(size_t) channelIndex][(size_t) slotIndex]->setButtonText ("+");
+            return;
         }
 
         refreshSlotButtonText (channelIndex, slotIndex);
@@ -121,6 +181,32 @@ void MainComponent::openSlotEditor (int channelIndex, int slotIndex)
 
     if (slot.isEmpty())
         return;
+
+    if (slot.isVst3())
+    {
+        auto* instance = slot.getVstInstance();
+
+        if (instance == nullptr)
+            return;
+
+        auto* editor = instance->createEditorIfNeeded();
+
+        if (editor == nullptr)
+        {
+            DBG ("Ce plugin n'a pas d'interface graphique.");
+            return;
+        }
+
+        juce::DialogWindow::LaunchOptions options;
+        options.content.setOwned (editor);
+        options.dialogTitle = "Ch " + juce::String (channelIndex + 1) + " - " + slot.getDisplayName();
+        options.escapeKeyTriggersCloseButton = true;
+        options.useNativeTitleBar = true;
+        options.resizable = true;
+        options.launchAsync();
+
+        return;
+    }
 
     auto editor = std::make_unique<CompressorEditor>(slot.getCompressor());
 

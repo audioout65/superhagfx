@@ -39,9 +39,12 @@ int main (int argc, char* argv[])
 
     for (auto* desc : typesFound)
     {
-        std::cout << "PLUGIN|" << desc->name << "|" << desc->manufacturerName
-                   << "|" << desc->pluginFormatName << "|" << desc->fileOrIdentifier
-                   << std::endl;
+        if (auto xml = desc->createXml())
+        {
+            auto xmlString = xml->toString();
+            auto encoded = juce::Base64::toBase64 (xmlString.toUTF8(), xmlString.getNumBytesAsUTF8());
+            std::cout << "XMLDESC|" << encoded << std::endl;
+        }
     }
 
     std::cout << "DONE" << std::endl;
