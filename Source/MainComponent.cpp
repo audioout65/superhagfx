@@ -26,6 +26,9 @@ MainComponent::MainComponent()
         pluginManager.scanForPlugins();
     };
 
+    if (pluginManager.loadCacheIfAvailable())
+        DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
+
     for (int i = 0; i < numChannels; ++i)
     {
         auto bypassBtn = std::make_unique<juce::ToggleButton>("Bypass");

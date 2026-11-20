@@ -22,6 +22,39 @@ public:
        #endif
     }
 
+    // Charge le cache s'il existe. Retourne true si des plugins ont ete charges.
+    bool loadCacheIfAvailable()
+    {
+        auto cacheFile = getCacheFile();
+
+        if (! cacheFile.existsAsFile())
+            return false;
+
+        scannedPlugins.clear();
+
+        auto lines = juce::StringArray::fromLines (cacheFile.loadFileAsString());
+
+        for (auto& line : lines)
+        {
+            if (line.startsWith ("PLUGIN|"))
+            {
+                auto parts = juce::StringArray::fromTokens (line, "|", "");
+                if (parts.size() >= 5)
+                {
+                    ScannedPlugin plugin;
+                    plugin.name             = parts[1];
+                    plugin.manufacturer     = parts[2];
+                    plugin.formatName       = parts[3];
+                    plugin.fileOrIdentifier = parts[4];
+                    scannedPlugins.push_back (plugin);
+                }
+            }
+        }
+
+        DBG ("Cache charge : " << (int) scannedPlugins.size() << " plugins.");
+        return ! scannedPlugins.empty();
+    }
+
     void scanForPlugins()
     {
         scannedPlugins.clear();
@@ -50,6 +83,8 @@ public:
 
         DBG ("Scan termine. Plugins valides : " << (int) scannedPlugins.size()
              << " | Plugins en echec : " << failedFiles.size());
+
+        saveCacheToDisk();
     }
 
     const std::vector<ScannedPlugin>& getScannedPlugins() const { return scannedPlugins; }
@@ -58,6 +93,30 @@ public:
     juce::AudioPluginFormatManager& getFormatManager() { return formatManager; }
 
 private:
+    juce::File getCacheFile() const
+    {
+        auto appDataDir = juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                            .getChildFile ("LiveRack");
+        appDataDir.createDirectory();
+        return appDataDir.getChildFile ("plugin_cache.txt");
+    }
+
+    void saveCacheToDisk()
+    {
+        juce::String content;
+
+        for (auto& plugin : scannedPlugins)
+        {
+            content << "PLUGIN|" << plugin.name << "|" << plugin.manufacturer
+                    << "|" << plugin.formatName << "|" << plugin.fileOrIdentifier << "\n";
+        }
+
+        auto cacheFile = getCacheFile();
+        cacheFile.replaceWithText (content);
+
+        DBG ("Cache sauvegarde : " << cacheFile.getFullPathName());
+    }
+
     juce::File findWorkerExecutable() const
     {
         auto appBundleDir = juce::File::getSpecialLocation (juce::File::currentApplicationFile);
@@ -140,3 +199,4 @@ private:
     std::vector<ScannedPlugin> scannedPlugins;
     juce::StringArray failedFiles;
 };
+
