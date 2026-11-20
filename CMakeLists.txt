@@ -19,6 +19,9 @@ target_sources(LiveRack PRIVATE
     Source/AudioChannel.h
     Source/Compressor.h
     Source/PluginManager.h
+    Source/PluginSlot.h
+    Source/SlotButton.h
+    Source/CompressorEditor.h
 )
 
 target_compile_definitions(LiveRack PRIVATE

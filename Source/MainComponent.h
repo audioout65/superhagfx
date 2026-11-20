@@ -2,6 +2,7 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 #include "PluginManager.h"
+#include "SlotButton.h"
 
 static constexpr int numChannels = 4;
 
@@ -21,6 +22,10 @@ public:
 
 private:
     void timerCallback() override;
+    void showSlotMenu (int channelIndex, int slotIndex);
+    void handleSlotClick (int channelIndex, int slotIndex);
+    void openSlotEditor (int channelIndex, int slotIndex);
+    void refreshSlotButtonText (int channelIndex, int slotIndex);
 
     std::array<AudioChannel, numChannels> channels;
     std::array<float, numChannels> displayedLevels {};
@@ -30,10 +35,10 @@ private:
 
     std::array<std::unique_ptr<juce::ToggleButton>, numChannels> bypassButtons;
     std::array<std::unique_ptr<juce::Slider>, numChannels> gainSliders;
-    std::array<std::unique_ptr<juce::Slider>, numChannels> thresholdSliders;
-    std::array<std::unique_ptr<juce::Slider>, numChannels> ratioSliders;
-    std::array<std::unique_ptr<juce::Label>, numChannels> thresholdLabels;
-    std::array<std::unique_ptr<juce::Label>, numChannels> ratioLabels;
+
+    std::array<std::array<std::unique_ptr<SlotButton>, numSlotsPerChannel>, numChannels> slotButtons;
+
+    std::unique_ptr<juce::Component> currentEditorWindowContent;
 
     PluginManager pluginManager;
     juce::TextButton scanPluginsButton { "Scanner les plugins VST3" };
