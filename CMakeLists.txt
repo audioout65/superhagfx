@@ -16,6 +16,7 @@ juce_generate_juce_header(LiveRack)
 target_sources(LiveRack PRIVATE
     Source/Main.cpp
     Source/MainComponent.cpp
+    Source/AudioChannel.h
 )
 
 target_compile_definitions(LiveRack PRIVATE

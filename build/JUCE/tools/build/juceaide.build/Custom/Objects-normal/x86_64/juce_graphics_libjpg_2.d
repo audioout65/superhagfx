@@ -1,0 +1,21 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdapimin.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jinclude.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jconfig.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jpeglib.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jmorecfg.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jpegint.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jerror.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdapistd.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdarith.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdcoefct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdcolor.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdmainct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdmarker.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdmaster.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdpostct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jquant1.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdsample.c

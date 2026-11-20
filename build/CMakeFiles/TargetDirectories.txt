@@ -1,0 +1,10 @@
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/install.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ALL_BUILD.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ZERO_CHECK.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/CMakeFiles/install.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/CMakeFiles/ALL_BUILD.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/CMakeFiles/ZERO_CHECK.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/modules/CMakeFiles/install.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/extras/Build/CMakeFiles/install.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/extras/Build/juceaide/CMakeFiles/install.dir

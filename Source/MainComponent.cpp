@@ -2,7 +2,7 @@
 
 MainComponent::MainComponent()
 {
-    setAudioChannels (2, 0); // 2 entrées pour commencer, 0 sortie (pas besoin de sortie pour ce test)
+    setAudioChannels (numChannels, 0); // N entrées, 0 sortie pour ce test
 
     addAndMakeVisible (deviceSettingsButton);
     deviceSettingsButton.onClick = [this]
@@ -20,7 +20,28 @@ MainComponent::MainComponent()
         options.launchAsync();
     };
 
-    setSize (600, 400);
+    for (int i = 0; i < numChannels; ++i)
+    {
+        auto bypassBtn = std::make_unique<juce::ToggleButton>("Bypass");
+        bypassBtn->onClick = [this, i, ptr = bypassBtn.get()]
+        {
+            channels[(size_t) i].setBypassed (ptr->getToggleState());
+        };
+        addAndMakeVisible (*bypassBtn);
+        bypassButtons[(size_t) i] = std::move (bypassBtn);
+
+        auto slider = std::make_unique<juce::Slider>(juce::Slider::LinearVertical, juce::Slider::TextBoxBelow);
+        slider->setRange (0.0, 2.0, 0.01);
+        slider->setValue (1.0);
+        slider->onValueChange = [this, i, ptr = slider.get()]
+        {
+            channels[(size_t) i].setGain ((float) ptr->getValue());
+        };
+        addAndMakeVisible (*slider);
+        gainSliders[(size_t) i] = std::move (slider);
+    }
+
+    setSize (700, 450);
     startTimerHz (30);
 }
 
@@ -29,27 +50,20 @@ MainComponent::~MainComponent()
     shutdownAudio();
 }
 
-void MainComponent::prepareToPlay (int /*samplesPerBlockExpected*/, double /*sampleRate*/)
+void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    auto numInputs = deviceManager.getCurrentAudioDevice() != nullptr
-                        ? deviceManager.getCurrentAudioDevice()->getActiveInputChannels().countNumberOfSetBits()
-                        : 2;
-
-    currentLevels.assign ((size_t) juce::jmax (2, numInputs), 0.0f);
-    displayedLevels.assign (currentLevels.size(), 0.0f);
+    for (auto& channel : channels)
+        channel.prepare (sampleRate, samplesPerBlockExpected);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    auto numChannels = bufferToFill.buffer->getNumChannels();
+    auto numAvailable = bufferToFill.buffer->getNumChannels();
 
-    if ((int) currentLevels.size() != numChannels)
-        currentLevels.assign ((size_t) numChannels, 0.0f);
-
-    for (int ch = 0; ch < numChannels; ++ch)
+    for (int ch = 0; ch < numChannels && ch < numAvailable; ++ch)
     {
-        auto magnitude = bufferToFill.buffer->getMagnitude (ch, bufferToFill.startSample, bufferToFill.numSamples);
-        currentLevels[(size_t) ch] = magnitude;
+        auto* samples = bufferToFill.buffer->getWritePointer (ch, bufferToFill.startSample);
+        channels[(size_t) ch].process (samples, bufferToFill.numSamples);
     }
 }
 
@@ -61,18 +75,15 @@ void MainComponent::timerCallback()
 {
     bool needsRepaint = false;
 
-    if (displayedLevels.size() != currentLevels.size())
-        displayedLevels.assign (currentLevels.size(), 0.0f);
-
-    for (size_t i = 0; i < currentLevels.size(); ++i)
+    for (int i = 0; i < numChannels; ++i)
     {
-        auto target = currentLevels[i];
-        auto& display = displayedLevels[i];
+        auto target = channels[(size_t) i].getLevel();
+        auto& display = displayedLevels[(size_t) i];
 
         if (target > display)
             display = target;
         else
-            display *= 0.85f; // chute douce du vumètre
+            display *= 0.85f;
 
         needsRepaint = true;
     }
@@ -86,31 +97,28 @@ void MainComponent::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     auto area = getLocalBounds().reduced (20);
-    area.removeFromTop (50); // place pour le bouton
+    area.removeFromTop (50); // place pour le bouton device settings
+
+    auto channelWidth = area.getWidth() / numChannels;
 
     g.setColour (juce::Colours::white);
-    g.setFont (16.0f);
+    g.setFont (14.0f);
 
-    if (displayedLevels.empty())
+    for (int i = 0; i < numChannels; ++i)
     {
-        g.drawText ("Aucune entree audio detectee. Verifie la SQ-7 dans les reglages.",
-                    area, juce::Justification::centred);
-        return;
-    }
+        auto channelArea = area.removeFromLeft (channelWidth).reduced (8);
 
-    auto meterWidth = juce::jmax (20, area.getWidth() / (int) displayedLevels.size() - 10);
+        auto labelArea = channelArea.removeFromTop (20);
+        g.drawText ("Ch " + juce::String (i + 1), labelArea, juce::Justification::centred);
 
-    for (size_t i = 0; i < displayedLevels.size(); ++i)
-    {
-        auto x = area.getX() + (int) i * (meterWidth + 10);
-        auto meterArea = juce::Rectangle<int> (x, area.getY(), meterWidth, area.getHeight());
+        auto meterArea = channelArea.removeFromLeft (channelArea.getWidth() / 3);
+        meterArea = meterArea.withSizeKeepingCentre (20, meterArea.getHeight() - 80);
 
         g.setColour (juce::Colours::darkgrey);
         g.fillRect (meterArea);
 
-        auto level = juce::jlimit (0.0f, 1.0f, displayedLevels[i]);
+        auto level = juce::jlimit (0.0f, 1.0f, displayedLevels[(size_t) i]);
         auto filledHeight = (int) (level * (float) meterArea.getHeight());
-
         auto filledArea = meterArea.withTop (meterArea.getBottom() - filledHeight);
 
         g.setColour (level > 0.9f ? juce::Colours::red
@@ -118,13 +126,26 @@ void MainComponent::paint (juce::Graphics& g)
         g.fillRect (filledArea);
 
         g.setColour (juce::Colours::white);
-        g.drawText ("Ch " + juce::String ((int) i + 1),
-                    meterArea.withTop (meterArea.getBottom() - 20),
-                    juce::Justification::centred);
     }
 }
 
 void MainComponent::resized()
 {
     deviceSettingsButton.setBounds (20, 10, 220, 30);
+
+    auto area = getLocalBounds().reduced (20);
+    area.removeFromTop (50);
+
+    auto channelWidth = area.getWidth() / numChannels;
+
+    for (int i = 0; i < numChannels; ++i)
+    {
+        auto channelArea = area.removeFromLeft (channelWidth).reduced (8);
+        channelArea.removeFromTop (20); // place pour le label du canal
+
+        auto sliderArea = channelArea.removeFromRight (channelArea.getWidth() * 2 / 3);
+        gainSliders[(size_t) i]->setBounds (sliderArea.removeFromTop (sliderArea.getHeight() - 40));
+
+        bypassButtons[(size_t) i]->setBounds (channelArea.removeFromBottom (30).withX (sliderArea.getX() - channelArea.getWidth()));
+    }
 }

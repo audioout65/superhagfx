@@ -1,0 +1,32 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/png.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngpriv.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pnglibconf.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/png.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngconf.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngstruct.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/zip/zlib/zlib.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/zip/zlib/zconf.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pnginfo.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngdebug.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngerror.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngget.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngmem.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngread.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngpread.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngrio.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngrtran.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngrutil.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngset.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngtrans.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngwio.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngwrite.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngwtran.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/pngwutil.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/arm/arm_init.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/arm/../pngpriv.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/arm/filter_neon_intrinsics.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/pnglib/arm/palette_neon_intrinsics.c

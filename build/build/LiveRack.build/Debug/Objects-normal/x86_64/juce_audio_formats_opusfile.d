@@ -1,0 +1,37 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/juce_opus_config.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/info.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/internal.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/opusfile.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../../ogg/include/ogg/ogg.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../../ogg/include/ogg/os_types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../opus/include/opus_multistream.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../opus/include/opus.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../opus/include/opus_types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/../include/../../opus/include/opus_defines.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/internal.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/opusfile.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/stream.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/opusfile/src/http.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/package_version.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/ogg_packer.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/ogg_packer.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/opus_header.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/opus_header.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/../../opus/include/opus.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/../../opus/include/opus_multistream.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/../../opus/include/opus_projection.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/opusenc.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/../include/opusenc.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/../include/../../opus/include/opus.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/speex_resampler.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/picture.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/unicode_support.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/picture.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/resample.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/arch.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/resample_sse.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/codecs/opus/libopusenc/src/unicode_support.c

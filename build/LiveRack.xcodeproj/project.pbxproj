@@ -1,0 +1,1209 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		0D0AE08598F040799785B5F7 /* install */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 10D4D7CEFA9A4AC4BAC75E98 /* Build configuration list for PBXAggregateTarget "install" */;
+			buildPhases = (
+				31030817BE503C7640C771D3 /* CMake PostBuild Rules */,
+			);
+			dependencies = (
+				36E611C802D44FEDAE0B5ED7 /* PBXTargetDependency */,
+			);
+			name = install;
+			productName = install;
+		};
+		2B621539222B5B3739779054 /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 8FB3484B81214FF3809CB63F /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				39F501AB890E93CC0DECCA63 /* Generate CMakeFiles/ALL_BUILD */,
+			);
+			dependencies = (
+				31F397FBCA0E4932A15C5AA9 /* PBXTargetDependency */,
+				3762C402E8724F5CB697D13B /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+		CB7F3C37B82932EB6AC34642 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4492DED6C3894D179D263C80 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				E6F817E110D2CF95C07A6373 /* Generate CMakeFiles/ZERO_CHECK */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		02CC9C9214E44FA4BB131169 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp */ = {isa = PBXBuildFile; fileRef = 084F2E22FFBC4014824B13F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp */; };
+		07195CEE4B45464B92C76CBF /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */ = {isa = PBXBuildFile; fileRef = B237D122FC6F4C7CB2A4CF2F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */; };
+		0BDA4B6CFB384E629E5DEB3A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXBuildFile; fileRef = 9D04BC7DBBCA47DAA08F2E20 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */; };
+		17F7F384D01C45EF9E4C322E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXBuildFile; fileRef = AB88D3B9C58A4F6F88655944 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */; };
+		1D5FE70CC86A4CEBA5F02778 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp */ = {isa = PBXBuildFile; fileRef = CB0FB070FD0040CF85E06989 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp */; };
+		1E4FE9E8525945EE9CB6C916 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h.rule */ = {isa = PBXBuildFile; fileRef = 3A464B2841AA4A40BE0E6074 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h.rule */; };
+		238ABE9F583A45158F620896 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXBuildFile; fileRef = CE792DC12C4C4C0987DE6D8D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */; };
+		23BB658152D64BEF9803361C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXBuildFile; fileRef = F1E1951C18924DAA8CDADEA4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */; };
+		258E48C06CAF416A8E485F88 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics.mm */ = {isa = PBXBuildFile; fileRef = 7C3AA282E4B14E9E8CE9F51C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics.mm */; };
+		27DE9A2401134B56AFF9F5BB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXBuildFile; fileRef = E7277309A8C24E4CBD60D564 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */; };
+		29C394989D134E009619E505 /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.cpp */ = {isa = PBXBuildFile; fileRef = C6ACB540C99C46C4AA6C813B /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.cpp */; };
+		29C42EF6503C42059085F668 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp */ = {isa = PBXBuildFile; fileRef = 15BC98A73994474DAA52689F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp */; };
+		29C51922D8BB4A629169831B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXBuildFile; fileRef = B7C9E9E8041049519F77473C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */; };
+		2B35A5711CBA4BD6A313EDAC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXBuildFile; fileRef = 267BF49F7F594F768BB1A3E5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */; };
+		35A2C2C25727411C9BD56208 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/juce_audio_utils.mm */ = {isa = PBXBuildFile; fileRef = B9A2AC5F5C7948E08FF46897 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/juce_audio_utils.mm */; };
+		3E830C7B145C438792CF02D7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp */ = {isa = PBXBuildFile; fileRef = 66613A2465F64CEBAA241425 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp */; };
+		3EA86CE523C44354AAFE4FDF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXBuildFile; fileRef = EFA3C1DC7A884613911129CD /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */; };
+		40C2DF306C6743BB9B98E34E /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp */ = {isa = PBXBuildFile; fileRef = 014920A13A9E491C982CFFDC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp */; };
+		40CD4C57341B4219A6757753 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c */ = {isa = PBXBuildFile; fileRef = 7DB03AC8AC4E40519A48AE8F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c */; };
+		4196671178834A738E95153C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c */ = {isa = PBXBuildFile; fileRef = 55540F8BC986488686E6A54C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c */; };
+		43192DA4B4154248B2FAE9B4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXBuildFile; fileRef = 8ACBC7FE23C34396B5EEA863 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */; };
+		4E8000BDA4DF406EBA6CD9AF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib */ = {isa = PBXBuildFile; fileRef = 51D0D1D2DB5040E09E3FEA52 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib */; };
+		5193EAAF1C5847B89EF7B5C2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXBuildFile; fileRef = 4562BDB4FEA84098BD409FD6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */; };
+		5551F0519337427780FEEFC3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c */ = {isa = PBXBuildFile; fileRef = 6B87564EAA5E4849A3428151 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c */; };
+		625A92BAA851450AADAD82ED /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = EE06507D22B04803866039D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */; };
+		655FB96C0CFF4C969D477DBC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/juce_audio_processors.mm */ = {isa = PBXBuildFile; fileRef = 970204841F3F46EAAD29863B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/juce_audio_processors.mm */; };
+		6579BC1512094BE084565CD3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXBuildFile; fileRef = EBFFF98799F343199C91BA21 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */; };
+		65C3646C9C164146906F410F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */ = {isa = PBXBuildFile; fileRef = A045C85D83A541D795D80324 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */; };
+		71E525CF54D44B25A7275D8C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/juce_audio_basics.mm */ = {isa = PBXBuildFile; fileRef = 1435AAA9D5F842669C8B53D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/juce_audio_basics.mm */; };
+		77F890E27E9A47C88DCCCF1D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXBuildFile; fileRef = 0DF5C22F72DD44268F17A3F0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */; };
+		7DA3FE5221054D8DAC8E1F82 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats.mm */ = {isa = PBXBuildFile; fileRef = B5918A512C1A426680F32E3E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats.mm */; };
+		7FB464F28B424B0F9D4E4075 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXBuildFile; fileRef = 3DA9FF25FF974613A6C2DDC5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */; };
+		842B27FB79E045B08B4B7731 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXBuildFile; fileRef = A2C9BAE9762E463ABF8B1A78 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */; };
+		85F4BF034D2A487FADE57DA8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h */ = {isa = PBXBuildFile; fileRef = 595C8AE4C94446C1A535D8FC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h */; };
+		86F9F7D41CDB446C93F0E18D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXBuildFile; fileRef = D50BCE79842E4F268EA0E6E0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */; };
+		88CCE84673C2483F815E4D82 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXBuildFile; fileRef = DD00F527BE324DAB9161891D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */; };
+		914FD2FE45624681AE4E772C /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist */ = {isa = PBXBuildFile; fileRef = 7F9B99A150984CDB8980271F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist */; };
+		9B4247706ACA4A42BF25C71F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp */ = {isa = PBXBuildFile; fileRef = 69ED2ED0045A4B7395B41B64 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp */; };
+		9CC4255C68D14BC5BDE03F07 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm */ = {isa = PBXBuildFile; fileRef = 6065F3D91D704F1A9AD80BC2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm */; };
+		A20E51B754844AA0AC76468A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXBuildFile; fileRef = 80062EE7DAE546E2ABFF8CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */; };
+		B70B1874800C4065AB2EA825 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXBuildFile; fileRef = 699820C35FE34E648CE14219 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */; };
+		BC0E12DC38034DB5BF6E9B93 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c */ = {isa = PBXBuildFile; fileRef = D943024ABF0946DDA5CB06F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c */; };
+		C6C38C655A994E2FBC2520F9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp */ = {isa = PBXBuildFile; fileRef = F504A2E54DAE477FBAECA65B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp */; };
+		CC8A364919E5450D9E141C09 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_devices/juce_audio_devices.mm */ = {isa = PBXBuildFile; fileRef = 1971518E4421446CBF812465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_devices/juce_audio_devices.mm */; };
+		D333B11774954E3995D8CC66 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c */ = {isa = PBXBuildFile; fileRef = FB7C58F78E554D09BFF577A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c */; };
+		D5779D37D675419895538DD9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo.rule */ = {isa = PBXBuildFile; fileRef = 3D1EAEB1918841E2882C2854 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo.rule */; };
+		D9A67F7D9671475E9E5B7C6F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_data_structures/juce_data_structures.mm */ = {isa = PBXBuildFile; fileRef = FAE8784A4F884A94A3AF9342 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_data_structures/juce_data_structures.mm */; };
+		DC174C5B7E3E49E680CF62AD /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXBuildFile; fileRef = 2A1D342644894C28B3C5ECE6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */; };
+		DEA75D4644454D7E81527838 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXBuildFile; fileRef = C2315C72F1EE4D8782D08E97 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */; };
+		E4C87328AA7344B78CE516B0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXBuildFile; fileRef = 53F34C12DDCB44EDB720B227 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */; };
+		F558B44D041A4E0090F42C0F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXBuildFile; fileRef = 0898BB74B6524AD99CF75841 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */; };
+		FAF8EDEF68EB4D9787F3F28C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_extra/juce_gui_extra.mm */ = {isa = PBXBuildFile; fileRef = A434B607DBA141D9A4DD2EE8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_extra/juce_gui_extra.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		24B0A9A079A74099BD023020 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E91D6FB7F434DD0A5D97214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB7F3C37B82932EB6AC34642;
+			remoteInfo = ZERO_CHECK;
+		};
+		24FC625A28D944D99814CB39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E91D6FB7F434DD0A5D97214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B621539222B5B3739779054;
+			remoteInfo = ALL_BUILD;
+		};
+		6DA028DC72794AC28A69839E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E91D6FB7F434DD0A5D97214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1D2733838DFD66AC1303E9;
+			remoteInfo = LiveRack;
+		};
+		7B32F00B91F34CB3AD723A82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E91D6FB7F434DD0A5D97214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB7F3C37B82932EB6AC34642;
+			remoteInfo = ZERO_CHECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		014920A13A9E491C982CFFDC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Main.cpp; path = Source/Main.cpp; sourceTree = SOURCE_ROOT; };
+		084F2E22FFBC4014824B13F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_audio_processors_headless_lv2_libs.cpp; path = JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
+		0898BB74B6524AD99CF75841 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_1.c; path = JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c; sourceTree = SOURCE_ROOT; };
+		0DF5C22F72DD44268F17A3F0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dec.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c; sourceTree = SOURCE_ROOT; };
+		1435AAA9D5F842669C8B53D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/juce_audio_basics.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_basics.mm; path = JUCE/modules/juce_audio_basics/juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
+		15BC98A73994474DAA52689F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_gui_basics_2.cpp; path = JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp; sourceTree = SOURCE_ROOT; };
+		1971518E4421446CBF812465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_devices/juce_audio_devices.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_devices.mm; path = JUCE/modules/juce_audio_devices/juce_audio_devices.mm; sourceTree = SOURCE_ROOT; };
+		267BF49F7F594F768BB1A3E5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_core.mm; path = JUCE/modules/juce_core/juce_core.mm; sourceTree = SOURCE_ROOT; };
+		2A1D342644894C28B3C5ECE6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_core_zlib.c; path = JUCE/modules/juce_core/juce_core_zlib.c; sourceTree = SOURCE_ROOT; };
+		3A464B2841AA4A40BE0E6074 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h.rule */ = {isa = PBXFileReference; explicitFileType = default; fileEncoding = 4; name = JuceHeader.h.rule; path = build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h.rule; sourceTree = SOURCE_ROOT; };
+		3D1EAEB1918841E2882C2854 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo.rule */ = {isa = PBXFileReference; explicitFileType = default; fileEncoding = 4; name = PkgInfo.rule; path = build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo.rule; sourceTree = SOURCE_ROOT; };
+		3DA9FF25FF974613A6C2DDC5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_sharpyuv.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c; sourceTree = SOURCE_ROOT; };
+		4562BDB4FEA84098BD409FD6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c; sourceTree = SOURCE_ROOT; };
+		51D0D1D2DB5040E09E3FEA52 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; explicitFileType = default; fileEncoding = 4; name = RecentFilesMenuTemplate.nib; path = JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
+		53F34C12DDCB44EDB720B227 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_2.c; path = JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c; sourceTree = SOURCE_ROOT; };
+		55540F8BC986488686E6A54C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_audio_formats_opus.c; path = JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c; sourceTree = SOURCE_ROOT; };
+		595C8AE4C94446C1A535D8FC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AudioChannel.h; path = Source/AudioChannel.h; sourceTree = SOURCE_ROOT; };
+		6065F3D91D704F1A9AD80BC2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_processors_headless.mm; path = JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm; sourceTree = SOURCE_ROOT; };
+		66613A2465F64CEBAA241425 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_gui_basics_5.cpp; path = JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp; sourceTree = SOURCE_ROOT; };
+		699820C35FE34E648CE14219 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_avx2.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c; sourceTree = SOURCE_ROOT; };
+		69ED2ED0045A4B7395B41B64 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_gui_basics_3.cpp; path = JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp; sourceTree = SOURCE_ROOT; };
+		6B87564EAA5E4849A3428151 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_audio_formats_flac_2.c; path = JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c; sourceTree = SOURCE_ROOT; };
+		7C3AA282E4B14E9E8CE9F51C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_gui_basics.mm; path = JUCE/modules/juce_gui_basics/juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
+		7DB03AC8AC4E40519A48AE8F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_audio_formats_flac_1.c; path = JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c; sourceTree = SOURCE_ROOT; };
+		7EBC7F230BD24CE0BD58E095 /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		7F9B99A150984CDB8980271F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist */ = {isa = PBXFileReference; explicitFileType = sourcecode.text.plist; fileEncoding = 4; name = Info.plist; path = build/CMakeFiles/LiveRack.dir/Info.plist; sourceTree = SOURCE_ROOT; };
+		80062EE7DAE546E2ABFF8CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_graphics.mm; path = JUCE/modules/juce_graphics/juce_graphics.mm; sourceTree = SOURCE_ROOT; };
+		8ACBC7FE23C34396B5EEA863 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_avx2.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c; sourceTree = SOURCE_ROOT; };
+		970204841F3F46EAAD29863B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/juce_audio_processors.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_processors.mm; path = JUCE/modules/juce_audio_processors/juce_audio_processors.mm; sourceTree = SOURCE_ROOT; };
+		9D04BC7DBBCA47DAA08F2E20 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_sse41.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c; sourceTree = SOURCE_ROOT; };
+		A045C85D83A541D795D80324 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = JuceHeader.h; path = build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
+		A2C9BAE9762E463ABF8B1A78 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libpng.c; path = JUCE/modules/juce_graphics/juce_graphics_libpng.c; sourceTree = SOURCE_ROOT; };
+		A434B607DBA141D9A4DD2EE8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_extra/juce_gui_extra.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_gui_extra.mm; path = JUCE/modules/juce_gui_extra/juce_gui_extra.mm; sourceTree = SOURCE_ROOT; };
+		AB88D3B9C58A4F6F88655944 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_lunasvg.c; path = JUCE/modules/juce_graphics/juce_graphics_lunasvg.c; sourceTree = SOURCE_ROOT; };
+		B237D122FC6F4C7CB2A4CF2F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */ = {isa = PBXFileReference; explicitFileType = default; fileEncoding = 4; name = PkgInfo; path = build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo; sourceTree = SOURCE_ROOT; };
+		B5918A512C1A426680F32E3E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_formats.mm; path = JUCE/modules/juce_audio_formats/juce_audio_formats.mm; sourceTree = SOURCE_ROOT; };
+		B7C9E9E8041049519F77473C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_core_CompilationTime.cpp; path = JUCE/modules/juce_core/juce_core_CompilationTime.cpp; sourceTree = SOURCE_ROOT; };
+		B9A2AC5F5C7948E08FF46897 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/juce_audio_utils.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_audio_utils.mm; path = JUCE/modules/juce_audio_utils/juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
+		C2315C72F1EE4D8782D08E97 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_Sheenbidi.c; path = JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c; sourceTree = SOURCE_ROOT; };
+		C6ACB540C99C46C4AA6C813B /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MainComponent.cpp; path = Source/MainComponent.cpp; sourceTree = SOURCE_ROOT; };
+		CB0FB070FD0040CF85E06989 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_gui_basics_4.cpp; path = JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp; sourceTree = SOURCE_ROOT; };
+		CE792DC12C4C4C0987DE6D8D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c; sourceTree = SOURCE_ROOT; };
+		D50BCE79842E4F268EA0E6E0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_3.c; path = JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c; sourceTree = SOURCE_ROOT; };
+		D943024ABF0946DDA5CB06F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_audio_formats_opusfile.c; path = JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c; sourceTree = SOURCE_ROOT; };
+		DD00F527BE324DAB9161891D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_sse41.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c; sourceTree = SOURCE_ROOT; };
+		E7277309A8C24E4CBD60D564 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_events.mm; path = JUCE/modules/juce_events/juce_events.mm; sourceTree = SOURCE_ROOT; };
+		EBFFF98799F343199C91BA21 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_utils.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c; sourceTree = SOURCE_ROOT; };
+		EE06507D22B04803866039D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		EFA3C1DC7A884613911129CD /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_enc.c; path = JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c; sourceTree = SOURCE_ROOT; };
+		F0FF33B313938DEEF32B6FE5 /* LiveRack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = LiveRack; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1E1951C18924DAA8CDADEA4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_graphics_Harfbuzz.cpp; path = JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp; sourceTree = SOURCE_ROOT; };
+		F504A2E54DAE477FBAECA65B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_audio_processors_headless_ara.cpp; path = JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp; sourceTree = SOURCE_ROOT; };
+		FAE8784A4F884A94A3AF9342 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_data_structures/juce_data_structures.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_data_structures.mm; path = JUCE/modules/juce_data_structures/juce_data_structures.mm; sourceTree = SOURCE_ROOT; };
+		FB7C58F78E554D09BFF577A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_audio_formats_ogg.c; path = JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0FB7184CEC2343B9875A1348 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0767F96F819740649C674A8F /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				B12A84B915824653AD26D310 /* CMake Rules */,
+				7EBC7F230BD24CE0BD58E095 /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		18D82559D32546219522BAF9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		7105B28602504EB88DF13A90 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF33B313938DEEF32B6FE5 /* LiveRack */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		76964504D68E4EC08972CA48 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				595C8AE4C94446C1A535D8FC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h */,
+				A045C85D83A541D795D80324 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		A23E697D75C84C0F879B4458 /* LiveRack */ = {
+			isa = PBXGroup;
+			children = (
+				C74D1BE56B174AE48364573E /* CMake Rules */,
+				76964504D68E4EC08972CA48 /* Header Files */,
+				C49EE36193344CC89C421845 /* Resources */,
+				E42BC75D785B44009756B2B5 /* Source Files */,
+				EE06507D22B04803866039D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/CMakeLists.txt */,
+				51D0D1D2DB5040E09E3FEA52 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib */,
+				B237D122FC6F4C7CB2A4CF2F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */,
+			);
+			name = LiveRack;
+			sourceTree = "<group>";
+		};
+		AFD44FFA2AAF48C6BCBD084A = {
+			isa = PBXGroup;
+			children = (
+				0767F96F819740649C674A8F /* ALL_BUILD */,
+				A23E697D75C84C0F879B4458 /* LiveRack */,
+				7105B28602504EB88DF13A90 /* Products */,
+				F2E3C645680D4D8FA61EAACA /* Frameworks */,
+				18D82559D32546219522BAF9 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		B12A84B915824653AD26D310 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		C49EE36193344CC89C421845 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7F9B99A150984CDB8980271F /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		C74D1BE56B174AE48364573E /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+				3A464B2841AA4A40BE0E6074 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h.rule */,
+				3D1EAEB1918841E2882C2854 /* /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo.rule */,
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		E42BC75D785B44009756B2B5 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				1435AAA9D5F842669C8B53D0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/juce_audio_basics.mm */,
+				1971518E4421446CBF812465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_devices/juce_audio_devices.mm */,
+				B5918A512C1A426680F32E3E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats.mm */,
+				7DB03AC8AC4E40519A48AE8F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c */,
+				6B87564EAA5E4849A3428151 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c */,
+				FB7C58F78E554D09BFF577A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c */,
+				55540F8BC986488686E6A54C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c */,
+				D943024ABF0946DDA5CB06F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c */,
+				970204841F3F46EAAD29863B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/juce_audio_processors.mm */,
+				6065F3D91D704F1A9AD80BC2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm */,
+				F504A2E54DAE477FBAECA65B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp */,
+				084F2E22FFBC4014824B13F6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp */,
+				B9A2AC5F5C7948E08FF46897 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/juce_audio_utils.mm */,
+				267BF49F7F594F768BB1A3E5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
+				B7C9E9E8041049519F77473C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
+				2A1D342644894C28B3C5ECE6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
+				FAE8784A4F884A94A3AF9342 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_data_structures/juce_data_structures.mm */,
+				E7277309A8C24E4CBD60D564 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
+				80062EE7DAE546E2ABFF8CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
+				F1E1951C18924DAA8CDADEA4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
+				C2315C72F1EE4D8782D08E97 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
+				0898BB74B6524AD99CF75841 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
+				53F34C12DDCB44EDB720B227 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
+				D50BCE79842E4F268EA0E6E0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
+				A2C9BAE9762E463ABF8B1A78 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
+				0DF5C22F72DD44268F17A3F0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
+				4562BDB4FEA84098BD409FD6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
+				8ACBC7FE23C34396B5EEA863 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
+				9D04BC7DBBCA47DAA08F2E20 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
+				CE792DC12C4C4C0987DE6D8D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
+				699820C35FE34E648CE14219 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
+				DD00F527BE324DAB9161891D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
+				EFA3C1DC7A884613911129CD /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
+				3DA9FF25FF974613A6C2DDC5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
+				EBFFF98799F343199C91BA21 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
+				AB88D3B9C58A4F6F88655944 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
+				7C3AA282E4B14E9E8CE9F51C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics.mm */,
+				15BC98A73994474DAA52689F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp */,
+				69ED2ED0045A4B7395B41B64 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp */,
+				CB0FB070FD0040CF85E06989 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp */,
+				66613A2465F64CEBAA241425 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp */,
+				A434B607DBA141D9A4DD2EE8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_extra/juce_gui_extra.mm */,
+				014920A13A9E491C982CFFDC /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp */,
+				C6ACB540C99C46C4AA6C813B /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		F2E3C645680D4D8FA61EAACA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA1D2733838DFD66AC1303E9 /* LiveRack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D00A0092CEF44959863FBE6 /* Build configuration list for PBXNativeTarget "LiveRack" */;
+			buildPhases = (
+				1DD0E5ADE27E9770BB2712FF /* Generate LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */,
+				C5ACD6F30AB40B044F3E1D65 /* Generate LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */,
+				B6C0AB7B23E749C197341E4B /* Resources */,
+				10224114D3564485B402F974 /* Sources */,
+				0FB7184CEC2343B9875A1348 /* Frameworks */,
+				D05D64C40E2E0CCDD66D3349 /* CMake PostBuild Rules */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				085667777F70499EB917BDAF /* PBXTargetDependency */,
+			);
+			name = LiveRack;
+			productName = LiveRack;
+			productReference = F0FF33B313938DEEF32B6FE5 /* LiveRack */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1E91D6FB7F434DD0A5D97214 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1240;
+			};
+			buildConfigurationList = 29DBB234B964439984A80B7A /* Build configuration list for PBXProject "LiveRack" */;
+			buildSettings = {
+			};
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = AFD44FFA2AAF48C6BCBD084A;
+			projectDirPath = /Users/lebatarddesmontagnes/Dev/LiveRack;
+			projectRoot = "";
+			targets = (
+				2B621539222B5B3739779054 /* ALL_BUILD */,
+				0D0AE08598F040799785B5F7 /* install */,
+				AA1D2733838DFD66AC1303E9 /* LiveRack */,
+				CB7F3C37B82932EB6AC34642 /* ZERO_CHECK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		18A22F902F506870772F2F82 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		1DD0E5ADE27E9770BB2712FF /* Generate LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo";
+			outputPaths = (
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide pkginfo App /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide pkginfo App /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide pkginfo App /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide pkginfo App /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		31030817BE503C7640C771D3 /* CMake PostBuild Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "CMake PostBuild Rules";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		3310A1DC8880D57CCD2325B6 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		39F501AB890E93CC0DECCA63 /* Generate CMakeFiles/ALL_BUILD */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ALL_BUILD";
+			outputPaths = (
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ALL_BUILD			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		8742FB40EE47CFD03D663D19 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		C5ACD6F30AB40B044F3E1D65 /* Generate LiveRack_artefacts/JuceLibraryCode/JuceHeader.h */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/Debug/Defs.txt,/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/MinSizeRel/Defs.txt,/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/RelWithDebInfo/Defs.txt,/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/Release/Defs.txt			);
+			name = "Generate LiveRack_artefacts/JuceLibraryCode/JuceHeader.h";
+			outputPaths = (
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide header /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/Debug/Defs.txt /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide header /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/Release/Defs.txt /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide header /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/MinSizeRel/Defs.txt /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/extras/Build/juceaide/juceaide_artefacts/Custom/juceaide header /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/RelWithDebInfo/Defs.txt /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/JuceHeader.h
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		D05D64C40E2E0CCDD66D3349 /* CMake PostBuild Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}","${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist","$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)","$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)"			);
+			name = "CMake PostBuild Rules";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -E copy /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/Debug/LiveRack.app/Contents
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -E copy /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/Release/LiveRack.app/Contents
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -E copy /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/MinSizeRel/LiveRack.app/Contents
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  /Applications/CMake.app/Contents/bin/cmake -E copy /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack/PkgInfo /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/RelWithDebInfo/LiveRack.app/Contents
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		E6F817E110D2CF95C07A6373 /* Generate CMakeFiles/ZERO_CHECK */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate CMakeFiles/ZERO_CHECK";
+			outputPaths = (
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ZERO_CHECK			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  make -f /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  make -f /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  make -f /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/lebatarddesmontagnes/Dev/LiveRack/build
+  make -f /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B6C0AB7B23E749C197341E4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E8000BDA4DF406EBA6CD9AF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/CMake/RecentFilesMenuTemplate.nib */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		10224114D3564485B402F974 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				71E525CF54D44B25A7275D8C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/juce_audio_basics.mm */,
+				CC8A364919E5450D9E141C09 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_devices/juce_audio_devices.mm */,
+				7DA3FE5221054D8DAC8E1F82 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats.mm */,
+				40CD4C57341B4219A6757753 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_1.c */,
+				5551F0519337427780FEEFC3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_flac_2.c */,
+				D333B11774954E3995D8CC66 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_ogg.c */,
+				4196671178834A738E95153C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opus.c */,
+				BC0E12DC38034DB5BF6E9B93 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_formats/juce_audio_formats_opusfile.c */,
+				655FB96C0CFF4C969D477DBC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/juce_audio_processors.mm */,
+				9CC4255C68D14BC5BDE03F07 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless.mm */,
+				C6C38C655A994E2FBC2520F9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp */,
+				02CC9C9214E44FA4BB131169 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/juce_audio_processors_headless_lv2_libs.cpp */,
+				35A2C2C25727411C9BD56208 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/juce_audio_utils.mm */,
+				2B35A5711CBA4BD6A313EDAC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
+				29C51922D8BB4A629169831B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
+				DC174C5B7E3E49E680CF62AD /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
+				D9A67F7D9671475E9E5B7C6F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_data_structures/juce_data_structures.mm */,
+				27DE9A2401134B56AFF9F5BB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
+				A20E51B754844AA0AC76468A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
+				23BB658152D64BEF9803361C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
+				DEA75D4644454D7E81527838 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
+				F558B44D041A4E0090F42C0F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
+				E4C87328AA7344B78CE516B0 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
+				86F9F7D41CDB446C93F0E18D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
+				842B27FB79E045B08B4B7731 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
+				77F890E27E9A47C88DCCCF1D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
+				5193EAAF1C5847B89EF7B5C2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
+				43192DA4B4154248B2FAE9B4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
+				0BDA4B6CFB384E629E5DEB3A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
+				238ABE9F583A45158F620896 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
+				B70B1874800C4065AB2EA825 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
+				88CCE84673C2483F815E4D82 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
+				3EA86CE523C44354AAFE4FDF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
+				7FB464F28B424B0F9D4E4075 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
+				6579BC1512094BE084565CD3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
+				17F7F384D01C45EF9E4C322E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
+				258E48C06CAF416A8E485F88 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics.mm */,
+				29C42EF6503C42059085F668 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_2.cpp */,
+				9B4247706ACA4A42BF25C71F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_3.cpp */,
+				1D5FE70CC86A4CEBA5F02778 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_4.cpp */,
+				3E830C7B145C438792CF02D7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_basics/juce_gui_basics_5.cpp */,
+				FAF8EDEF68EB4D9787F3F28C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_gui_extra/juce_gui_extra.mm */,
+				40C2DF306C6743BB9B98E34E /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp */,
+				29C394989D134E009619E505 /* /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.cpp */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		085667777F70499EB917BDAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB7F3C37B82932EB6AC34642 /* ZERO_CHECK */;
+			targetProxy = 7B32F00B91F34CB3AD723A82 /* PBXContainerItemProxy */;
+		};
+		31F397FBCA0E4932A15C5AA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB7F3C37B82932EB6AC34642 /* ZERO_CHECK */;
+			targetProxy = 24B0A9A079A74099BD023020 /* PBXContainerItemProxy */;
+		};
+		36E611C802D44FEDAE0B5ED7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B621539222B5B3739779054 /* ALL_BUILD */;
+			targetProxy = 24FC625A28D944D99814CB39 /* PBXContainerItemProxy */;
+		};
+		3762C402E8724F5CB697D13B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1D2733838DFD66AC1303E9 /* LiveRack */;
+			targetProxy = 6DA028DC72794AC28A69839E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1559C5F2CB794A19BEE866B2 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/RelWithDebInfo;
+				ENABLE_HARDENED_RUNTIME = FALSE;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","'JUCE_STANDALONE_APPLICATION=1'","'JUCE_IN_APP_PURCHASES=0'","'JUCE_WEB_BROWSER=0'","'JUCE_USE_CURL=0'","'JUCE_APPLICATION_NAME_STRING=\"LiveRack\"'","'JUCE_APPLICATION_VERSION_STRING=\"0.1.0\"'","'JUCE_MODULE_AVAILABLE_juce_audio_basics=1'","'JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1'","'NDEBUG=1'","'_NDEBUG=1'","'JUCE_MODULE_AVAILABLE_juce_core=1'","'JUCE_MODULE_AVAILABLE_juce_audio_devices=1'","'JUCE_MODULE_AVAILABLE_juce_events=1'","'JUCE_MODULE_AVAILABLE_juce_audio_formats=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors=1'","'JUCE_MODULE_AVAILABLE_juce_gui_extra=1'","'JUCE_WEBVIEW_INTEROP_LIBRARY_VERSION=\"1.0.0\"'","'JUCE_MODULE_AVAILABLE_juce_gui_basics=1'","'JUCE_MODULE_AVAILABLE_juce_graphics=1'","'JUCE_MODULE_AVAILABLE_juce_data_structures=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors_headless=1'","'JUCE_MODULE_AVAILABLE_juce_audio_utils=1'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lv2,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/serd,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord/src,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sratom,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv/src,"$(inherited)");
+				INFOPLIST_FILE = /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				OTHER_CFLAGS = ("       -DNDEBUG -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers ","$(inherited)");
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG '-std=gnu++17' -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual -Wreorder -Winconsistent-missing-destructor-override ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework QuartzCore","-weak_framework Metal","-weak_framework MetalKit","-framework WebKit","-framework Accelerate","-framework Cocoa","-framework Foundation","-framework IOKit","-framework Security","-framework CoreAudio","-framework CoreMIDI","-framework AudioToolbox","-framework CoreAudioKit","-framework DiscRecording","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.YourName.LiveRack;
+				PRODUCT_NAME = LiveRack;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_TEMP_DIR = "/Users/lebatarddesmontagnes/Dev/LiveRack/build/build/LiveRack.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		282258965B9D4A779F8F2757 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		2865768070334C52B9182965 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		3F0CEAF2F184404798B14B69 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		46B4610DB4C046E7ADD626C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
+				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/build;
+			};
+			name = Debug;
+		};
+		54BF0CAD3458458F963CE41D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		5A1DED32154C4E348E09194C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/Release;
+				ENABLE_HARDENED_RUNTIME = FALSE;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","'JUCE_STANDALONE_APPLICATION=1'","'JUCE_IN_APP_PURCHASES=0'","'JUCE_WEB_BROWSER=0'","'JUCE_USE_CURL=0'","'JUCE_APPLICATION_NAME_STRING=\"LiveRack\"'","'JUCE_APPLICATION_VERSION_STRING=\"0.1.0\"'","'JUCE_MODULE_AVAILABLE_juce_audio_basics=1'","'JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1'","'NDEBUG=1'","'_NDEBUG=1'","'JUCE_MODULE_AVAILABLE_juce_core=1'","'JUCE_MODULE_AVAILABLE_juce_audio_devices=1'","'JUCE_MODULE_AVAILABLE_juce_events=1'","'JUCE_MODULE_AVAILABLE_juce_audio_formats=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors=1'","'JUCE_MODULE_AVAILABLE_juce_gui_extra=1'","'JUCE_WEBVIEW_INTEROP_LIBRARY_VERSION=\"1.0.0\"'","'JUCE_MODULE_AVAILABLE_juce_gui_basics=1'","'JUCE_MODULE_AVAILABLE_juce_graphics=1'","'JUCE_MODULE_AVAILABLE_juce_data_structures=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors_headless=1'","'JUCE_MODULE_AVAILABLE_juce_audio_utils=1'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lv2,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/serd,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord/src,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sratom,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv/src,"$(inherited)");
+				INFOPLIST_FILE = /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				OTHER_CFLAGS = ("    -DNDEBUG     -flto -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers ","$(inherited)");
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++17'     -flto -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual -Wreorder -Winconsistent-missing-destructor-override ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework QuartzCore","-weak_framework Metal","-weak_framework MetalKit","-framework WebKit","-framework Accelerate","-framework Cocoa","-framework Foundation","-framework IOKit","-framework Security","-framework CoreAudio","-framework CoreMIDI","-framework AudioToolbox","-framework CoreAudioKit","-framework DiscRecording","-flto","-Wl,-weak_reference_mismatches,weak","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.YourName.LiveRack;
+				PRODUCT_NAME = LiveRack;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_TEMP_DIR = "/Users/lebatarddesmontagnes/Dev/LiveRack/build/build/LiveRack.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		5B37321F74E1475C92592B63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		679FB9FCC7C943CABE1017B9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		703DEFCCA5174233A31AD624 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		7A4BFD93E0554A4596960559 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		94C0C84D1E66414C9B559DB7 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		9770B62500FD4C62ACC4B065 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/build;
+			};
+			name = MinSizeRel;
+		};
+		A67251DCB1634D39853D24F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/Debug;
+				ENABLE_HARDENED_RUNTIME = FALSE;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","'JUCE_STANDALONE_APPLICATION=1'","'JUCE_IN_APP_PURCHASES=0'","'JUCE_WEB_BROWSER=0'","'JUCE_USE_CURL=0'","'JUCE_APPLICATION_NAME_STRING=\"LiveRack\"'","'JUCE_APPLICATION_VERSION_STRING=\"0.1.0\"'","'JUCE_MODULE_AVAILABLE_juce_audio_basics=1'","'JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1'","'DEBUG=1'","'_DEBUG=1'","'JUCE_MODULE_AVAILABLE_juce_core=1'","'JUCE_MODULE_AVAILABLE_juce_audio_devices=1'","'JUCE_MODULE_AVAILABLE_juce_events=1'","'JUCE_MODULE_AVAILABLE_juce_audio_formats=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors=1'","'JUCE_MODULE_AVAILABLE_juce_gui_extra=1'","'JUCE_WEBVIEW_INTEROP_LIBRARY_VERSION=\"1.0.0\"'","'JUCE_MODULE_AVAILABLE_juce_gui_basics=1'","'JUCE_MODULE_AVAILABLE_juce_graphics=1'","'JUCE_MODULE_AVAILABLE_juce_data_structures=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors_headless=1'","'JUCE_MODULE_AVAILABLE_juce_audio_utils=1'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lv2,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/serd,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord/src,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sratom,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv/src,"$(inherited)");
+				INFOPLIST_FILE = /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				OTHER_CFLAGS = ("          -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers ","$(inherited)");
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				OTHER_CPLUSPLUSFLAGS = "   '-std=gnu++17'        -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual -Wreorder -Winconsistent-missing-destructor-override ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework QuartzCore","-weak_framework Metal","-weak_framework MetalKit","-framework WebKit","-framework Accelerate","-framework Cocoa","-framework Foundation","-framework IOKit","-framework Security","-framework CoreAudio","-framework CoreMIDI","-framework AudioToolbox","-framework CoreAudioKit","-framework DiscRecording","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.YourName.LiveRack;
+				PRODUCT_NAME = LiveRack;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_TEMP_DIR = "/Users/lebatarddesmontagnes/Dev/LiveRack/build/build/LiveRack.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		AA6DDF54E6D3475694311DE5 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode/LiveRack.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/MinSizeRel;
+				ENABLE_HARDENED_RUNTIME = FALSE;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","'JUCE_STANDALONE_APPLICATION=1'","'JUCE_IN_APP_PURCHASES=0'","'JUCE_WEB_BROWSER=0'","'JUCE_USE_CURL=0'","'JUCE_APPLICATION_NAME_STRING=\"LiveRack\"'","'JUCE_APPLICATION_VERSION_STRING=\"0.1.0\"'","'JUCE_MODULE_AVAILABLE_juce_audio_basics=1'","'JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1'","'NDEBUG=1'","'_NDEBUG=1'","'JUCE_MODULE_AVAILABLE_juce_core=1'","'JUCE_MODULE_AVAILABLE_juce_audio_devices=1'","'JUCE_MODULE_AVAILABLE_juce_events=1'","'JUCE_MODULE_AVAILABLE_juce_audio_formats=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors=1'","'JUCE_MODULE_AVAILABLE_juce_gui_extra=1'","'JUCE_WEBVIEW_INTEROP_LIBRARY_VERSION=\"1.0.0\"'","'JUCE_MODULE_AVAILABLE_juce_gui_basics=1'","'JUCE_MODULE_AVAILABLE_juce_graphics=1'","'JUCE_MODULE_AVAILABLE_juce_data_structures=1'","'JUCE_MODULE_AVAILABLE_juce_audio_processors_headless=1'","'JUCE_MODULE_AVAILABLE_juce_audio_utils=1'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/lebatarddesmontagnes/Dev/LiveRack/build/LiveRack_artefacts/JuceLibraryCode,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lv2,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/serd,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sord/src,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/sratom,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv,/Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/LV2_SDK/lilv/src,"$(inherited)");
+				INFOPLIST_FILE = /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				OTHER_CFLAGS = ("    -DNDEBUG -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers ","$(inherited)");
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++17' -Wall -Wshadow-all -Wshorten-64-to-32 -Wstrict-aliasing -Wuninitialized -Wunused-parameter -Wconversion -Wsign-compare -Wint-conversion -Wconditional-uninitialized -Wconstant-conversion -Wsign-conversion -Wbool-conversion -Wextra-semi -Wunreachable-code -Wcast-align -Wshift-sign-overflow -Wmissing-prototypes -Wnullable-to-nonnull-conversion -Wno-ignored-qualifiers -Wswitch-enum -Wpedantic -Wdeprecated -Wfloat-equal -Wmissing-field-initializers -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual -Wreorder -Winconsistent-missing-destructor-override ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework QuartzCore","-weak_framework Metal","-weak_framework MetalKit","-framework WebKit","-framework Accelerate","-framework Cocoa","-framework Foundation","-framework IOKit","-framework Security","-framework CoreAudio","-framework CoreMIDI","-framework AudioToolbox","-framework CoreAudioKit","-framework DiscRecording","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.YourName.LiveRack;
+				PRODUCT_NAME = LiveRack;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGET_TEMP_DIR = "/Users/lebatarddesmontagnes/Dev/LiveRack/build/build/LiveRack.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		ACF05CADDF2142EA8E2BA462 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		B102F6A7F9E34AC78BA0D972 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/build;
+			};
+			name = Release;
+		};
+		BE2B21E80AB54DEA835D0249 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/build;
+			};
+			name = RelWithDebInfo;
+		};
+		EB0537474E834DC5B709F737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		F0419348FF10432BB67C11D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10D4D7CEFA9A4AC4BAC75E98 /* Build configuration list for PBXAggregateTarget "install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				703DEFCCA5174233A31AD624 /* Debug */,
+				F0419348FF10432BB67C11D8 /* Release */,
+				7A4BFD93E0554A4596960559 /* MinSizeRel */,
+				ACF05CADDF2142EA8E2BA462 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		29DBB234B964439984A80B7A /* Build configuration list for PBXProject "LiveRack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46B4610DB4C046E7ADD626C5 /* Debug */,
+				B102F6A7F9E34AC78BA0D972 /* Release */,
+				9770B62500FD4C62ACC4B065 /* MinSizeRel */,
+				BE2B21E80AB54DEA835D0249 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4492DED6C3894D179D263C80 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54BF0CAD3458458F963CE41D /* Debug */,
+				EB0537474E834DC5B709F737 /* Release */,
+				94C0C84D1E66414C9B559DB7 /* MinSizeRel */,
+				679FB9FCC7C943CABE1017B9 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8FB3484B81214FF3809CB63F /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B37321F74E1475C92592B63 /* Debug */,
+				2865768070334C52B9182965 /* Release */,
+				3F0CEAF2F184404798B14B69 /* MinSizeRel */,
+				282258965B9D4A779F8F2757 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9D00A0092CEF44959863FBE6 /* Build configuration list for PBXNativeTarget "LiveRack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A67251DCB1634D39853D24F1 /* Debug */,
+				5A1DED32154C4E348E09194C /* Release */,
+				AA6DDF54E6D3475694311DE5 /* MinSizeRel */,
+				1559C5F2CB794A19BEE866B2 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1E91D6FB7F434DD0A5D97214 /* Project object */;
+}
