@@ -1,0 +1,35 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcapimin.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jinclude.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jconfig.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jpeglib.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jmorecfg.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jpegint.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jerror.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcapistd.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jccoefct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcinit.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcmainct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcmarker.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcmaster.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcomapi.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcparam.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcprepct.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcsample.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jmemmgr.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jmemsys.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jmemnobs.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jquant2.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jutils.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdinput.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jcarith.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jchuff.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jaricom.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jfdctint.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdct.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jfdctflt.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jfdctfst.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/jpglib/jdhuff.c
