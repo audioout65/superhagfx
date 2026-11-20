@@ -579,4 +579,6 @@ dependencies: /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Main.cpp \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/audio_cd/juce_AudioCDBurner.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_utils/audio_cd/juce_AudioCDReader.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainComponent.h \
-  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Compressor.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/PluginManager.h

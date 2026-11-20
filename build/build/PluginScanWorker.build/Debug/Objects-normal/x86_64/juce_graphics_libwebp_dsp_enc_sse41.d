@@ -1,0 +1,20 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/juce_webp_config.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/enc_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/dsp.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/cpu.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/common_sse2.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/enc/vp8i_enc.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/common_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/bit_writer_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/thread_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/encode.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/./types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/lossless_enc_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/lossless.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/decode.h

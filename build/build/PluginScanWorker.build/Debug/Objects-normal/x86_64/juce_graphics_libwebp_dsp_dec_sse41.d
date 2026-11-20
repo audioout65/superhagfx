@@ -1,0 +1,31 @@
+dependencies: \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_CompilerWarnings.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/system/juce_TargetPlatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/juce_webp_config.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/alpha_processing_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/cpu.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/dsp.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/dec_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/vp8i_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/common_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/vp8_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/decode.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/./types.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/vp8li_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dec/webpi_dec.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/rescaler_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/bit_reader_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/color_cache_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/huffman_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/webp/format_constants.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/random_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/thread_utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/utils/utils.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/lossless_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/lossless.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/upsampling_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/yuv.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/yuv_sse41.c \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/image_formats/libwebp/src/dsp/common_sse41.h

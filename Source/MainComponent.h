@@ -1,6 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "AudioChannel.h"
+#include "PluginManager.h"
 
 static constexpr int numChannels = 4;
 
@@ -29,6 +30,13 @@ private:
 
     std::array<std::unique_ptr<juce::ToggleButton>, numChannels> bypassButtons;
     std::array<std::unique_ptr<juce::Slider>, numChannels> gainSliders;
+    std::array<std::unique_ptr<juce::Slider>, numChannels> thresholdSliders;
+    std::array<std::unique_ptr<juce::Slider>, numChannels> ratioSliders;
+    std::array<std::unique_ptr<juce::Label>, numChannels> thresholdLabels;
+    std::array<std::unique_ptr<juce::Label>, numChannels> ratioLabels;
+
+    PluginManager pluginManager;
+    juce::TextButton scanPluginsButton { "Scanner les plugins VST3" };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

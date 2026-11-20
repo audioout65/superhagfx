@@ -533,7 +533,70 @@ dependencies: \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_LegacyAudioParameter.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/format_types/juce_VSTPluginFormat.cpp \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/format_types/juce_VST3PluginFormat.cpp \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_VST3PluginFormatImpl.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_VST3Headers.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/fplatform.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/base/source/fstring.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/ftypes.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/fstrdefs.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/istringresult.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/funknown.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/smartpointer.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/ipersistent.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/base/source/fobject.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/iupdatehandler.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/base/source/fdebug.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/conststringtable.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/ipluginbase.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/iplugincompatibility.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/ibstream.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/ustring.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/gui/iplugview.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/typesizecheck.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/gui/iplugviewcontentscalesupport.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/falignpush.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/base/falignpop.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstattributes.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/vsttypes.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstaudioprocessor.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstcomponent.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/vstspeaker.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstcontextmenu.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivsteditcontroller.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstevents.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstprocesscontext.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstnoteexpression.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivsthostapplication.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstmessage.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstmidicontrollers.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstparameterchanges.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstplugview.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstremapparamid.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstunits.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/pluginterfaces/vst/ivstchannelcontextinfo.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/common/memorystream.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/utility/uid.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/utility/optional.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/utility/vst2persistence.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/vsteditcontroller.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/vstcomponentbase.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/vstparameters.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/common/pluginview.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/vstpresetfile.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/base/source/fbuffer.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/moduleinfo/moduleinfoparser.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK/public.sdk/source/vst/moduleinfo/moduleinfo.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/pslextensions/ipslviewembedding.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_VST3Utilities.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_VST3Common.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/utilities/juce_FlagCache.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_ARACommonInternal.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/utilities/juce_NSViewComponentWithParent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/format_types/juce_AudioUnitPluginFormat.mm \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_AudioUnitPluginFormatImpl.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/native/juce_CoreAudioTimeConversions_mac.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_basics/native/juce_CoreAudioLayouts_mac.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors_headless/format_types/juce_AU_Shared.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/scanning/juce_KnownPluginList.cpp \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/scanning/juce_PluginDirectoryScanner.cpp \
   /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_audio_processors/scanning/juce_PluginListComponent.cpp \

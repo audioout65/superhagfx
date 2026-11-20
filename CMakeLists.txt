@@ -17,11 +17,15 @@ target_sources(LiveRack PRIVATE
     Source/Main.cpp
     Source/MainComponent.cpp
     Source/AudioChannel.h
+    Source/Compressor.h
+    Source/PluginManager.h
 )
 
 target_compile_definitions(LiveRack PRIVATE
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
+    JUCE_PLUGINHOST_VST3=1
+    JUCE_PLUGINHOST_AU=1
     JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:LiveRack,JUCE_PRODUCT_NAME>"
     JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:LiveRack,JUCE_VERSION>"
 )
@@ -38,6 +42,34 @@ target_link_libraries(LiveRack PRIVATE
     juce::juce_graphics
     juce::juce_gui_basics
     juce::juce_gui_extra
+    juce::juce_recommended_config_flags
+    juce::juce_recommended_lto_flags
+    juce::juce_recommended_warning_flags
+)
+juce_add_console_app(PluginScanWorker
+    PRODUCT_NAME "PluginScanWorker"
+)
+    juce_generate_juce_header(PluginScanWorker)
+
+target_sources(PluginScanWorker PRIVATE
+    Source/PluginScanWorkerMain.cpp
+)
+
+target_compile_definitions(PluginScanWorker PRIVATE
+    JUCE_STANDALONE_APPLICATION=1
+    JUCE_PLUGINHOST_VST3=1
+    JUCE_PLUGINHOST_AU=1
+)
+
+target_link_libraries(PluginScanWorker PRIVATE
+    juce::juce_audio_basics
+    juce::juce_audio_devices
+    juce::juce_audio_formats
+    juce::juce_audio_processors
+    juce::juce_audio_utils
+    juce::juce_core
+    juce::juce_data_structures
+    juce::juce_events
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags

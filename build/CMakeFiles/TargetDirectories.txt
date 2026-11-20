@@ -1,4 +1,5 @@
 /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/LiveRack.dir
+/Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/PluginScanWorker.dir
 /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/install.dir
 /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ALL_BUILD.dir
 /Users/lebatarddesmontagnes/Dev/LiveRack/build/CMakeFiles/ZERO_CHECK.dir
