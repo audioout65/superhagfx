@@ -57,12 +57,15 @@ private:
     void openChannelDetail (int channelIndex);
     void closeChannelDetail();
     void updatePanelPositions();
+    void setInterfaceLocked (bool shouldBeLocked);
+    void changeBufferSize (int newBufferSize);
 
     std::array<AudioChannel, numChannels> channels;
 
     TopBarComponent topBar;
     LeftSidebarComponent leftSidebar;
     int currentBank = 0;
+    bool interfaceLocked = false;
 
     std::unique_ptr<juce::AudioDeviceSelectorComponent> deviceSelector;
 

@@ -9,6 +9,8 @@ MainComponent::MainComponent()
     addAndMakeVisible (topBar);
     topBar.onOverviewTabClicked = [this] { closeChannelDetail(); };
     topBar.onRackTabClicked = [this] { openChannelDetail (detailChannelIndex); };
+    topBar.onLockToggled = [this] (bool locked) { setInterfaceLocked (locked); };
+    topBar.onLatencyChanged = [this] (int newBufferSize) { changeBufferSize (newBufferSize); };
 
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
@@ -104,6 +106,40 @@ void MainComponent::handleMenuCommand (int menuItemID)
         case MainMenu::audioSettings:  openAudioSettings(); break;
         default: break;
     }
+}
+
+void MainComponent::setInterfaceLocked (bool shouldBeLocked)
+{
+    interfaceLocked = shouldBeLocked;
+
+    // Verrouille tout sauf la barre du haut elle-meme (qui contient le
+    // cadenas et la navigation OVERVIEW/RACK), pour qu'on puisse toujours
+    // deverrouiller et changer de vue sans rien pouvoir modifier.
+    leftSidebar.setEnabled (! interfaceLocked);
+    channelsHolder.setEnabled (! interfaceLocked);
+    channelDetailView.setEnabled (! interfaceLocked);
+    inputPanel.setEnabled (! interfaceLocked);
+    outputPanel.setEnabled (! interfaceLocked);
+
+    repaint();
+}
+
+void MainComponent::changeBufferSize (int newBufferSize)
+{
+    auto* device = deviceManager.getCurrentAudioDevice();
+
+    if (device == nullptr)
+        return;
+
+    auto setup = deviceManager.getAudioDeviceSetup();
+    setup.bufferSize = newBufferSize;
+
+    auto error = deviceManager.setAudioDeviceSetup (setup, true);
+
+    if (error.isNotEmpty())
+        DBG ("Erreur lors du changement de buffer : " << error);
+    else
+        DBG ("Buffer change a " << newBufferSize << " samples.");
 }
 
 void MainComponent::openAudioSettings()
@@ -466,6 +502,15 @@ void MainComponent::timerCallback()
 void MainComponent::paint (juce::Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+
+    if (interfaceLocked)
+    {
+        // Leger voile semi-transparent par-dessus tout (sauf la barre du
+        // haut) pour indiquer visuellement que l'interface est verrouillee.
+        g.setColour (juce::Colours::black.withAlpha (0.25f));
+        auto overlayArea = getLocalBounds().withTrimmedTop (44);
+        g.fillRect (overlayArea);
+    }
 }
 
 void MainComponent::resized()
