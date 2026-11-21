@@ -22,6 +22,7 @@ target_sources(LiveRack PRIVATE
     Source/PluginSlot.h
     Source/SlotButton.h
     Source/CompressorEditor.h
+    Source/ChannelStripComponent.h
 )
 
 target_compile_definitions(LiveRack PRIVATE

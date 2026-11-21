@@ -3,7 +3,7 @@
 
 MainComponent::MainComponent()
 {
-    setAudioChannels (numChannels, 0);
+    setAudioChannels (32, 32);
 
     addAndMakeVisible (deviceSettingsButton);
     deviceSettingsButton.onClick = [this]
@@ -30,52 +30,69 @@ MainComponent::MainComponent()
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
 
+    addAndMakeVisible (bankAButton);
+    addAndMakeVisible (bankBButton);
+    bankAButton.setClickingTogglesState (true);
+    bankBButton.setClickingTogglesState (true);
+    bankAButton.setRadioGroupId (1001);
+    bankBButton.setRadioGroupId (1001);
+    bankAButton.setToggleState (true, juce::dontSendNotification);
+
+    bankAButton.onClick = [this] { showBank (0); };
+    bankBButton.onClick = [this] { showBank (1); };
+
     for (int ch = 0; ch < numChannels; ++ch)
     {
-        auto bypassBtn = std::make_unique<juce::ToggleButton>("Bypass");
-        bypassBtn->onClick = [this, ch, ptr = bypassBtn.get()]
+        channels[(size_t) ch].setInputChannelIndex (ch);
+        channels[(size_t) ch].setOutputChannelIndex (ch);
+
+        auto strip = std::make_unique<ChannelStripComponent>(ch, channels[(size_t) ch]);
+
+        strip->onSlotClicked = [this] (int channelIndex, int slotIndex)
         {
-            channels[(size_t) ch].setBypassed (ptr->getToggleState());
+            handleSlotClick (channelIndex, slotIndex);
         };
-        addAndMakeVisible (*bypassBtn);
-        bypassButtons[(size_t) ch] = std::move (bypassBtn);
-
-        auto slider = std::make_unique<juce::Slider>(juce::Slider::LinearVertical, juce::Slider::TextBoxBelow);
-        slider->setRange (0.0, 2.0, 0.01);
-        slider->setValue (1.0);
-        slider->onValueChange = [this, ch, ptr = slider.get()]
+        strip->onSlotRightClicked = [this] (int channelIndex, int slotIndex)
         {
-            channels[(size_t) ch].setGain ((float) ptr->getValue());
+            showSlotMenu (channelIndex, slotIndex);
         };
-        addAndMakeVisible (*slider);
-        gainSliders[(size_t) ch] = std::move (slider);
 
-        for (int slot = 0; slot < numSlotsPerChannel; ++slot)
-        {
-            auto slotBtn = std::make_unique<SlotButton>("+");
-
-            slotBtn->onClick = [this, ch, slot]
-            {
-                handleSlotClick (ch, slot);
-            };
-
-            slotBtn->onRightClick = [this, ch, slot]
-            {
-                showSlotMenu (ch, slot);
-            };
-
-            addAndMakeVisible (*slotBtn);
-            slotButtons[(size_t) ch][(size_t) slot] = std::move (slotBtn);
-        }
+        channelsHolder.addChildComponent (*strip);
+        channelsHolder.strips.push_back (strip.get());
+        channelStrips.push_back (std::move (strip));
     }
 
-    setSize (900, 650);
+    addAndMakeVisible (channelsHolder);
+
+    showBank (0);
+
+    setSize (1100, 650);
     startTimerHz (30);
 }
 
 MainComponent::~MainComponent()
 {
     shutdownAudio();
+}
+
+void MainComponent::showBank (int bankIndex)
+{
+    currentBank = bankIndex;
+    auto firstVisible = bankIndex * channelsPerBank;
+    auto lastVisible = firstVisible + channelsPerBank;
+
+    channelsHolder.strips.clear();
+
+    for (int ch = 0; ch < numChannels; ++ch)
+    {
+        auto isVisible = (ch >= firstVisible && ch < lastVisible);
+        channelStrips[(size_t) ch]->setVisible (isVisible);
+
+        if (isVisible)
+            channelsHolder.strips.push_back (channelStrips[(size_t) ch].get());
+    }
+
+    channelsHolder.resized();
 }
 
 void MainComponent::handleSlotClick (int channelIndex, int slotIndex)
@@ -102,7 +119,6 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
         menu.addSeparator();
         menu.addSectionHeader ("Plugins VST3 (" + juce::String ((int) plugins.size()) + ")");
 
-        // Regroupe les plugins par fabricant, tries alphabetiquement
         std::map<juce::String, std::vector<int>> byManufacturer;
 
         for (int i = 0; i < (int) plugins.size(); ++i)
@@ -113,7 +129,6 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
             byManufacturer[manufacturer].push_back (i);
         }
 
-        // IDs de menu : on decale de 1000 pour ne pas entrer en collision avec 1 et 2
         for (auto& entry : byManufacturer)
         {
             juce::PopupMenu subMenu;
@@ -159,7 +174,7 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
     const auto& desc = plugins[(size_t) pluginListIndex];
     auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
 
-    slotButtons[(size_t) channelIndex][(size_t) slotIndex]->setButtonText ("Chargement...");
+    channelStrips[(size_t) channelIndex]->refreshSlotButtonText (slotIndex, "Chargement...");
 
     slot.loadVst3Async (desc, pluginManager.getFormatManager(),
                         [this, channelIndex, slotIndex] (bool success, juce::String error)
@@ -167,7 +182,7 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
         if (! success)
         {
             DBG ("Echec du chargement VST3 : " << error);
-            slotButtons[(size_t) channelIndex][(size_t) slotIndex]->setButtonText ("+");
+            channelStrips[(size_t) channelIndex]->refreshSlotButtonText (slotIndex, "+");
             return;
         }
 
@@ -222,7 +237,7 @@ void MainComponent::openSlotEditor (int channelIndex, int slotIndex)
 void MainComponent::refreshSlotButtonText (int channelIndex, int slotIndex)
 {
     auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
-    slotButtons[(size_t) channelIndex][(size_t) slotIndex]->setButtonText (slot.getDisplayName());
+    channelStrips[(size_t) channelIndex]->refreshSlotButtonText (slotIndex, slot.getDisplayName());
 }
 
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
@@ -233,13 +248,15 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    auto numAvailable = bufferToFill.buffer->getNumChannels();
+    auto& buffer = *bufferToFill.buffer;
+    auto startSample = bufferToFill.startSample;
+    auto numSamples = bufferToFill.numSamples;
 
-    for (int ch = 0; ch < numChannels && ch < numAvailable; ++ch)
-    {
-        auto* samples = bufferToFill.buffer->getWritePointer (ch, bufferToFill.startSample);
-        channels[(size_t) ch].process (samples, bufferToFill.numSamples);
-    }
+    for (auto& channel : channels)
+        channel.readInput (buffer, startSample, numSamples);
+
+    for (auto& channel : channels)
+        channel.processAndWriteOutput (buffer, startSample, numSamples);
 }
 
 void MainComponent::releaseResources()
@@ -248,86 +265,25 @@ void MainComponent::releaseResources()
 
 void MainComponent::timerCallback()
 {
-    bool needsRepaint = false;
-
-    for (int i = 0; i < numChannels; ++i)
-    {
-        auto target = channels[(size_t) i].getLevel();
-        auto& display = displayedLevels[(size_t) i];
-
-        if (target > display)
-            display = target;
-        else
-            display *= 0.85f;
-
-        needsRepaint = true;
-    }
-
-    if (needsRepaint)
-        repaint();
+    for (auto& strip : channelStrips)
+        if (strip->isVisible())
+            strip->updateMeter();
 }
 
 void MainComponent::paint (juce::Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    auto area = getLocalBounds().reduced (20);
-    area.removeFromTop (90);
-
-    auto channelWidth = area.getWidth() / numChannels;
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-
-    for (int i = 0; i < numChannels; ++i)
-    {
-        auto channelArea = area.removeFromLeft (channelWidth).reduced (8);
-
-        auto labelArea = channelArea.removeFromTop (20);
-        g.drawText ("Ch " + juce::String (i + 1), labelArea, juce::Justification::centred);
-
-        auto meterArea = channelArea.removeFromLeft (30);
-        meterArea = meterArea.withSizeKeepingCentre (20, 150);
-
-        g.setColour (juce::Colours::darkgrey);
-        g.fillRect (meterArea);
-
-        auto level = juce::jlimit (0.0f, 1.0f, displayedLevels[(size_t) i]);
-        auto filledHeight = (int) (level * (float) meterArea.getHeight());
-        auto filledArea = meterArea.withTop (meterArea.getBottom() - filledHeight);
-
-        g.setColour (level > 0.9f ? juce::Colours::red
-                                   : (level > 0.7f ? juce::Colours::orange : juce::Colours::green));
-        g.fillRect (filledArea);
-    }
 }
 
 void MainComponent::resized()
 {
     deviceSettingsButton.setBounds (20, 10, 220, 30);
     scanPluginsButton.setBounds (260, 10, 220, 30);
+    bankAButton.setBounds (520, 10, 80, 30);
+    bankBButton.setBounds (610, 10, 80, 30);
 
-    auto area = getLocalBounds().reduced (20);
-    area.removeFromTop (90);
-
-    auto channelWidth = area.getWidth() / numChannels;
-
-    for (int ch = 0; ch < numChannels; ++ch)
-    {
-        auto channelArea = area.removeFromLeft (channelWidth).reduced (8);
-        channelArea.removeFromTop (20);
-
-        auto meterAndGainArea = channelArea.removeFromLeft (60);
-        gainSliders[(size_t) ch]->setBounds (meterAndGainArea.withTrimmedLeft (30).removeFromTop (180));
-        bypassButtons[(size_t) ch]->setBounds (meterAndGainArea.withTrimmedLeft (30).withY (meterAndGainArea.getY() + 185).withHeight (25));
-
-        auto slotsArea = channelArea.reduced (4);
-        slotsArea.removeFromTop (190);
-
-        for (int slot = 0; slot < numSlotsPerChannel; ++slot)
-        {
-            slotButtons[(size_t) ch][(size_t) slot]->setBounds (slotsArea.removeFromTop (34));
-            slotsArea.removeFromTop (4);
-        }
-    }
+    auto area = getLocalBounds();
+    area.removeFromTop (50);
+    channelsHolder.setBounds (area);
+    channelsHolder.resized();
 }

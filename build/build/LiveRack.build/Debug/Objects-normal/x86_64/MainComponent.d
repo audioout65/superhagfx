@@ -584,5 +584,6 @@ dependencies: \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/PluginSlot.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Compressor.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/PluginManager.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/ChannelStripComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/SlotButton.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/CompressorEditor.h

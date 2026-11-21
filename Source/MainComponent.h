@@ -2,9 +2,25 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 #include "PluginManager.h"
-#include "SlotButton.h"
+#include "ChannelStripComponent.h"
 
-static constexpr int numChannels = 4;
+static constexpr int numChannels = 32;
+static constexpr int channelsPerBank = 16;
+
+class ChannelsHolder : public juce::Component
+{
+public:
+    void resized() override
+    {
+        auto area = getLocalBounds();
+        auto stripWidth = area.getWidth() / juce::jmax (1, (int) strips.size());
+
+        for (auto* strip : strips)
+            strip->setBounds (area.removeFromLeft (stripWidth));
+    }
+
+    std::vector<ChannelStripComponent*> strips;
+};
 
 class MainComponent : public juce::AudioAppComponent,
                        private juce::Timer
@@ -27,20 +43,22 @@ private:
     void openSlotEditor (int channelIndex, int slotIndex);
     void refreshSlotButtonText (int channelIndex, int slotIndex);
     void loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex);
+    void showBank (int bankIndex);
 
     std::array<AudioChannel, numChannels> channels;
-    std::array<float, numChannels> displayedLevels {};
 
     juce::TextButton deviceSettingsButton { "Audio Device Settings..." };
     std::unique_ptr<juce::AudioDeviceSelectorComponent> deviceSelector;
 
-    std::array<std::unique_ptr<juce::ToggleButton>, numChannels> bypassButtons;
-    std::array<std::unique_ptr<juce::Slider>, numChannels> gainSliders;
-
-    std::array<std::array<std::unique_ptr<SlotButton>, numSlotsPerChannel>, numChannels> slotButtons;
+    juce::TextButton bankAButton { "1-16" };
+    juce::TextButton bankBButton { "17-32" };
+    int currentBank = 0;
 
     PluginManager pluginManager;
     juce::TextButton scanPluginsButton { "Scanner les plugins VST3" };
+
+    ChannelsHolder channelsHolder;
+    std::vector<std::unique_ptr<ChannelStripComponent>> channelStrips;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
