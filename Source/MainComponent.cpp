@@ -65,13 +65,6 @@ MainComponent::MainComponent()
         if (detailChannelIndex < numChannels - 1)
             openChannelDetail (detailChannelIndex + 1);
     };
-    channelDetailView.onSlotClicked = [this] (int channelIndex, int slotIndex)
-    {
-        auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
-
-        if (slot.isEmpty())
-            showSlotMenu (channelIndex, slotIndex);
-    };
     channelDetailView.onSlotRightClicked = [this] (int channelIndex, int slotIndex)
     {
         showSlotMenu (channelIndex, slotIndex);
@@ -112,9 +105,6 @@ void MainComponent::setInterfaceLocked (bool shouldBeLocked)
 {
     interfaceLocked = shouldBeLocked;
 
-    // Verrouille tout sauf la barre du haut elle-meme (qui contient le
-    // cadenas et la navigation OVERVIEW/RACK), pour qu'on puisse toujours
-    // deverrouiller et changer de vue sans rien pouvoir modifier.
     leftSidebar.setEnabled (! interfaceLocked);
     channelsHolder.setEnabled (! interfaceLocked);
     channelDetailView.setEnabled (! interfaceLocked);
@@ -369,11 +359,17 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
         {
             slot.loadInternalCompressor();
             refreshSlotButtonText (channelIndex, slotIndex);
+
+            if (detailViewOpen && detailChannelIndex == channelIndex)
+                channelDetailView.refreshSlots();
         }
         else if (result == 2)
         {
             slot.clear();
             refreshSlotButtonText (channelIndex, slotIndex);
+
+            if (detailViewOpen && detailChannelIndex == channelIndex)
+                channelDetailView.refreshSlots();
         }
         else if (result >= 1000)
         {
@@ -408,6 +404,18 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
 
         if (detailViewOpen && detailChannelIndex == channelIndex)
             channelDetailView.refreshSlots();
+
+        // 900ms : la capture interne (PluginSlot::startThumbnailCapture) prend
+        // maintenant jusqu'a 500ms (300ms premier affichage + 200ms resync
+        // taille), donc ce delai exterieur doit rester superieur a ça.
+        juce::Timer::callAfterDelay (900, [this, channelIndex, slotIndex]
+        {
+            auto& slotRef = channels[(size_t) channelIndex].getSlot (slotIndex);
+            auto thumb = slotRef.getThumbnail();
+
+            if (detailViewOpen && detailChannelIndex == channelIndex)
+                channelDetailView.refreshSlotThumbnail (slotIndex, thumb);
+        });
     });
 }
 
@@ -494,6 +502,7 @@ void MainComponent::timerCallback()
     {
         inputPanel.updateMeter();
         outputPanel.updateMeter();
+        channelDetailView.updateSlotMeters();
     }
 
     topBar.setCpuUsage (deviceManager.getCpuUsage());
@@ -505,8 +514,6 @@ void MainComponent::paint (juce::Graphics& g)
 
     if (interfaceLocked)
     {
-        // Leger voile semi-transparent par-dessus tout (sauf la barre du
-        // haut) pour indiquer visuellement que l'interface est verrouillee.
         g.setColour (juce::Colours::black.withAlpha (0.25f));
         auto overlayArea = getLocalBounds().withTrimmedTop (44);
         g.fillRect (overlayArea);

@@ -45,9 +45,9 @@ private:
     bool pendingClick = false;
 };
 
-// L'interface complete d'un seul canal : section INPUT en haut, pile de
-// slots au milieu, section OUTPUT en bas. Les deux vumetres se partagent
-// a parts rigoureusement egales l'espace vertical restant.
+// L'interface complete d'un seul canal pour la vue OVERVIEW (texte seul
+// dans les slots, pas de miniature -- celles-ci sont reservees a RACK) :
+// section INPUT en haut, pile de slots au milieu, section OUTPUT en bas.
 class ChannelStripComponent : public juce::Component
 {
 public:
@@ -239,28 +239,22 @@ public:
     {
         auto fullArea = getLocalBounds().reduced (10);
 
-        // --- Reserve d'abord toutes les zones de taille FIXE, dans l'ordre
-        // d'affichage, en travaillant sur une copie, pour calculer ensuite
-        // l'espace total disponible pour les deux vumetres. ---
         auto probe = fullArea;
-        probe.removeFromTop (22 + 6);                 // nom du canal
-        probe.removeFromTop (14 + 4 + 20 + 8);         // titre+combo INPUT
-        auto inputFixedBottom = 66 + 10 + 20 + 10;     // knob+marge+bouton IN+marge
+        probe.removeFromTop (22 + 6);
+        probe.removeFromTop (14 + 4 + 20 + 8);
+        auto inputFixedBottom = 66 + 10 + 20 + 10;
         probe.removeFromTop (inputFixedBottom);
 
         auto slotsHeight = (int) slotButtons.size() * 34 - 4;
-        probe.removeFromTop (slotsHeight + 10);        // slots + marge
+        probe.removeFromTop (slotsHeight + 10);
 
-        probe.removeFromTop (14 + 4 + 20 + 8);         // titre+combo OUTPUT
-        auto outputFixedBottom = 80 + 16 + 30;         // knob+marge+MUTE
+        probe.removeFromTop (14 + 4 + 20 + 8);
+        auto outputFixedBottom = 80 + 16 + 30;
         probe.removeFromBottom (outputFixedBottom);
 
-        // Ce qui reste dans "probe" est l'espace total pour les deux
-        // vumetres reunis : on le partage strictement en deux.
         auto totalMeterHeight = juce::jmax (0, probe.getHeight());
         auto eachMeterHeight = totalMeterHeight / 2;
 
-        // --- Applique maintenant les positions reelles, dans le meme ordre. ---
         auto area = fullArea;
 
         channelLabel.setBounds (area.removeFromTop (22));

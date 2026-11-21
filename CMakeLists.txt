@@ -16,11 +16,14 @@ juce_generate_juce_header(LiveRack)
 target_sources(LiveRack PRIVATE
     Source/Main.cpp
     Source/MainComponent.cpp
+    Source/NativeWindowCapture.mm
     Source/AudioChannel.h
     Source/Compressor.h
     Source/PluginManager.h
     Source/PluginSlot.h
     Source/SlotButton.h
+    Source/RackSlotComponent.h
+    Source/NativeWindowCapture.h
     Source/CompressorEditor.h
     Source/ChannelStripComponent.h
     Source/ChannelDetailView.h
@@ -57,6 +60,19 @@ target_link_libraries(LiveRack PRIVATE
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
 )
+
+if (APPLE)
+    target_link_libraries(LiveRack PRIVATE
+        "-framework Cocoa"
+        "-framework CoreGraphics"
+        "-framework ImageIO"
+    )
+
+    add_custom_command(TARGET LiveRack POST_BUILD
+        COMMAND bash -c "/usr/libexec/PlistBuddy -c 'Delete :NSMicrophoneUsageDescription' '$<TARGET_BUNDLE_CONTENT_DIR:LiveRack>/Info.plist' 2>/dev/null; /usr/libexec/PlistBuddy -c 'Add :NSMicrophoneUsageDescription string \"LiveRack a besoin des entrees audio pour traiter le son en direct.\"' '$<TARGET_BUNDLE_CONTENT_DIR:LiveRack>/Info.plist'"
+        VERBATIM
+    )
+endif()
 
 juce_add_console_app(PluginScanWorker
     PRODUCT_NAME "PluginScanWorker"

@@ -1,13 +1,12 @@
 #pragma once
 #include <JuceHeader.h>
 #include "AudioChannel.h"
-#include "SlotButton.h"
+#include "RackSlotComponent.h"
 #include "CompressorEditor.h"
 
-// Vue detaillee d'un seul canal : nom editable, pile de slots, editeur du
-// plugin selectionne. Les panneaux INPUT et OUTPUT sont geres a part par
-// MainComponent (toujours au premier plan), cette vue reserve juste leurs
-// emplacements.
+// Vue detaillee d'un seul canal : entree/sortie en haut, pile de slots
+// composites a gauche (nom+selecteur, IN, mini-vumetre, miniature),
+// editeur du plugin selectionne a droite.
 class ChannelDetailView : public juce::Component
 {
 public:
@@ -28,32 +27,31 @@ public:
         {
             if (channel != nullptr)
                 channel->setCustomName (channelNameLabel.getText());
-
-            if (onNameChanged != nullptr)
-                onNameChanged (channelIndex, channelNameLabel.getText());
         };
         addAndMakeVisible (channelNameLabel);
 
         for (int slot = 0; slot < numSlotsPerChannel; ++slot)
         {
-            auto slotBtn = std::make_unique<SlotButton>("ADD PLUGIN");
+            auto slotComp = std::make_unique<RackSlotComponent>();
             auto slotIndexCopy = slot;
 
-            slotBtn->onClick = [this, slotIndexCopy]
-            {
-                selectSlotForDisplay (slotIndexCopy);
-
-                if (onSlotClicked != nullptr)
-                    onSlotClicked (channelIndex, slotIndexCopy);
-            };
-            slotBtn->onRightClick = [this, slotIndexCopy]
+            slotComp->onMenuRequested = [this, slotIndexCopy]
             {
                 if (onSlotRightClicked != nullptr)
                     onSlotRightClicked (channelIndex, slotIndexCopy);
             };
+            slotComp->onThumbnailClicked = [this, slotIndexCopy]
+            {
+                selectSlotForDisplay (slotIndexCopy);
+            };
+            slotComp->onInToggled = [this, slotIndexCopy] (bool isIn)
+            {
+                if (channel != nullptr)
+                    channel->getSlot (slotIndexCopy).setBypassed (! isIn);
+            };
 
-            addAndMakeVisible (*slotBtn);
-            slotButtons.push_back (std::move (slotBtn));
+            addAndMakeVisible (*slotComp);
+            slotComponents.push_back (std::move (slotComp));
         }
 
         pluginViewport.setViewedComponent (&pluginDisplayArea, false);
@@ -69,7 +67,6 @@ public:
         auto displayName = channel->getCustomName();
         if (displayName.isEmpty())
             displayName = "Ch " + juce::String (channelIndex + 1);
-
         channelNameLabel.setText (displayName, juce::dontSendNotification);
 
         selectedSlot = -1;
@@ -91,13 +88,41 @@ public:
             auto name = pluginSlot.getDisplayName();
             auto isLoaded = ! pluginSlot.isEmpty();
 
-            slotButtons[(size_t) slot]->setButtonText (isLoaded ? name : "ADD PLUGIN");
-            slotButtons[(size_t) slot]->setColour (juce::TextButton::buttonColourId,
-                isLoaded ? juce::Colour (0xff2d6fc4) : juce::Colour (0xff2c313a));
+            slotComponents[(size_t) slot]->setPluginName (isLoaded ? name : "");
+            slotComponents[(size_t) slot]->setInState (! pluginSlot.isBypassed());
+
+            if (isLoaded && pluginSlot.getThumbnail().isValid())
+                slotComponents[(size_t) slot]->setThumbnail (pluginSlot.getThumbnail());
+            else
+                slotComponents[(size_t) slot]->clearThumbnail();
         }
 
         if (selectedSlot >= 0)
             selectSlotForDisplay (selectedSlot);
+    }
+
+    void refreshSlotThumbnail (int slotIndex, const juce::Image& image)
+    {
+        if (slotIndex >= 0 && slotIndex < (int) slotComponents.size())
+        {
+            if (image.isValid())
+                slotComponents[(size_t) slotIndex]->setThumbnail (image);
+            else
+                slotComponents[(size_t) slotIndex]->clearThumbnail();
+        }
+    }
+
+    void updateSlotMeters()
+    {
+        // Pas de vumetre par plugin individuel pour l'instant : on reutilise
+        // le niveau global du canal comme approximation visuelle simple.
+        if (channel == nullptr)
+            return;
+
+        auto level = channel->getLevel();
+
+        for (auto& slotComp : slotComponents)
+            slotComp->setMeterLevel (level);
     }
 
     void selectSlotForDisplay (int slotIndex)
@@ -171,20 +196,23 @@ public:
 
         area.removeFromTop (16);
 
-        // Reserve 170px a gauche pour le panneau INPUT et 170px a droite
-        // pour le panneau OUTPUT, geres par MainComponent.
         inputPanelBounds = area.removeFromLeft (170);
         area.removeFromLeft (20);
 
         outputPanelBounds = area.removeFromRight (170);
         area.removeFromRight (20);
 
+        // Colonne de slots composites : large et assez haute pour que la
+        // miniature du plugin soit bien lisible.
+        constexpr int slotHeight = 150;
+        constexpr int slotGap = 10;
+
         auto slotsColumn = area.removeFromLeft (280);
 
-        for (auto& btn : slotButtons)
+        for (auto& slotComp : slotComponents)
         {
-            btn->setBounds (slotsColumn.removeFromTop (44));
-            slotsColumn.removeFromTop (8);
+            slotComp->setBounds (slotsColumn.removeFromTop (slotHeight));
+            slotsColumn.removeFromTop (slotGap);
         }
 
         area.removeFromLeft (20);
@@ -196,16 +224,11 @@ public:
             layoutPluginEditor (*currentInternalEditor);
         else
             layoutEmptyDisplay();
-
-        if (onPanelBoundsChanged != nullptr)
-            onPanelBoundsChanged();
     }
 
     std::function<void()> onPrevious;
     std::function<void()> onNext;
-    std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
-    std::function<void (int channelIndex, juce::String newName)> onNameChanged;
     std::function<void()> onPanelBoundsChanged;
 
 private:
@@ -245,7 +268,7 @@ private:
 
     juce::TextButton prevButton, nextButton;
     juce::Label channelNameLabel;
-    std::vector<std::unique_ptr<SlotButton>> slotButtons;
+    std::vector<std::unique_ptr<RackSlotComponent>> slotComponents;
 
     juce::Viewport pluginViewport;
     juce::Component pluginDisplayArea;

@@ -1,6 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "Compressor.h"
+#include "NativeWindowCapture.h"
 
 enum class SlotContentType
 {
@@ -9,9 +10,6 @@ enum class SlotContentType
     vst3
 };
 
-// Un emplacement dans la chaine d'un canal : vide, effet interne, ou plugin VST3.
-// Protege par un verrou car le thread audio (process) et le thread principal
-// (chargement d'un plugin) peuvent y acceder en meme temps.
 class PluginSlot
 {
 public:
@@ -67,6 +65,7 @@ public:
         const juce::SpinLock::ScopedLockType lock (pluginLock);
         vstInstance.reset();
         contentType = SlotContentType::internalCompressor;
+        thumbnailImage = juce::Image();
     }
 
     void clear()
@@ -76,6 +75,7 @@ public:
         contentType = SlotContentType::empty;
         vstDisplayName.clear();
         lastPluginDescription = juce::PluginDescription();
+        thumbnailImage = juce::Image();
     }
 
     void loadVst3Async (const juce::PluginDescription& desc,
@@ -102,6 +102,8 @@ public:
                     contentType = SlotContentType::vst3;
                 }
 
+                startThumbnailCapture();
+
                 if (onDone != nullptr)
                     onDone (true, {});
             });
@@ -121,6 +123,8 @@ public:
         }
     }
 
+    const juce::Image& getThumbnail() const { return thumbnailImage; }
+
     void setBypassed (bool shouldBeBypassed) { bypassed = shouldBeBypassed; }
     bool isBypassed() const                   { return bypassed; }
 
@@ -132,8 +136,6 @@ public:
         return vstInstance.get();
     }
 
-    // Sauvegarde ce slot dans un element XML. formatManager est utilise pour
-    // retrouver le vrai PluginDescription au chargement.
     void saveToXml (juce::XmlElement& xml) const
     {
         switch (contentType)
@@ -171,9 +173,6 @@ public:
         xml.setAttribute ("bypassed", bypassed);
     }
 
-    // Charge ce slot depuis un element XML. Pour un VST3, le chargement est
-    // asynchrone : onDone est appele une fois termine (ou immediatement pour
-    // les autres types).
     void loadFromXmlAsync (const juce::XmlElement& xml,
                            juce::AudioPluginFormatManager& formatManager,
                            std::function<void()> onDone)
@@ -224,9 +223,13 @@ public:
             {
                 if (success && state.getSize() > 0)
                 {
-                    const juce::SpinLock::ScopedLockType lock (pluginLock);
-                    if (vstInstance != nullptr)
-                        vstInstance->setStateInformation (state.getData(), (int) state.getSize());
+                    {
+                        const juce::SpinLock::ScopedLockType lock (pluginLock);
+                        if (vstInstance != nullptr)
+                            vstInstance->setStateInformation (state.getData(), (int) state.getSize());
+                    }
+
+                    startThumbnailCapture();
                 }
 
                 if (onDone != nullptr)
@@ -277,6 +280,87 @@ private:
         }
     }
 
+    // Affiche brievement l'editeur dans une vraie fenetre visible a l'ecran,
+    // a pleine opacite (necessaire pour que les pixels captures ne soient pas
+    // transparents), puis capture et referme aussitot.
+    //
+    // Certains plugins (Ozone, RC 48...) redimensionnent leur editeur juste
+    // apres sa creation (taille initiale = placeholder, taille finale posee
+    // un peu plus tard par le plugin lui-meme). On resynchronise donc la
+    // taille de la fenetre juste avant la capture, avec un court delai
+    // supplementaire pour laisser ce redimensionnement se produire.
+    void startThumbnailCapture()
+    {
+        if (! juce::MessageManager::getInstance()->isThisTheMessageThread())
+        {
+            juce::MessageManager::callAsync ([this] { startThumbnailCapture(); });
+            return;
+        }
+
+        juce::AudioPluginInstance* instance = nullptr;
+        {
+            const juce::SpinLock::ScopedLockType lock (pluginLock);
+            instance = vstInstance.get();
+        }
+
+        if (instance == nullptr)
+            return;
+
+        auto editor = std::shared_ptr<juce::AudioProcessorEditor> (instance->createEditorIfNeeded());
+
+        if (editor == nullptr)
+            return;
+
+        auto window = std::make_shared<juce::DocumentWindow>(
+            "capture", juce::Colours::black, juce::DocumentWindow::TitleBarButtons::closeButton);
+
+        window->setContentNonOwned (editor.get(), true);
+        window->setAlwaysOnTop (true);
+        window->setAlpha (1.0f);
+        window->setUsingNativeTitleBar (false);
+        window->setDropShadowEnabled (false);
+        window->setVisible (true);
+        window->setBounds (20, 20, editor->getWidth(), editor->getHeight());
+        window->toFront (false);
+
+        auto tempFile = juce::File::getSpecialLocation (juce::File::tempDirectory)
+                            .getChildFile ("liverack_thumb_" + juce::String (juce::Random::getSystemRandom().nextInt()) + ".png");
+        auto tempPath = tempFile.getFullPathName().toStdString();
+
+        // Etape 1 (300ms) : laisser l'editeur finir son premier affichage
+        // et son eventuel auto-redimensionnement, puis resynchroniser la
+        // fenetre sur sa taille reelle actuelle.
+        juce::Timer::callAfterDelay (300, [this, editor, window, tempFile, tempPath]
+        {
+            auto realWidth  = editor->getWidth();
+            auto realHeight = editor->getHeight();
+
+            if (realWidth > 0 && realHeight > 0)
+                window->setBounds (20, 20, realWidth, realHeight);
+
+            // Etape 2 (200ms de plus) : laisser ce resize se composer
+            // reellement a l'ecran avant de capturer les pixels.
+            juce::Timer::callAfterDelay (200, [this, editor, window, tempFile, tempPath]
+            {
+                auto* peer = editor->getPeer();
+                auto nativeHandle = peer != nullptr ? peer->getNativeHandle() : nullptr;
+
+                if (nativeHandle != nullptr)
+                {
+                    auto captureOk = captureNativeWindowToFile (nativeHandle, tempPath);
+
+                    if (captureOk)
+                        thumbnailImage = juce::ImageFileFormat::loadFrom (tempFile);
+                }
+
+                tempFile.deleteFile();
+
+                window->setContentNonOwned (nullptr, false);
+                window->setVisible (false);
+            });
+        });
+    }
+
     double currentSampleRate = 44100.0;
     int currentBlockSize = 512;
 
@@ -291,4 +375,5 @@ private:
     juce::PluginDescription lastPluginDescription;
     juce::AudioBuffer<float> scratchBuffer;
     juce::MidiBuffer midiBuffer;
+    juce::Image thumbnailImage;
 };
