@@ -591,4 +591,5 @@ dependencies: \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/TopBarComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MeterAndGainOverlay.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/InputPanelComponent.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/LeftSidebarComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainMenu.h

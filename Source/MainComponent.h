@@ -7,6 +7,7 @@
 #include "TopBarComponent.h"
 #include "MeterAndGainOverlay.h"
 #include "InputPanelComponent.h"
+#include "LeftSidebarComponent.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -60,12 +61,10 @@ private:
     std::array<AudioChannel, numChannels> channels;
 
     TopBarComponent topBar;
+    LeftSidebarComponent leftSidebar;
+    int currentBank = 0;
 
     std::unique_ptr<juce::AudioDeviceSelectorComponent> deviceSelector;
-
-    juce::TextButton bankAButton { "1-16" };
-    juce::TextButton bankBButton { "17-32" };
-    int currentBank = 0;
 
     std::unique_ptr<juce::FileChooser> fileChooser;
 

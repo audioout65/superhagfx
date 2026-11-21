@@ -27,6 +27,7 @@ target_sources(LiveRack PRIVATE
     Source/TopBarComponent.h
     Source/MeterAndGainOverlay.h
     Source/InputPanelComponent.h
+    Source/LeftSidebarComponent.h
     Source/LiveRackLookAndFeel.h
     Source/MainMenu.h
 )

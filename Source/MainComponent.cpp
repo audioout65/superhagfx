@@ -13,16 +13,8 @@ MainComponent::MainComponent()
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
 
-    addAndMakeVisible (bankAButton);
-    addAndMakeVisible (bankBButton);
-    bankAButton.setClickingTogglesState (true);
-    bankBButton.setClickingTogglesState (true);
-    bankAButton.setRadioGroupId (1001);
-    bankBButton.setRadioGroupId (1001);
-    bankAButton.setToggleState (true, juce::dontSendNotification);
-
-    bankAButton.onClick = [this] { showBank (0); };
-    bankBButton.onClick = [this] { showBank (1); };
+    addAndMakeVisible (leftSidebar);
+    leftSidebar.onBankSelected = [this] (int bankIndex) { showBank (bankIndex); };
 
     for (int ch = 0; ch < numChannels; ++ch)
     {
@@ -86,16 +78,8 @@ MainComponent::MainComponent()
     {
         updatePanelPositions();
     };
-    channelDetailView.onNameChanged = [this] (int channelIndex, juce::String newName)
-    {
-        juce::ignoreUnused (channelIndex, newName);
-        // Le nom est deja stocke dans AudioChannel par ChannelDetailView ;
-        // on pourrait ici rafraichir d'autres affichages si besoin plus tard.
-    };
     addChildComponent (channelDetailView);
 
-    // Panneaux ajoutes en dernier : toujours dessines par-dessus tout le
-    // reste, y compris un plugin qui deborderait de son emplacement.
     addChildComponent (inputPanel);
     addChildComponent (outputPanel);
 
@@ -161,8 +145,7 @@ void MainComponent::openChannelDetail (int channelIndex)
     channelDetailView.setChannel (channelIndex, channels[(size_t) channelIndex]);
     channelDetailView.setVisible (true);
     channelsHolder.setVisible (false);
-    bankAButton.setVisible (false);
-    bankBButton.setVisible (false);
+    leftSidebar.setVisible (false);
 
     inputPanel.setChannel (&channels[(size_t) channelIndex]);
     inputPanel.setVisible (true);
@@ -180,8 +163,7 @@ void MainComponent::closeChannelDetail()
     detailViewOpen = false;
     channelDetailView.setVisible (false);
     channelsHolder.setVisible (true);
-    bankAButton.setVisible (true);
-    bankBButton.setVisible (true);
+    leftSidebar.setVisible (true);
 
     inputPanel.setVisible (false);
     inputPanel.setChannel (nullptr);
@@ -276,6 +258,8 @@ void MainComponent::loadSession()
 void MainComponent::showBank (int bankIndex)
 {
     currentBank = bankIndex;
+    leftSidebar.setSelectedBank (bankIndex);
+
     auto firstVisible = bankIndex * channelsPerBank;
     auto lastVisible = firstVisible + channelsPerBank;
 
@@ -491,11 +475,7 @@ void MainComponent::resized()
     auto topBarArea = fullArea.removeFromTop (44);
     topBar.setBounds (topBarArea);
 
-    auto bankBarArea = fullArea.removeFromTop (44);
-    auto bankButtonsArea = bankBarArea.removeFromRight (160).reduced (10, 7);
-    bankAButton.setBounds (bankButtonsArea.removeFromLeft (70));
-    bankButtonsArea.removeFromLeft (10);
-    bankBButton.setBounds (bankButtonsArea);
+    leftSidebar.setBounds (fullArea.removeFromLeft (100));
 
     channelsHolder.setBounds (fullArea);
     channelsHolder.resized();
