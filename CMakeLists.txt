@@ -23,6 +23,10 @@ target_sources(LiveRack PRIVATE
     Source/SlotButton.h
     Source/CompressorEditor.h
     Source/ChannelStripComponent.h
+    Source/ChannelDetailView.h
+    Source/TopBarComponent.h
+    Source/LiveRackLookAndFeel.h
+    Source/MainMenu.h
 )
 
 target_compile_definitions(LiveRack PRIVATE
@@ -50,10 +54,12 @@ target_link_libraries(LiveRack PRIVATE
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
 )
+
 juce_add_console_app(PluginScanWorker
     PRODUCT_NAME "PluginScanWorker"
 )
-    juce_generate_juce_header(PluginScanWorker)
+
+juce_generate_juce_header(PluginScanWorker)
 
 target_sources(PluginScanWorker PRIVATE
     Source/PluginScanWorkerMain.cpp

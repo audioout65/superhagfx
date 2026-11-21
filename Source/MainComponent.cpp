@@ -1,40 +1,17 @@
 #include "MainComponent.h"
 #include "CompressorEditor.h"
+#include "MainMenu.h"
 
 MainComponent::MainComponent()
 {
     setAudioChannels (32, 32);
 
-    addAndMakeVisible (deviceSettingsButton);
-    deviceSettingsButton.onClick = [this]
-    {
-        deviceSelector = std::make_unique<juce::AudioDeviceSelectorComponent>(
-            deviceManager, 0, 32, 0, 32, false, false, true, false);
-        deviceSelector->setSize (500, 400);
-
-        juce::DialogWindow::LaunchOptions options;
-        options.content.setOwned (deviceSelector.release());
-        options.dialogTitle = "Audio Device Settings";
-        options.escapeKeyTriggersCloseButton = true;
-        options.useNativeTitleBar = true;
-        options.resizable = true;
-        options.launchAsync();
-    };
-
-    addAndMakeVisible (scanPluginsButton);
-    scanPluginsButton.onClick = [this]
-    {
-        pluginManager.scanForPlugins();
-    };
+    addAndMakeVisible (topBar);
+    topBar.onOverviewTabClicked = [this] { closeChannelDetail(); };
+    topBar.onRackTabClicked = [this] { openChannelDetail (detailChannelIndex); };
 
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
-
-    addAndMakeVisible (saveSessionButton);
-    saveSessionButton.onClick = [this] { saveSession(); };
-
-    addAndMakeVisible (loadSessionButton);
-    loadSessionButton.onClick = [this] { loadSession(); };
 
     addAndMakeVisible (bankAButton);
     addAndMakeVisible (bankBButton);
@@ -54,6 +31,10 @@ MainComponent::MainComponent()
 
         auto strip = std::make_unique<ChannelStripComponent>(ch, channels[(size_t) ch]);
 
+        strip->onChannelNameClicked = [this] (int channelIndex)
+        {
+            openChannelDetail (channelIndex);
+        };
         strip->onSlotClicked = [this] (int channelIndex, int slotIndex)
         {
             handleSlotClick (channelIndex, slotIndex);
@@ -70,15 +51,91 @@ MainComponent::MainComponent()
 
     addAndMakeVisible (channelsHolder);
 
+    channelDetailView.onPrevious = [this]
+    {
+        if (detailChannelIndex > 0)
+            openChannelDetail (detailChannelIndex - 1);
+    };
+    channelDetailView.onNext = [this]
+    {
+        if (detailChannelIndex < numChannels - 1)
+            openChannelDetail (detailChannelIndex + 1);
+    };
+    channelDetailView.onSlotClicked = [this] (int channelIndex, int slotIndex)
+    {
+        handleSlotClick (channelIndex, slotIndex);
+    };
+    channelDetailView.onSlotRightClicked = [this] (int channelIndex, int slotIndex)
+    {
+        showSlotMenu (channelIndex, slotIndex);
+    };
+    addChildComponent (channelDetailView);
+
     showBank (0);
 
-    setSize (1100, 650);
+    setSize (1100, 680);
     startTimerHz (30);
 }
 
 MainComponent::~MainComponent()
 {
     shutdownAudio();
+}
+
+void MainComponent::handleMenuCommand (int menuItemID)
+{
+    switch (menuItemID)
+    {
+        case MainMenu::scanPlugins:    pluginManager.scanForPlugins(); break;
+        case MainMenu::saveSession:    saveSession(); break;
+        case MainMenu::loadSession:    loadSession(); break;
+        case MainMenu::audioSettings:  openAudioSettings(); break;
+        default: break;
+    }
+}
+
+void MainComponent::openAudioSettings()
+{
+    deviceSelector = std::make_unique<juce::AudioDeviceSelectorComponent>(
+        deviceManager, 0, 32, 0, 32, false, false, true, false);
+    deviceSelector->setSize (500, 400);
+
+    juce::DialogWindow::LaunchOptions options;
+    options.content.setOwned (deviceSelector.release());
+    options.dialogTitle = "Audio Device Settings";
+    options.escapeKeyTriggersCloseButton = true;
+    options.useNativeTitleBar = true;
+    options.resizable = true;
+    options.launchAsync();
+}
+
+void MainComponent::openChannelDetail (int channelIndex)
+{
+    detailChannelIndex = channelIndex;
+    detailViewOpen = true;
+
+    channelDetailView.setChannel (channelIndex, channels[(size_t) channelIndex]);
+    channelDetailView.setVisible (true);
+    channelsHolder.setVisible (false);
+    bankAButton.setVisible (false);
+    bankBButton.setVisible (false);
+
+    topBar.setActiveTab (true);
+
+    resized();
+}
+
+void MainComponent::closeChannelDetail()
+{
+    detailViewOpen = false;
+    channelDetailView.setVisible (false);
+    channelsHolder.setVisible (true);
+    bankAButton.setVisible (true);
+    bankBButton.setVisible (true);
+
+    topBar.setActiveTab (false);
+
+    resized();
 }
 
 void MainComponent::saveSession()
@@ -150,6 +207,9 @@ void MainComponent::loadSession()
                 [this, index]
             {
                 channelStrips[(size_t) index]->refreshFromChannel();
+
+                if (detailViewOpen && detailChannelIndex == index)
+                    channelDetailView.refreshSlots();
             });
         }
 
@@ -269,6 +329,9 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
         }
 
         refreshSlotButtonText (channelIndex, slotIndex);
+
+        if (detailViewOpen && detailChannelIndex == channelIndex)
+            channelDetailView.refreshSlots();
     });
 }
 
@@ -350,6 +413,11 @@ void MainComponent::timerCallback()
     for (auto& strip : channelStrips)
         if (strip->isVisible())
             strip->updateMeter();
+
+    if (detailViewOpen)
+        channelDetailView.updateMeter();
+
+    topBar.setCpuUsage (deviceManager.getCpuUsage());
 }
 
 void MainComponent::paint (juce::Graphics& g)
@@ -359,15 +427,19 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    deviceSettingsButton.setBounds (20, 10, 180, 30);
-    scanPluginsButton.setBounds (210, 10, 180, 30);
-    saveSessionButton.setBounds (400, 10, 150, 30);
-    loadSessionButton.setBounds (560, 10, 150, 30);
-    bankAButton.setBounds (730, 10, 70, 30);
-    bankBButton.setBounds (810, 10, 70, 30);
+    auto fullArea = getLocalBounds();
 
-    auto area = getLocalBounds();
-    area.removeFromTop (50);
-    channelsHolder.setBounds (area);
+    auto topBarArea = fullArea.removeFromTop (44);
+    topBar.setBounds (topBarArea);
+
+    auto bankBarArea = fullArea.removeFromTop (44);
+    auto bankButtonsArea = bankBarArea.removeFromRight (160).reduced (10, 7);
+    bankAButton.setBounds (bankButtonsArea.removeFromLeft (70));
+    bankButtonsArea.removeFromLeft (10);
+    bankBButton.setBounds (bankButtonsArea);
+
+    channelsHolder.setBounds (fullArea);
     channelsHolder.resized();
+
+    channelDetailView.setBounds (fullArea);
 }

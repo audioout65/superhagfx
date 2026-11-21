@@ -1,5 +1,7 @@
 #include <JuceHeader.h>
 #include "MainComponent.h"
+#include "LiveRackLookAndFeel.h"
+#include "MainMenu.h"
 
 class LiveRackApplication : public juce::JUCEApplication
 {
@@ -12,12 +14,18 @@ public:
 
     void initialise (const juce::String&) override
     {
+        lookAndFeel = std::make_unique<LiveRackLookAndFeel>();
+        juce::LookAndFeel::setDefaultLookAndFeel (lookAndFeel.get());
+
         mainWindow.reset (new MainWindow (getApplicationName()));
     }
 
     void shutdown() override
     {
+        juce::MenuBarModel::setMacMainMenu (nullptr);
         mainWindow = nullptr;
+        juce::LookAndFeel::setDefaultLookAndFeel (nullptr);
+        lookAndFeel = nullptr;
     }
 
     void systemRequestedQuit() override
@@ -35,7 +43,16 @@ public:
                                DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainComponent(), true);
+
+            auto* content = new MainComponent();
+            setContentOwned (content, true);
+
+            mainMenu = std::make_unique<MainMenu>();
+            mainMenu->onMenuItemSelected = [content] (int menuItemID)
+            {
+                content->handleMenuCommand (menuItemID);
+            };
+            juce::MenuBarModel::setMacMainMenu (mainMenu.get());
 
             centreWithSize (getWidth(), getHeight());
             setResizable (true, true);
@@ -47,10 +64,14 @@ public:
             juce::JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
+    private:
+        std::unique_ptr<MainMenu> mainMenu;
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
     };
 
 private:
+    std::unique_ptr<LiveRackLookAndFeel> lookAndFeel;
     std::unique_ptr<MainWindow> mainWindow;
 };
 

@@ -11,9 +11,12 @@ public:
     ChannelStripComponent (int channelIndexIn, AudioChannel& channelIn)
         : channelIndex (channelIndexIn), channel (channelIn)
     {
-        channelLabel.setText ("Ch " + juce::String (channelIndex + 1), juce::dontSendNotification);
-        channelLabel.setJustificationType (juce::Justification::centred);
-        channelLabel.setColour (juce::Label::textColourId, juce::Colours::white);
+        channelLabel.setButtonText ("Ch " + juce::String (channelIndex + 1));
+        channelLabel.onClick = [this]
+        {
+            if (onChannelNameClicked != nullptr)
+                onChannelNameClicked (channelIndex);
+        };
         addAndMakeVisible (channelLabel);
 
         for (int i = 1; i <= 32; ++i)
@@ -81,8 +84,6 @@ public:
             slotButtons[(size_t) slotIndex]->setButtonText (text);
     }
 
-    // Remet a jour tous les controles visuels d'apres l'etat actuel du canal
-    // (utilise apres le chargement d'une session).
     void refreshFromChannel()
     {
         inputCombo.setSelectedId (channel.getInputChannelIndex() + 1, juce::dontSendNotification);
@@ -128,7 +129,7 @@ public:
     {
         auto area = getLocalBounds().reduced (6);
 
-        channelLabel.setBounds (area.removeFromTop (18));
+        channelLabel.setBounds (area.removeFromTop (22));
         area.removeFromTop (4);
 
         auto ioArea = area.removeFromTop (44);
@@ -152,6 +153,7 @@ public:
         }
     }
 
+    std::function<void (int channelIndex)> onChannelNameClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
 
@@ -161,7 +163,7 @@ private:
     float displayedLevel = 0.0f;
     juce::Rectangle<int> meterBounds;
 
-    juce::Label channelLabel;
+    juce::TextButton channelLabel;
     juce::ComboBox inputCombo, outputCombo;
     juce::ToggleButton bypassButton;
     juce::Slider gainSlider;
