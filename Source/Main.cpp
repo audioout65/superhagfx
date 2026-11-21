@@ -54,7 +54,11 @@ public:
             };
             juce::MenuBarModel::setMacMainMenu (mainMenu.get());
 
-            centreWithSize (getWidth(), getHeight());
+            // Taille minimale garantissant que le vumetre et le fader restent
+            // toujours visibles dans la vue RACK, meme fenetre redimensionnee.
+            setResizeLimits (1300, 650, 10000, 10000);
+
+            centreWithSize (1300, 700);
             setResizable (true, true);
             setVisible (true);
         }

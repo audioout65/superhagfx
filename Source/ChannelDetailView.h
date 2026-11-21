@@ -2,9 +2,11 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 #include "SlotButton.h"
+#include "CompressorEditor.h"
 
-// Vue detaillee d'un seul canal, inspiree de l'ecran "Rack" de SuperRack :
-// entree/sortie en haut, pile de slots large, vumetre et fader a droite.
+// Vue detaillee d'un seul canal : entree/sortie en haut, pile de slots a
+// gauche, editeur du plugin selectionne a droite. Le vumetre/fader/IN sont
+// geres a part par MeterAndGainOverlay, toujours au premier plan.
 class ChannelDetailView : public juce::Component
 {
 public:
@@ -41,24 +43,15 @@ public:
         addAndMakeVisible (inputCombo);
         addAndMakeVisible (outputCombo);
 
-        bypassButton.setButtonText ("Bypass");
-        addAndMakeVisible (bypassButton);
-
-        gainSlider.setSliderStyle (juce::Slider::LinearVertical);
-        gainSlider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 60, 20);
-        gainSlider.setRange (0.0, 2.0, 0.01);
-        addAndMakeVisible (gainSlider);
-
         for (int slot = 0; slot < numSlotsPerChannel; ++slot)
         {
             auto slotBtn = std::make_unique<SlotButton>("ADD PLUGIN");
-            slotBtn->setButtonText ("ADD PLUGIN");
-
-            auto* ptr = slotBtn.get();
             auto slotIndexCopy = slot;
 
             slotBtn->onClick = [this, slotIndexCopy]
             {
+                selectSlotForDisplay (slotIndexCopy);
+
                 if (onSlotClicked != nullptr)
                     onSlotClicked (channelIndex, slotIndexCopy);
             };
@@ -68,10 +61,13 @@ public:
                     onSlotRightClicked (channelIndex, slotIndexCopy);
             };
 
-            addAndMakeVisible (*ptr);
+            addAndMakeVisible (*slotBtn);
             slotButtons.push_back (std::move (slotBtn));
-            juce::ignoreUnused (ptr);
         }
+
+        pluginViewport.setViewedComponent (&pluginDisplayArea, false);
+        pluginViewport.setScrollBarsShown (true, true);
+        addAndMakeVisible (pluginViewport);
     }
 
     void setChannel (int newChannelIndex, AudioChannel& newChannel)
@@ -83,13 +79,9 @@ public:
 
         inputCombo.onChange = nullptr;
         outputCombo.onChange = nullptr;
-        bypassButton.onClick = nullptr;
-        gainSlider.onValueChange = nullptr;
 
         inputCombo.setSelectedId (channel->getInputChannelIndex() + 1, juce::dontSendNotification);
         outputCombo.setSelectedId (channel->getOutputChannelIndex() + 1, juce::dontSendNotification);
-        bypassButton.setToggleState (channel->isBypassed(), juce::dontSendNotification);
-        gainSlider.setValue (channel->getGain(), juce::dontSendNotification);
 
         inputCombo.onChange = [this]
         {
@@ -101,19 +93,15 @@ public:
             if (channel != nullptr)
                 channel->setOutputChannelIndex (outputCombo.getSelectedId() - 1);
         };
-        bypassButton.onClick = [this]
-        {
-            if (channel != nullptr)
-                channel->setBypassed (bypassButton.getToggleState());
-        };
-        gainSlider.onValueChange = [this]
-        {
-            if (channel != nullptr)
-                channel->setGain ((float) gainSlider.getValue());
-        };
 
+        selectedSlot = -1;
+        clearPluginDisplay();
         refreshSlots();
     }
+
+    // La zone reservee au vumetre/fader/IN, a droite, pour que MainComponent
+    // puisse y placer l'overlay toujours au premier plan.
+    juce::Rectangle<int> getOverlayBounds() const { return overlayBounds; }
 
     void refreshSlots()
     {
@@ -122,22 +110,59 @@ public:
 
         for (int slot = 0; slot < numSlotsPerChannel; ++slot)
         {
-            auto name = channel->getSlot (slot).getDisplayName();
-            slotButtons[(size_t) slot]->setButtonText (name == "+" ? "ADD PLUGIN" : name);
+            auto& pluginSlot = channel->getSlot (slot);
+            auto name = pluginSlot.getDisplayName();
+            auto isLoaded = ! pluginSlot.isEmpty();
+
+            slotButtons[(size_t) slot]->setButtonText (isLoaded ? name : "ADD PLUGIN");
+            slotButtons[(size_t) slot]->setColour (juce::TextButton::buttonColourId,
+                isLoaded ? juce::Colour (0xff2d6fc4) : juce::Colour (0xff2c313a));
         }
+
+        if (selectedSlot >= 0)
+            selectSlotForDisplay (selectedSlot);
     }
 
-    void updateMeter()
+    void selectSlotForDisplay (int slotIndex)
     {
+        selectedSlot = slotIndex;
+        clearPluginDisplay();
+
         if (channel == nullptr)
             return;
 
-        auto target = channel->getLevel();
+        auto& slot = channel->getSlot (slotIndex);
 
-        if (target > displayedLevel)
-            displayedLevel = target;
+        if (slot.isEmpty())
+        {
+            layoutEmptyDisplay();
+            repaint();
+            return;
+        }
+
+        juce::Component* editorComponent = nullptr;
+
+        if (slot.isVst3())
+        {
+            auto* instance = slot.getVstInstance();
+
+            if (instance == nullptr)
+                return;
+
+            currentEditor.reset (instance->createEditorIfNeeded());
+            editorComponent = currentEditor.get();
+        }
         else
-            displayedLevel *= 0.85f;
+        {
+            currentInternalEditor = std::make_unique<CompressorEditor>(slot.getCompressor());
+            editorComponent = currentInternalEditor.get();
+        }
+
+        if (editorComponent == nullptr)
+            return;
+
+        pluginDisplayArea.addAndMakeVisible (*editorComponent);
+        layoutPluginEditor (*editorComponent);
 
         repaint();
     }
@@ -146,18 +171,16 @@ public:
     {
         g.fillAll (juce::Colour (0xff1a1d21));
 
-        auto meterArea = meterBounds;
+        g.setColour (juce::Colour (0xff22262b));
+        g.fillRoundedRectangle (pluginViewport.getBounds().toFloat(), 6.0f);
 
-        g.setColour (juce::Colour (0xff2c313a));
-        g.fillRoundedRectangle (meterArea.toFloat(), 4.0f);
-
-        auto level = juce::jlimit (0.0f, 1.0f, displayedLevel);
-        auto filledHeight = (int) (level * (float) meterArea.getHeight());
-        auto filledArea = meterArea.withTop (meterArea.getBottom() - filledHeight);
-
-        g.setColour (level > 0.9f ? juce::Colours::red
-                                   : (level > 0.7f ? juce::Colours::orange : juce::Colour (0xff4ea1ff)));
-        g.fillRoundedRectangle (filledArea.toFloat(), 4.0f);
+        if (selectedSlot < 0 || channel == nullptr || channel->getSlot (selectedSlot).isEmpty())
+        {
+            g.setColour (juce::Colour (0xff5a6472));
+            g.setFont (14.0f);
+            g.drawText ("Selectionnez un emplacement pour voir ses reglages",
+                        pluginViewport.getBounds(), juce::Justification::centred);
+        }
     }
 
     void resized() override
@@ -172,7 +195,7 @@ public:
         area.removeFromTop (16);
 
         auto ioArea = area.removeFromTop (70);
-        auto inputArea = ioArea.removeFromLeft (ioArea.getWidth() / 2).reduced (0, 0);
+        auto inputArea = ioArea.removeFromLeft (ioArea.getWidth() / 2);
         inputLabel.setBounds (inputArea.removeFromTop (18));
         inputCombo.setBounds (inputArea.removeFromTop (30));
 
@@ -182,37 +205,83 @@ public:
 
         area.removeFromTop (16);
 
-        auto rightColumn = area.removeFromRight (120);
-        meterBounds = rightColumn.removeFromLeft (40).withSizeKeepingCentre (28, rightColumn.getHeight() - 60).withY (rightColumn.getY());
-        rightColumn.removeFromLeft (10);
-        gainSlider.setBounds (rightColumn.withHeight (rightColumn.getHeight() - 40));
-        bypassButton.setBounds (rightColumn.withY (rightColumn.getBottom() - 30).withHeight (30));
+        // Reserve toujours 160px pour l'overlay (vumetre/fader/IN), quelle
+        // que soit la largeur de la zone restante pour le plugin.
+        overlayBounds = area.removeFromRight (160);
 
         area.removeFromRight (20);
 
+        auto slotsColumn = area.removeFromLeft (280);
+
         for (auto& btn : slotButtons)
         {
-            btn->setBounds (area.removeFromTop (44));
-            area.removeFromTop (8);
+            btn->setBounds (slotsColumn.removeFromTop (44));
+            slotsColumn.removeFromTop (8);
         }
+
+        area.removeFromLeft (20);
+        pluginViewport.setBounds (area);
+
+        if (currentEditor != nullptr)
+            layoutPluginEditor (*currentEditor);
+        else if (currentInternalEditor != nullptr)
+            layoutPluginEditor (*currentInternalEditor);
+        else
+            layoutEmptyDisplay();
+
+        if (onOverlayBoundsChanged != nullptr)
+            onOverlayBoundsChanged();
     }
 
     std::function<void()> onPrevious;
     std::function<void()> onNext;
     std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
+    std::function<void()> onOverlayBoundsChanged;
 
 private:
+    void layoutEmptyDisplay()
+    {
+        pluginDisplayArea.setBounds (0, 0, pluginViewport.getWidth(), pluginViewport.getHeight());
+    }
+
+    void layoutPluginEditor (juce::Component& editor)
+    {
+        auto viewportWidth = pluginViewport.getWidth();
+        auto viewportHeight = pluginViewport.getHeight();
+
+        auto editorWidth = editor.getWidth();
+        auto editorHeight = editor.getHeight();
+
+        auto areaWidth = juce::jmax (editorWidth, viewportWidth);
+        auto areaHeight = juce::jmax (editorHeight, viewportHeight);
+
+        pluginDisplayArea.setBounds (0, 0, areaWidth, areaHeight);
+
+        auto x = (areaWidth - editorWidth) / 2;
+        auto y = (areaHeight - editorHeight) / 2;
+        editor.setTopLeftPosition (x, y);
+    }
+
+    void clearPluginDisplay()
+    {
+        currentEditor.reset();
+        currentInternalEditor.reset();
+    }
+
     int channelIndex = 0;
     AudioChannel* channel = nullptr;
-    float displayedLevel = 0.0f;
-    juce::Rectangle<int> meterBounds;
+    int selectedSlot = -1;
+    juce::Rectangle<int> overlayBounds;
 
     juce::TextButton prevButton, nextButton;
     juce::Label channelNameLabel;
     juce::Label inputLabel, outputLabel;
     juce::ComboBox inputCombo, outputCombo;
-    juce::ToggleButton bypassButton;
-    juce::Slider gainSlider;
     std::vector<std::unique_ptr<SlotButton>> slotButtons;
+
+    juce::Viewport pluginViewport;
+    juce::Component pluginDisplayArea;
+    std::unique_ptr<juce::AudioProcessorEditor> currentEditor;
+    std::unique_ptr<CompressorEditor> currentInternalEditor;
 };

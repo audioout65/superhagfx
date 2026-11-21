@@ -25,6 +25,7 @@ target_sources(LiveRack PRIVATE
     Source/ChannelStripComponent.h
     Source/ChannelDetailView.h
     Source/TopBarComponent.h
+    Source/MeterAndGainOverlay.h
     Source/LiveRackLookAndFeel.h
     Source/MainMenu.h
 )

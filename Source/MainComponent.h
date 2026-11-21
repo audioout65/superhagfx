@@ -5,6 +5,7 @@
 #include "ChannelStripComponent.h"
 #include "ChannelDetailView.h"
 #include "TopBarComponent.h"
+#include "MeterAndGainOverlay.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -38,7 +39,6 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    // Appele depuis le menu natif de la barre de menu (voir MainMenu).
     void handleMenuCommand (int menuItemID);
 
 private:
@@ -54,6 +54,7 @@ private:
     void openAudioSettings();
     void openChannelDetail (int channelIndex);
     void closeChannelDetail();
+    void updateOverlayPosition();
 
     std::array<AudioChannel, numChannels> channels;
 
@@ -73,6 +74,7 @@ private:
     std::vector<std::unique_ptr<ChannelStripComponent>> channelStrips;
 
     ChannelDetailView channelDetailView;
+    MeterAndGainOverlay meterOverlay;
     bool detailViewOpen = false;
     int detailChannelIndex = 0;
 

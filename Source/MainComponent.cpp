@@ -37,7 +37,17 @@ MainComponent::MainComponent()
         };
         strip->onSlotClicked = [this] (int channelIndex, int slotIndex)
         {
-            handleSlotClick (channelIndex, slotIndex);
+            auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+            if (slot.isEmpty())
+            {
+                showSlotMenu (channelIndex, slotIndex);
+            }
+            else
+            {
+                openChannelDetail (channelIndex);
+                channelDetailView.selectSlotForDisplay (slotIndex);
+            }
         };
         strip->onSlotRightClicked = [this] (int channelIndex, int slotIndex)
         {
@@ -63,13 +73,24 @@ MainComponent::MainComponent()
     };
     channelDetailView.onSlotClicked = [this] (int channelIndex, int slotIndex)
     {
-        handleSlotClick (channelIndex, slotIndex);
+        auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+        if (slot.isEmpty())
+            showSlotMenu (channelIndex, slotIndex);
     };
     channelDetailView.onSlotRightClicked = [this] (int channelIndex, int slotIndex)
     {
         showSlotMenu (channelIndex, slotIndex);
     };
+    channelDetailView.onOverlayBoundsChanged = [this]
+    {
+        updateOverlayPosition();
+    };
     addChildComponent (channelDetailView);
+
+    // Ajoute en tout dernier : toujours dessine par-dessus tout le reste,
+    // y compris l'interface d'un plugin qui deborderait de son emplacement.
+    addChildComponent (meterOverlay);
 
     showBank (0);
 
@@ -109,6 +130,21 @@ void MainComponent::openAudioSettings()
     options.launchAsync();
 }
 
+void MainComponent::updateOverlayPosition()
+{
+    if (! detailViewOpen)
+        return;
+
+    // La zone que ChannelDetailView a reservee est exprimee dans ses propres
+    // coordonnees ; on la convertit vers celles de MainComponent, puisque
+    // meterOverlay est un enfant direct de MainComponent, pas de la vue.
+    auto boundsInDetailView = channelDetailView.getOverlayBounds();
+    auto topLeftInMain = channelDetailView.getPosition() + boundsInDetailView.getPosition();
+
+    meterOverlay.setBounds (topLeftInMain.x, topLeftInMain.y,
+                            boundsInDetailView.getWidth(), boundsInDetailView.getHeight());
+}
+
 void MainComponent::openChannelDetail (int channelIndex)
 {
     detailChannelIndex = channelIndex;
@@ -119,6 +155,9 @@ void MainComponent::openChannelDetail (int channelIndex)
     channelsHolder.setVisible (false);
     bankAButton.setVisible (false);
     bankBButton.setVisible (false);
+
+    meterOverlay.setChannel (&channels[(size_t) channelIndex]);
+    meterOverlay.setVisible (true);
 
     topBar.setActiveTab (true);
 
@@ -132,6 +171,9 @@ void MainComponent::closeChannelDetail()
     channelsHolder.setVisible (true);
     bankAButton.setVisible (true);
     bankBButton.setVisible (true);
+
+    meterOverlay.setVisible (false);
+    meterOverlay.setChannel (nullptr);
 
     topBar.setActiveTab (false);
 
@@ -415,7 +457,7 @@ void MainComponent::timerCallback()
             strip->updateMeter();
 
     if (detailViewOpen)
-        channelDetailView.updateMeter();
+        meterOverlay.updateMeter();
 
     topBar.setCpuUsage (deviceManager.getCpuUsage());
 }
@@ -442,4 +484,6 @@ void MainComponent::resized()
     channelsHolder.resized();
 
     channelDetailView.setBounds (fullArea);
+
+    updateOverlayPosition();
 }
