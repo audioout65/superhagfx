@@ -2,9 +2,9 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 
-// Panneau "OUTPUT" complet : titre, vumetre, fader et bouton IN, dans un
-// cadre distinct, toujours ajoute en dernier a la fenetre principale pour
-// rester au premier plan devant n'importe quel editeur de plugin.
+// Panneau "OUTPUT" complet : titre, selecteur de sortie, vumetre, bouton
+// rotatif de gain et bouton IN, dans un cadre distinct, toujours ajoute en
+// dernier a la fenetre principale pour rester au premier plan.
 class MeterAndGainOverlay : public juce::Component
 {
 public:
@@ -16,10 +16,16 @@ public:
         titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xff8a92a0));
         addAndMakeVisible (titleLabel);
 
-        gainSlider.setSliderStyle (juce::Slider::LinearVertical);
-        gainSlider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 60, 20);
-        gainSlider.setRange (0.0, 2.0, 0.01);
-        addAndMakeVisible (gainSlider);
+        for (int i = 1; i <= 16; ++i)
+            outputCombo.addItem ("Out " + juce::String (i), i);
+        addAndMakeVisible (outputCombo);
+
+        gainKnob.setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+        gainKnob.setRotaryParameters (juce::MathConstants<float>::pi * 1.2f,
+                                      juce::MathConstants<float>::pi * 2.8f, true);
+        gainKnob.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 60, 20);
+        gainKnob.setRange (0.0, 2.0, 0.01);
+        addAndMakeVisible (gainKnob);
 
         inButton.setButtonText ("IN");
         inButton.setClickingTogglesState (true);
@@ -43,23 +49,30 @@ public:
     {
         channel = newChannel;
 
-        gainSlider.onValueChange = nullptr;
+        gainKnob.onValueChange = nullptr;
         inButton.onClick = nullptr;
+        outputCombo.onChange = nullptr;
 
         if (channel != nullptr)
         {
-            gainSlider.setValue (channel->getGain(), juce::dontSendNotification);
+            gainKnob.setValue (channel->getGain(), juce::dontSendNotification);
             inButton.setToggleState (! channel->isBypassed(), juce::dontSendNotification);
+            outputCombo.setSelectedId (channel->getOutputChannelIndex() + 1, juce::dontSendNotification);
 
-            gainSlider.onValueChange = [this]
+            gainKnob.onValueChange = [this]
             {
                 if (channel != nullptr)
-                    channel->setGain ((float) gainSlider.getValue());
+                    channel->setGain ((float) gainKnob.getValue());
             };
             inButton.onClick = [this]
             {
                 if (channel != nullptr)
                     channel->setBypassed (! inButton.getToggleState());
+            };
+            outputCombo.onChange = [this]
+            {
+                if (channel != nullptr)
+                    channel->setOutputChannelIndex (outputCombo.getSelectedId() - 1);
             };
         }
 
@@ -83,8 +96,6 @@ public:
 
     void paint (juce::Graphics& g) override
     {
-        // Le panneau complet : fond legerement distinct, bordure, comme un
-        // vrai module "OUTPUT" separe du reste de l'interface.
         auto panelBounds = getLocalBounds().toFloat();
 
         g.setColour (juce::Colour (0xff1e2227));
@@ -120,13 +131,16 @@ public:
         auto area = getLocalBounds().reduced (8);
 
         titleLabel.setBounds (area.removeFromTop (18));
-        area.removeFromTop (8);
+        area.removeFromTop (6);
+
+        outputCombo.setBounds (area.removeFromTop (26));
+        area.removeFromTop (10);
 
         auto scaleColumn = area.removeFromLeft (28);
         area.removeFromLeft (4);
         auto meterColumn = area.removeFromLeft (34);
 
-        auto meterHeight = area.getHeight() - 70;
+        auto meterHeight = area.getHeight() - 90;
         meterBounds = meterColumn.withHeight (meterHeight).withY (area.getY());
 
         for (size_t i = 0; i < meterScaleLabels.size(); ++i)
@@ -135,9 +149,9 @@ public:
             meterScaleLabels[i]->setBounds (scaleColumn.getX(), y, scaleColumn.getWidth(), 14);
         }
 
-        area.removeFromLeft (8);
-        gainSlider.setBounds (area.withHeight (meterHeight));
-        inButton.setBounds (area.withY (area.getY() + meterHeight + 10).withHeight (30));
+        area.removeFromLeft (4);
+        gainKnob.setBounds (area.withHeight (80).withY (area.getY()));
+        inButton.setBounds (area.withY (area.getY() + 90).withHeight (30));
     }
 
 private:
@@ -146,7 +160,8 @@ private:
     juce::Rectangle<int> meterBounds;
 
     juce::Label titleLabel;
-    juce::Slider gainSlider;
+    juce::ComboBox outputCombo;
+    juce::Slider gainKnob;
     juce::TextButton inButton;
     std::vector<std::unique_ptr<juce::Label>> meterScaleLabels;
 };

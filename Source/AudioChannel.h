@@ -18,8 +18,6 @@ public:
             slot.prepare (sampleRate, samplesPerBlock);
     }
 
-    // Passe 1 : copie l'entree selectionnee depuis le tampon du peripherique.
-    // Si cette entree n'existe pas sur le peripherique actuel, le canal reste silencieux.
     void readInput (const juce::AudioBuffer<float>& deviceBuffer, int startSample, int numSamples)
     {
         if (workBuffer.getNumSamples() < numSamples)
@@ -28,14 +26,18 @@ public:
         if (inputChannelIndex < 0 || inputChannelIndex >= deviceBuffer.getNumChannels())
         {
             workBuffer.clear (0, 0, numSamples);
+            inputLevel = 0.0f;
             return;
         }
 
         workBuffer.copyFrom (0, 0, deviceBuffer, inputChannelIndex, startSample, numSamples);
+
+        auto* samples = workBuffer.getReadPointer (0);
+        inputLevel = 0.0f;
+        for (int i = 0; i < numSamples; ++i)
+            inputLevel = juce::jmax (inputLevel, std::abs (samples[i]));
     }
 
-    // Traite le signal, puis l'ecrit dans la sortie selectionnee du tampon du peripherique.
-    // Si cette sortie n'existe pas sur le peripherique actuel, rien n'est ecrit.
     void processAndWriteOutput (juce::AudioBuffer<float>& deviceBuffer, int startSample, int numSamples)
     {
         auto* samples = workBuffer.getWritePointer (0);
@@ -67,12 +69,16 @@ public:
     void setBypassed (bool shouldBeBypassed) { bypassed = shouldBeBypassed; }
     bool isBypassed() const            { return bypassed; }
     float getLevel() const             { return level; }
+    float getInputLevel() const        { return inputLevel; }
     float getGain() const              { return gain; }
 
     void setInputChannelIndex (int index)  { inputChannelIndex = index; }
     void setOutputChannelIndex (int index) { outputChannelIndex = index; }
     int getInputChannelIndex() const       { return inputChannelIndex; }
     int getOutputChannelIndex() const      { return outputChannelIndex; }
+
+    void setCustomName (const juce::String& name) { customName = name; }
+    juce::String getCustomName() const             { return customName; }
 
     PluginSlot& getSlot (int index) { return slots[(size_t) index]; }
     static constexpr int getNumSlots() { return numSlotsPerChannel; }
@@ -83,6 +89,7 @@ public:
         xml.setAttribute ("output", outputChannelIndex);
         xml.setAttribute ("gain", gain);
         xml.setAttribute ("bypassed", bypassed);
+        xml.setAttribute ("customName", customName);
 
         for (int i = 0; i < numSlotsPerChannel; ++i)
         {
@@ -92,8 +99,6 @@ public:
         }
     }
 
-    // Charge ce canal. onAllSlotsDone est appele une fois que tous les
-    // emplacements (y compris les VST3 asynchrones) ont fini de charger.
     void loadFromXmlAsync (const juce::XmlElement& xml,
                            juce::AudioPluginFormatManager& formatManager,
                            std::function<void()> onAllSlotsDone)
@@ -102,6 +107,7 @@ public:
         outputChannelIndex = xml.getIntAttribute ("output", outputChannelIndex);
         gain = (float) xml.getDoubleAttribute ("gain", gain);
         bypassed = xml.getBoolAttribute ("bypassed", bypassed);
+        customName = xml.getStringAttribute ("customName", customName);
 
         auto remaining = std::make_shared<int>(0);
 
@@ -139,9 +145,12 @@ private:
     float gain = 1.0f;
     bool bypassed = false;
     float level = 0.0f;
+    float inputLevel = 0.0f;
 
     int inputChannelIndex = 0;
     int outputChannelIndex = 0;
+
+    juce::String customName;
 
     juce::AudioBuffer<float> workBuffer;
     std::array<PluginSlot, numSlotsPerChannel> slots;

@@ -6,6 +6,7 @@
 #include "ChannelDetailView.h"
 #include "TopBarComponent.h"
 #include "MeterAndGainOverlay.h"
+#include "InputPanelComponent.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -54,7 +55,7 @@ private:
     void openAudioSettings();
     void openChannelDetail (int channelIndex);
     void closeChannelDetail();
-    void updateOverlayPosition();
+    void updatePanelPositions();
 
     std::array<AudioChannel, numChannels> channels;
 
@@ -74,7 +75,8 @@ private:
     std::vector<std::unique_ptr<ChannelStripComponent>> channelStrips;
 
     ChannelDetailView channelDetailView;
-    MeterAndGainOverlay meterOverlay;
+    InputPanelComponent inputPanel;
+    MeterAndGainOverlay outputPanel;
     bool detailViewOpen = false;
     int detailChannelIndex = 0;
 

@@ -4,9 +4,10 @@
 #include "SlotButton.h"
 #include "CompressorEditor.h"
 
-// Vue detaillee d'un seul canal : entree/sortie en haut, pile de slots a
-// gauche, editeur du plugin selectionne a droite. Le vumetre/fader/IN sont
-// geres a part par MeterAndGainOverlay, toujours au premier plan.
+// Vue detaillee d'un seul canal : nom editable, pile de slots, editeur du
+// plugin selectionne. Les panneaux INPUT et OUTPUT sont geres a part par
+// MainComponent (toujours au premier plan), cette vue reserve juste leurs
+// emplacements.
 class ChannelDetailView : public juce::Component
 {
 public:
@@ -22,26 +23,16 @@ public:
 
         channelNameLabel.setJustificationType (juce::Justification::centred);
         channelNameLabel.setFont (juce::Font (20.0f, juce::Font::bold));
+        channelNameLabel.setEditable (false, true, false);
+        channelNameLabel.onTextChange = [this]
+        {
+            if (channel != nullptr)
+                channel->setCustomName (channelNameLabel.getText());
+
+            if (onNameChanged != nullptr)
+                onNameChanged (channelIndex, channelNameLabel.getText());
+        };
         addAndMakeVisible (channelNameLabel);
-
-        inputLabel.setText ("Input", juce::dontSendNotification);
-        inputLabel.setJustificationType (juce::Justification::centredLeft);
-        inputLabel.setFont (12.0f);
-        addAndMakeVisible (inputLabel);
-
-        outputLabel.setText ("Output", juce::dontSendNotification);
-        outputLabel.setJustificationType (juce::Justification::centredLeft);
-        outputLabel.setFont (12.0f);
-        addAndMakeVisible (outputLabel);
-
-        for (int i = 1; i <= 32; ++i)
-            inputCombo.addItem ("In " + juce::String (i), i);
-
-        for (int i = 1; i <= 16; ++i)
-            outputCombo.addItem ("Out " + juce::String (i), i);
-
-        addAndMakeVisible (inputCombo);
-        addAndMakeVisible (outputCombo);
 
         for (int slot = 0; slot < numSlotsPerChannel; ++slot)
         {
@@ -75,33 +66,19 @@ public:
         channelIndex = newChannelIndex;
         channel = &newChannel;
 
-        channelNameLabel.setText ("Ch " + juce::String (channelIndex + 1), juce::dontSendNotification);
+        auto displayName = channel->getCustomName();
+        if (displayName.isEmpty())
+            displayName = "Ch " + juce::String (channelIndex + 1);
 
-        inputCombo.onChange = nullptr;
-        outputCombo.onChange = nullptr;
-
-        inputCombo.setSelectedId (channel->getInputChannelIndex() + 1, juce::dontSendNotification);
-        outputCombo.setSelectedId (channel->getOutputChannelIndex() + 1, juce::dontSendNotification);
-
-        inputCombo.onChange = [this]
-        {
-            if (channel != nullptr)
-                channel->setInputChannelIndex (inputCombo.getSelectedId() - 1);
-        };
-        outputCombo.onChange = [this]
-        {
-            if (channel != nullptr)
-                channel->setOutputChannelIndex (outputCombo.getSelectedId() - 1);
-        };
+        channelNameLabel.setText (displayName, juce::dontSendNotification);
 
         selectedSlot = -1;
         clearPluginDisplay();
         refreshSlots();
     }
 
-    // La zone reservee au vumetre/fader/IN, a droite, pour que MainComponent
-    // puisse y placer l'overlay toujours au premier plan.
-    juce::Rectangle<int> getOverlayBounds() const { return overlayBounds; }
+    juce::Rectangle<int> getInputPanelBounds() const  { return inputPanelBounds; }
+    juce::Rectangle<int> getOutputPanelBounds() const { return outputPanelBounds; }
 
     void refreshSlots()
     {
@@ -194,21 +171,12 @@ public:
 
         area.removeFromTop (16);
 
-        auto ioArea = area.removeFromTop (70);
-        auto inputArea = ioArea.removeFromLeft (ioArea.getWidth() / 2);
-        inputLabel.setBounds (inputArea.removeFromTop (18));
-        inputCombo.setBounds (inputArea.removeFromTop (30));
+        // Reserve 170px a gauche pour le panneau INPUT et 170px a droite
+        // pour le panneau OUTPUT, geres par MainComponent.
+        inputPanelBounds = area.removeFromLeft (170);
+        area.removeFromLeft (20);
 
-        ioArea.removeFromLeft (20);
-        outputLabel.setBounds (ioArea.removeFromTop (18));
-        outputCombo.setBounds (ioArea.removeFromTop (30));
-
-        area.removeFromTop (16);
-
-        // Reserve toujours 160px pour l'overlay (vumetre/fader/IN), quelle
-        // que soit la largeur de la zone restante pour le plugin.
-        overlayBounds = area.removeFromRight (160);
-
+        outputPanelBounds = area.removeFromRight (170);
         area.removeFromRight (20);
 
         auto slotsColumn = area.removeFromLeft (280);
@@ -229,15 +197,16 @@ public:
         else
             layoutEmptyDisplay();
 
-        if (onOverlayBoundsChanged != nullptr)
-            onOverlayBoundsChanged();
+        if (onPanelBoundsChanged != nullptr)
+            onPanelBoundsChanged();
     }
 
     std::function<void()> onPrevious;
     std::function<void()> onNext;
     std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
-    std::function<void()> onOverlayBoundsChanged;
+    std::function<void (int channelIndex, juce::String newName)> onNameChanged;
+    std::function<void()> onPanelBoundsChanged;
 
 private:
     void layoutEmptyDisplay()
@@ -272,12 +241,10 @@ private:
     int channelIndex = 0;
     AudioChannel* channel = nullptr;
     int selectedSlot = -1;
-    juce::Rectangle<int> overlayBounds;
+    juce::Rectangle<int> inputPanelBounds, outputPanelBounds;
 
     juce::TextButton prevButton, nextButton;
     juce::Label channelNameLabel;
-    juce::Label inputLabel, outputLabel;
-    juce::ComboBox inputCombo, outputCombo;
     std::vector<std::unique_ptr<SlotButton>> slotButtons;
 
     juce::Viewport pluginViewport;

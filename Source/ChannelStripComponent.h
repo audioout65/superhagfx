@@ -3,6 +3,51 @@
 #include "AudioChannel.h"
 #include "SlotButton.h"
 
+// Le nom du canal : simple clic ouvre la vue RACK, double-clic permet de
+// renommer le canal directement en ligne. On utilise un court delai pour
+// distinguer de maniere fiable un simple clic d'un double-clic.
+class ChannelNameButton : public juce::Label,
+                          private juce::Timer
+{
+public:
+    std::function<void()> onSingleClick;
+
+    void mouseDown (const juce::MouseEvent& e) override
+    {
+        if (isBeingEdited())
+        {
+            juce::Label::mouseDown (e);
+            return;
+        }
+
+        pendingClick = true;
+        startTimer (250); // delai standard pour detecter un double-clic
+    }
+
+    void mouseDoubleClick (const juce::MouseEvent& e) override
+    {
+        pendingClick = false;
+        stopTimer();
+        juce::Label::mouseDoubleClick (e);
+    }
+
+private:
+    void timerCallback() override
+    {
+        stopTimer();
+
+        if (pendingClick)
+        {
+            pendingClick = false;
+
+            if (onSingleClick != nullptr)
+                onSingleClick();
+        }
+    }
+
+    bool pendingClick = false;
+};
+
 // L'interface complete d'un seul canal : entree/sortie, vumetre, gain,
 // bypass, et la pile d'emplacements de plugins.
 class ChannelStripComponent : public juce::Component
@@ -11,11 +56,19 @@ public:
     ChannelStripComponent (int channelIndexIn, AudioChannel& channelIn)
         : channelIndex (channelIndexIn), channel (channelIn)
     {
-        channelLabel.setButtonText ("Ch " + juce::String (channelIndex + 1));
-        channelLabel.onClick = [this]
+        channelLabel.setText ("Ch " + juce::String (channelIndex + 1), juce::dontSendNotification);
+        channelLabel.setJustificationType (juce::Justification::centred);
+        channelLabel.setEditable (false, true, false);
+        channelLabel.setColour (juce::Label::backgroundColourId, juce::Colour (0xff2c313a));
+        channelLabel.setColour (juce::Label::textColourId, juce::Colours::white);
+        channelLabel.onSingleClick = [this]
         {
             if (onChannelNameClicked != nullptr)
                 onChannelNameClicked (channelIndex);
+        };
+        channelLabel.onTextChange = [this]
+        {
+            channel.setCustomName (channelLabel.getText());
         };
         addAndMakeVisible (channelLabel);
 
@@ -91,6 +144,11 @@ public:
         gainSlider.setValue (channel.getGain(), juce::dontSendNotification);
         bypassButton.setToggleState (channel.isBypassed(), juce::dontSendNotification);
 
+        auto displayName = channel.getCustomName();
+        if (displayName.isEmpty())
+            displayName = "Ch " + juce::String (channelIndex + 1);
+        channelLabel.setText (displayName, juce::dontSendNotification);
+
         for (int slot = 0; slot < numSlotsPerChannel; ++slot)
             refreshSlotButtonText (slot, channel.getSlot (slot).getDisplayName());
     }
@@ -163,7 +221,7 @@ private:
     float displayedLevel = 0.0f;
     juce::Rectangle<int> meterBounds;
 
-    juce::TextButton channelLabel;
+    ChannelNameButton channelLabel;
     juce::ComboBox inputCombo, outputCombo;
     juce::ToggleButton bypassButton;
     juce::Slider gainSlider;
