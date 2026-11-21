@@ -23,7 +23,7 @@ public:
         if (workBuffer.getNumSamples() < numSamples)
             workBuffer.setSize (1, numSamples, false, false, true);
 
-        if (inputChannelIndex < 0 || inputChannelIndex >= deviceBuffer.getNumChannels())
+        if (! inputEnabled || inputChannelIndex < 0 || inputChannelIndex >= deviceBuffer.getNumChannels())
         {
             workBuffer.clear (0, 0, numSamples);
             inputLevel = 0.0f;
@@ -32,7 +32,12 @@ public:
 
         workBuffer.copyFrom (0, 0, deviceBuffer, inputChannelIndex, startSample, numSamples);
 
-        auto* samples = workBuffer.getReadPointer (0);
+        auto inputGainLinear = juce::Decibels::decibelsToGain (inputGainDb, -60.0f);
+        auto* samples = workBuffer.getWritePointer (0);
+
+        for (int i = 0; i < numSamples; ++i)
+            samples[i] *= inputGainLinear;
+
         inputLevel = 0.0f;
         for (int i = 0; i < numSamples; ++i)
             inputLevel = juce::jmax (inputLevel, std::abs (samples[i]));
@@ -42,7 +47,7 @@ public:
     {
         auto* samples = workBuffer.getWritePointer (0);
 
-        if (bypassed)
+        if (outputMuted)
         {
             level = 0.0f;
             for (int i = 0; i < numSamples; ++i)
@@ -50,8 +55,10 @@ public:
         }
         else
         {
+            auto outputGainLinear = juce::Decibels::decibelsToGain (outputGainDb, -60.0f);
+
             for (int i = 0; i < numSamples; ++i)
-                samples[i] *= gain;
+                samples[i] *= outputGainLinear;
 
             for (auto& slot : slots)
                 slot.process (samples, numSamples);
@@ -65,12 +72,22 @@ public:
             deviceBuffer.copyFrom (outputChannelIndex, startSample, workBuffer, 0, 0, numSamples);
     }
 
-    void setGain (float newGain)       { gain = newGain; }
-    void setBypassed (bool shouldBeBypassed) { bypassed = shouldBeBypassed; }
-    bool isBypassed() const            { return bypassed; }
+    void setOutputGainDb (float newGainDb) { outputGainDb = newGainDb; }
+    float getOutputGainDb() const          { return outputGainDb; }
+
+    void setInputGainDb (float newGainDb)  { inputGainDb = newGainDb; }
+    float getInputGainDb() const           { return inputGainDb; }
+
+    // IN (panneau d'entree) : active ou coupe la reception du signal d'entree.
+    void setInputEnabled (bool shouldBeEnabled) { inputEnabled = shouldBeEnabled; }
+    bool isInputEnabled() const                  { return inputEnabled; }
+
+    // MUTE (panneau de sortie) : coupe le traitement et la sortie du canal.
+    void setOutputMuted (bool shouldBeMuted) { outputMuted = shouldBeMuted; }
+    bool isOutputMuted() const                { return outputMuted; }
+
     float getLevel() const             { return level; }
     float getInputLevel() const        { return inputLevel; }
-    float getGain() const              { return gain; }
 
     void setInputChannelIndex (int index)  { inputChannelIndex = index; }
     void setOutputChannelIndex (int index) { outputChannelIndex = index; }
@@ -87,8 +104,10 @@ public:
     {
         xml.setAttribute ("input", inputChannelIndex);
         xml.setAttribute ("output", outputChannelIndex);
-        xml.setAttribute ("gain", gain);
-        xml.setAttribute ("bypassed", bypassed);
+        xml.setAttribute ("outputGainDb", outputGainDb);
+        xml.setAttribute ("inputGainDb", inputGainDb);
+        xml.setAttribute ("inputEnabled", inputEnabled);
+        xml.setAttribute ("outputMuted", outputMuted);
         xml.setAttribute ("customName", customName);
 
         for (int i = 0; i < numSlotsPerChannel; ++i)
@@ -105,8 +124,10 @@ public:
     {
         inputChannelIndex = xml.getIntAttribute ("input", inputChannelIndex);
         outputChannelIndex = xml.getIntAttribute ("output", outputChannelIndex);
-        gain = (float) xml.getDoubleAttribute ("gain", gain);
-        bypassed = xml.getBoolAttribute ("bypassed", bypassed);
+        outputGainDb = (float) xml.getDoubleAttribute ("outputGainDb", outputGainDb);
+        inputGainDb = (float) xml.getDoubleAttribute ("inputGainDb", inputGainDb);
+        inputEnabled = xml.getBoolAttribute ("inputEnabled", inputEnabled);
+        outputMuted = xml.getBoolAttribute ("outputMuted", outputMuted);
         customName = xml.getStringAttribute ("customName", customName);
 
         auto remaining = std::make_shared<int>(0);
@@ -142,8 +163,10 @@ public:
 
 private:
     double currentSampleRate = 44100.0;
-    float gain = 1.0f;
-    bool bypassed = false;
+    float outputGainDb = 0.0f;
+    float inputGainDb = 0.0f;
+    bool inputEnabled = true;
+    bool outputMuted = false;
     float level = 0.0f;
     float inputLevel = 0.0f;
 

@@ -22,6 +22,8 @@ public:
 
         setColour (juce::Slider::trackColourId, juce::Colour (0xff3d434d));
         setColour (juce::Slider::thumbColourId, accentColour);
+        setColour (juce::Slider::rotarySliderFillColourId, accentColour);
+        setColour (juce::Slider::rotarySliderOutlineColourId, juce::Colour (0xff3d434d));
         setColour (juce::Slider::backgroundColourId, juce::Colour (0xff2c313a));
         setColour (juce::Slider::textBoxTextColourId, juce::Colour (0xffe0e0e0));
         setColour (juce::Slider::textBoxBackgroundColourId, juce::Colour (0xff2c313a));
@@ -110,6 +112,69 @@ public:
         {
             LookAndFeel_V4::drawLinearSlider (g, x, y, width, height, sliderPos, minSliderPos, maxSliderPos, style, slider);
         }
+    }
+
+    // Knob metallique avec un anneau de petites LED autour (bleues jusqu'a la
+    // valeur actuelle, sombres au-dela), et le repere "0" (0 dB) marque.
+    void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height,
+                           float sliderPosProportional, float rotaryStartAngle,
+                           float rotaryEndAngle, juce::Slider& slider) override
+    {
+        auto fullBounds = juce::Rectangle<int> (x, y, width, height).toFloat().reduced (2.0f);
+        auto overallRadius = juce::jmin (fullBounds.getWidth(), fullBounds.getHeight()) * 0.5f;
+        auto centre = fullBounds.getCentre();
+
+        auto knobRadius = overallRadius * 0.62f;
+        auto ledInnerRadius = overallRadius * 0.86f;
+        auto ledOuterRadius = overallRadius;
+
+        constexpr int numLeds = 24;
+        auto angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
+
+        for (int i = 0; i < numLeds; ++i)
+        {
+            auto ledProportion = (float) i / (float) (numLeds - 1);
+            auto ledAngle = rotaryStartAngle + ledProportion * (rotaryEndAngle - rotaryStartAngle);
+
+            juce::Point<float> p1 (centre.x + ledInnerRadius * std::sin (ledAngle), centre.y - ledInnerRadius * std::cos (ledAngle));
+            juce::Point<float> p2 (centre.x + ledOuterRadius * std::sin (ledAngle), centre.y - ledOuterRadius * std::cos (ledAngle));
+
+            auto isLit = ledAngle <= angle + 0.001f;
+            g.setColour (isLit ? slider.findColour (juce::Slider::rotarySliderFillColourId)
+                               : juce::Colour (0xff23303f));
+            g.drawLine ({ p1, p2 }, 2.6f);
+        }
+
+        // Repere "0" (0 dB), marque en blanc par-dessus les LED a sa position.
+        auto zeroProportion = juce::jlimit (0.0f, 1.0f,
+            (float) ((0.0 - slider.getMinimum()) / (slider.getMaximum() - slider.getMinimum())));
+        auto zeroAngle = rotaryStartAngle + zeroProportion * (rotaryEndAngle - rotaryStartAngle);
+        juce::Point<float> zeroInner (centre.x + ledInnerRadius * std::sin (zeroAngle), centre.y - ledInnerRadius * std::cos (zeroAngle));
+        juce::Point<float> zeroOuter (centre.x + ledOuterRadius * std::sin (zeroAngle), centre.y - ledOuterRadius * std::cos (zeroAngle));
+        g.setColour (juce::Colours::white);
+        g.drawLine ({ zeroInner, zeroOuter }, 2.2f);
+
+        juce::Point<float> labelPos (centre.x + (ledOuterRadius + 10.0f) * std::sin (zeroAngle),
+                                     centre.y - (ledOuterRadius + 10.0f) * std::cos (zeroAngle));
+        g.setFont (juce::Font (9.0f, juce::Font::bold));
+        g.setColour (juce::Colour (0xff8a92a0));
+        g.drawText ("0", juce::Rectangle<float> (labelPos.x - 8.0f, labelPos.y - 6.0f, 16.0f, 12.0f),
+                    juce::Justification::centred);
+
+        // Corps du knob : degrade metallique circulaire.
+        juce::ColourGradient metalGradient (juce::Colour (0xffd8dadd), centre.x - knobRadius * 0.4f, centre.y - knobRadius * 0.4f,
+                                            juce::Colour (0xff3a3e44), centre.x + knobRadius * 0.6f, centre.y + knobRadius * 0.6f, true);
+        g.setGradientFill (metalGradient);
+        g.fillEllipse (centre.x - knobRadius, centre.y - knobRadius, knobRadius * 2.0f, knobRadius * 2.0f);
+
+        g.setColour (juce::Colour (0xff15171a));
+        g.drawEllipse (centre.x - knobRadius, centre.y - knobRadius, knobRadius * 2.0f, knobRadius * 2.0f, 1.5f);
+
+        // Petit point indicateur, sur le bord du knob, qui tourne avec la valeur.
+        auto dotRadius = knobRadius * 0.9f;
+        juce::Point<float> dotCentre (centre.x + dotRadius * std::sin (angle), centre.y - dotRadius * std::cos (angle));
+        g.setColour (slider.findColour (juce::Slider::rotarySliderFillColourId));
+        g.fillEllipse (dotCentre.x - 3.0f, dotCentre.y - 3.0f, 6.0f, 6.0f);
     }
 
     void drawToggleButton (juce::Graphics& g, juce::ToggleButton& button,

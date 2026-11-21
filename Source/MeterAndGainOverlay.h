@@ -2,9 +2,9 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 
-// Panneau "OUTPUT" complet : titre, selecteur de sortie, vumetre, bouton
-// rotatif de gain et bouton IN, dans un cadre distinct, toujours ajoute en
-// dernier a la fenetre principale pour rester au premier plan.
+// Panneau "OUTPUT" complet : titre, selecteur, vumetre centre sur le meme
+// axe que le knob de gain en dessous, graduations a gauche du vumetre,
+// MUTE tout en bas (coupe la sortie du canal).
 class MeterAndGainOverlay : public juce::Component
 {
 public:
@@ -22,17 +22,17 @@ public:
 
         gainKnob.setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
         gainKnob.setRotaryParameters (juce::MathConstants<float>::pi * 1.2f,
-                                      juce::MathConstants<float>::pi * 2.8f, true);
+                                      juce::MathConstants<float>::pi * 2.76f, true);
         gainKnob.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 60, 20);
-        gainKnob.setRange (0.0, 2.0, 0.01);
+        gainKnob.setRange (-60.0, 12.0, 0.1);
+        gainKnob.setDoubleClickReturnValue (true, 0.0);
         addAndMakeVisible (gainKnob);
 
-        inButton.setButtonText ("IN");
-        inButton.setClickingTogglesState (true);
-        inButton.setToggleState (true, juce::dontSendNotification);
-        inButton.setColour (juce::TextButton::buttonOnColourId, juce::Colour (0xff3fae54));
-        inButton.setColour (juce::TextButton::textColourOnId, juce::Colours::white);
-        addAndMakeVisible (inButton);
+        muteButton.setButtonText ("MUTE");
+        muteButton.setClickingTogglesState (true);
+        muteButton.setColour (juce::TextButton::buttonOnColourId, juce::Colours::red);
+        muteButton.setColour (juce::TextButton::textColourOnId, juce::Colours::white);
+        addAndMakeVisible (muteButton);
 
         for (auto db : { 0, -10, -20, -30, -40, -50, -60 })
         {
@@ -50,24 +50,24 @@ public:
         channel = newChannel;
 
         gainKnob.onValueChange = nullptr;
-        inButton.onClick = nullptr;
+        muteButton.onClick = nullptr;
         outputCombo.onChange = nullptr;
 
         if (channel != nullptr)
         {
-            gainKnob.setValue (channel->getGain(), juce::dontSendNotification);
-            inButton.setToggleState (! channel->isBypassed(), juce::dontSendNotification);
+            gainKnob.setValue (channel->getOutputGainDb(), juce::dontSendNotification);
+            muteButton.setToggleState (channel->isOutputMuted(), juce::dontSendNotification);
             outputCombo.setSelectedId (channel->getOutputChannelIndex() + 1, juce::dontSendNotification);
 
             gainKnob.onValueChange = [this]
             {
                 if (channel != nullptr)
-                    channel->setGain ((float) gainKnob.getValue());
+                    channel->setOutputGainDb ((float) gainKnob.getValue());
             };
-            inButton.onClick = [this]
+            muteButton.onClick = [this]
             {
                 if (channel != nullptr)
-                    channel->setBypassed (! inButton.getToggleState());
+                    channel->setOutputMuted (muteButton.getToggleState());
             };
             outputCombo.onChange = [this]
             {
@@ -129,6 +129,7 @@ public:
     void resized() override
     {
         auto area = getLocalBounds().reduced (8);
+        auto panelCentreX = area.getCentreX();
 
         titleLabel.setBounds (area.removeFromTop (18));
         area.removeFromTop (6);
@@ -136,12 +137,16 @@ public:
         outputCombo.setBounds (area.removeFromTop (26));
         area.removeFromTop (10);
 
-        auto scaleColumn = area.removeFromLeft (28);
-        area.removeFromLeft (4);
-        auto meterColumn = area.removeFromLeft (34);
+        auto bottomArea = area.removeFromBottom (126);
 
-        auto meterHeight = area.getHeight() - 90;
-        meterBounds = meterColumn.withHeight (meterHeight).withY (area.getY());
+        constexpr int meterWidth = 34;
+        constexpr int scaleGap = 4;
+        constexpr int scaleWidth = 28;
+
+        auto meterX = panelCentreX - meterWidth / 2;
+        meterBounds = juce::Rectangle<int> (meterX, area.getY(), meterWidth, area.getHeight());
+
+        auto scaleColumn = juce::Rectangle<int> (meterX - scaleGap - scaleWidth, area.getY(), scaleWidth, area.getHeight());
 
         for (size_t i = 0; i < meterScaleLabels.size(); ++i)
         {
@@ -149,9 +154,12 @@ public:
             meterScaleLabels[i]->setBounds (scaleColumn.getX(), y, scaleColumn.getWidth(), 14);
         }
 
-        area.removeFromLeft (4);
-        gainKnob.setBounds (area.withHeight (80).withY (area.getY()));
-        inButton.setBounds (area.withY (area.getY() + 90).withHeight (30));
+        auto knobArea = bottomArea.removeFromTop (80);
+        auto knobSize = juce::jmin (knobArea.getWidth(), knobArea.getHeight());
+        gainKnob.setBounds (knobArea.withSizeKeepingCentre (knobSize, knobSize));
+
+        bottomArea.removeFromTop (16);
+        muteButton.setBounds (bottomArea.removeFromTop (30));
     }
 
 private:
@@ -162,6 +170,6 @@ private:
     juce::Label titleLabel;
     juce::ComboBox outputCombo;
     juce::Slider gainKnob;
-    juce::TextButton inButton;
+    juce::TextButton muteButton;
     std::vector<std::unique_ptr<juce::Label>> meterScaleLabels;
 };
