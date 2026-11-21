@@ -8,6 +8,7 @@
 #include "MeterAndGainOverlay.h"
 #include "InputPanelComponent.h"
 #include "LeftSidebarComponent.h"
+#include "HotPluginsPanel.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -64,6 +65,7 @@ private:
 
     TopBarComponent topBar;
     LeftSidebarComponent leftSidebar;
+    HotPluginsPanel hotPluginsPanel;
     int currentBank = 0;
     bool interfaceLocked = false;
 

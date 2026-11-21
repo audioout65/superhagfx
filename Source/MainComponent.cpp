@@ -18,6 +18,8 @@ MainComponent::MainComponent()
     addAndMakeVisible (leftSidebar);
     leftSidebar.onBankSelected = [this] (int bankIndex) { showBank (bankIndex); };
 
+    addAndMakeVisible (hotPluginsPanel);
+
     for (int ch = 0; ch < numChannels; ++ch)
     {
         channels[(size_t) ch].setInputChannelIndex (ch);
@@ -405,9 +407,6 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
         if (detailViewOpen && detailChannelIndex == channelIndex)
             channelDetailView.refreshSlots();
 
-        // 900ms : la capture interne (PluginSlot::startThumbnailCapture) prend
-        // maintenant jusqu'a 500ms (300ms premier affichage + 200ms resync
-        // taille), donc ce delai exterieur doit rester superieur a ça.
         juce::Timer::callAfterDelay (900, [this, channelIndex, slotIndex]
         {
             auto& slotRef = channels[(size_t) channelIndex].getSlot (slotIndex);
@@ -528,6 +527,8 @@ void MainComponent::resized()
     topBar.setBounds (topBarArea);
 
     leftSidebar.setBounds (fullArea.removeFromLeft (100));
+
+    hotPluginsPanel.setBounds (fullArea.removeFromRight (160));
 
     channelsHolder.setBounds (fullArea);
     channelsHolder.resized();
