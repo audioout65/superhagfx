@@ -44,6 +44,8 @@ private:
     void refreshSlotButtonText (int channelIndex, int slotIndex);
     void loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex);
     void showBank (int bankIndex);
+    void saveSession();
+    void loadSession();
 
     std::array<AudioChannel, numChannels> channels;
 
@@ -53,6 +55,10 @@ private:
     juce::TextButton bankAButton { "1-16" };
     juce::TextButton bankBButton { "17-32" };
     int currentBank = 0;
+
+    juce::TextButton saveSessionButton { "Sauvegarder session" };
+    juce::TextButton loadSessionButton { "Charger session" };
+    std::unique_ptr<juce::FileChooser> fileChooser;
 
     PluginManager pluginManager;
     juce::TextButton scanPluginsButton { "Scanner les plugins VST3" };

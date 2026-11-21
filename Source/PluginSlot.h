@@ -36,9 +36,6 @@ public:
             vstInstance->prepareToPlay (sampleRate, samplesPerBlock);
     }
 
-    // Appele depuis le thread audio. Ne doit jamais bloquer longtemps :
-    // on tente le verrou sans attendre, et on saute ce bloc si c'est occupe
-    // (par exemple pendant un chargement), plutot que de risquer un blocage.
     void process (float* samples, int numSamples)
     {
         if (bypassed)
@@ -78,6 +75,7 @@ public:
         vstInstance.reset();
         contentType = SlotContentType::empty;
         vstDisplayName.clear();
+        lastPluginDescription = juce::PluginDescription();
     }
 
     void loadVst3Async (const juce::PluginDescription& desc,
@@ -100,6 +98,7 @@ public:
                     const juce::SpinLock::ScopedLockType lock (pluginLock);
                     vstInstance = std::move (instance);
                     vstDisplayName = desc.name;
+                    lastPluginDescription = desc;
                     contentType = SlotContentType::vst3;
                 }
 
@@ -127,11 +126,118 @@ public:
 
     Compressor& getCompressor() { return compressor; }
 
-    // Pour ouvrir l'editeur : appele depuis le thread principal uniquement.
     juce::AudioPluginInstance* getVstInstance()
     {
         const juce::SpinLock::ScopedLockType lock (pluginLock);
         return vstInstance.get();
+    }
+
+    // Sauvegarde ce slot dans un element XML. formatManager est utilise pour
+    // retrouver le vrai PluginDescription au chargement.
+    void saveToXml (juce::XmlElement& xml) const
+    {
+        switch (contentType)
+        {
+            case SlotContentType::internalCompressor:
+            {
+                xml.setAttribute ("type", "compressor");
+                auto* compXml = xml.createNewChildElement ("Compressor");
+                compressor.saveToXml (*compXml);
+                break;
+            }
+
+            case SlotContentType::vst3:
+            {
+                xml.setAttribute ("type", "vst3");
+
+                if (auto descXml = lastPluginDescription.createXml())
+                    xml.addChildElement (descXml.release());
+
+                if (vstInstance != nullptr)
+                {
+                    juce::MemoryBlock state;
+                    vstInstance->getStateInformation (state);
+                    xml.setAttribute ("state", state.toBase64Encoding());
+                }
+                break;
+            }
+
+            case SlotContentType::empty:
+            default:
+                xml.setAttribute ("type", "empty");
+                break;
+        }
+
+        xml.setAttribute ("bypassed", bypassed);
+    }
+
+    // Charge ce slot depuis un element XML. Pour un VST3, le chargement est
+    // asynchrone : onDone est appele une fois termine (ou immediatement pour
+    // les autres types).
+    void loadFromXmlAsync (const juce::XmlElement& xml,
+                           juce::AudioPluginFormatManager& formatManager,
+                           std::function<void()> onDone)
+    {
+        bypassed = xml.getBoolAttribute ("bypassed", false);
+
+        auto type = xml.getStringAttribute ("type", "empty");
+
+        if (type == "compressor")
+        {
+            if (auto* compXml = xml.getChildByName ("Compressor"))
+                compressor.loadFromXml (*compXml);
+
+            loadInternalCompressor();
+
+            if (onDone != nullptr)
+                onDone();
+            return;
+        }
+
+        if (type == "vst3")
+        {
+            juce::PluginDescription desc;
+            bool descLoaded = false;
+
+            for (auto* child : xml.getChildIterator())
+            {
+                if (child->hasTagName ("PLUGIN"))
+                {
+                    descLoaded = desc.loadFromXml (*child);
+                    break;
+                }
+            }
+
+            if (! descLoaded)
+            {
+                if (onDone != nullptr)
+                    onDone();
+                return;
+            }
+
+            juce::MemoryBlock state;
+            auto stateBase64 = xml.getStringAttribute ("state");
+            if (stateBase64.isNotEmpty())
+                state.fromBase64Encoding (stateBase64);
+
+            loadVst3Async (desc, formatManager, [this, state, onDone] (bool success, juce::String)
+            {
+                if (success && state.getSize() > 0)
+                {
+                    const juce::SpinLock::ScopedLockType lock (pluginLock);
+                    if (vstInstance != nullptr)
+                        vstInstance->setStateInformation (state.getData(), (int) state.getSize());
+                }
+
+                if (onDone != nullptr)
+                    onDone();
+            });
+            return;
+        }
+
+        clear();
+        if (onDone != nullptr)
+            onDone();
     }
 
 private:
@@ -182,6 +288,7 @@ private:
     juce::SpinLock pluginLock;
     std::unique_ptr<juce::AudioPluginInstance> vstInstance;
     juce::String vstDisplayName;
+    juce::PluginDescription lastPluginDescription;
     juce::AudioBuffer<float> scratchBuffer;
     juce::MidiBuffer midiBuffer;
 };

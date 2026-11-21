@@ -20,7 +20,6 @@ public:
         {
             auto inputLevel = std::abs (samples[i]);
 
-            // Suivi d'enveloppe (attaque/release)
             if (inputLevel > envelope)
                 envelope = attackCoeff * (envelope - inputLevel) + inputLevel;
             else
@@ -53,6 +52,25 @@ public:
     float getReleaseMs() const   { return releaseMs; }
     float getMakeupGainDb() const { return makeupGainDb; }
     float getLastGainReductionDb() const { return lastGainReductionDb; }
+
+    // Sauvegarde/chargement des reglages pour les sessions.
+    void saveToXml (juce::XmlElement& xml) const
+    {
+        xml.setAttribute ("threshold", thresholdDb);
+        xml.setAttribute ("ratio", ratio);
+        xml.setAttribute ("attack", attackMs);
+        xml.setAttribute ("release", releaseMs);
+        xml.setAttribute ("makeup", makeupGainDb);
+    }
+
+    void loadFromXml (const juce::XmlElement& xml)
+    {
+        setThresholdDb ((float) xml.getDoubleAttribute ("threshold", thresholdDb));
+        setRatio ((float) xml.getDoubleAttribute ("ratio", ratio));
+        setAttackMs ((float) xml.getDoubleAttribute ("attack", attackMs));
+        setReleaseMs ((float) xml.getDoubleAttribute ("release", releaseMs));
+        setMakeupGainDb ((float) xml.getDoubleAttribute ("makeup", makeupGainDb));
+    }
 
 private:
     void updateCoefficients()

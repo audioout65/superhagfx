@@ -30,6 +30,12 @@ MainComponent::MainComponent()
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
 
+    addAndMakeVisible (saveSessionButton);
+    saveSessionButton.onClick = [this] { saveSession(); };
+
+    addAndMakeVisible (loadSessionButton);
+    loadSessionButton.onClick = [this] { loadSession(); };
+
     addAndMakeVisible (bankAButton);
     addAndMakeVisible (bankBButton);
     bankAButton.setClickingTogglesState (true);
@@ -73,6 +79,82 @@ MainComponent::MainComponent()
 MainComponent::~MainComponent()
 {
     shutdownAudio();
+}
+
+void MainComponent::saveSession()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Sauvegarder la session",
+        juce::File::getSpecialLocation (juce::File::userDocumentsDirectory),
+        "*.liverack");
+
+    auto flags = juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::canSelectFiles;
+
+    fileChooser->launchAsync (flags, [this] (const juce::FileChooser& fc)
+    {
+        auto file = fc.getResult();
+
+        if (file == juce::File())
+            return;
+
+        if (! file.hasFileExtension (".liverack"))
+            file = file.withFileExtension (".liverack");
+
+        juce::XmlElement root ("LiveRackSession");
+
+        for (int ch = 0; ch < numChannels; ++ch)
+        {
+            auto* channelXml = root.createNewChildElement ("Channel");
+            channelXml->setAttribute ("index", ch);
+            channels[(size_t) ch].saveToXml (*channelXml);
+        }
+
+        if (root.writeTo (file))
+            DBG ("Session sauvegardee : " << file.getFullPathName());
+        else
+            DBG ("Echec de la sauvegarde de session.");
+    });
+}
+
+void MainComponent::loadSession()
+{
+    fileChooser = std::make_unique<juce::FileChooser>(
+        "Charger une session",
+        juce::File::getSpecialLocation (juce::File::userDocumentsDirectory),
+        "*.liverack");
+
+    fileChooser->launchAsync (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
+                              [this] (const juce::FileChooser& fc)
+    {
+        auto file = fc.getResult();
+
+        if (file == juce::File())
+            return;
+
+        auto xml = juce::parseXML (file);
+
+        if (xml == nullptr || ! xml->hasTagName ("LiveRackSession"))
+        {
+            DBG ("Fichier de session invalide.");
+            return;
+        }
+
+        for (auto* channelXml : xml->getChildWithTagNameIterator ("Channel"))
+        {
+            auto index = channelXml->getIntAttribute ("index", -1);
+
+            if (index < 0 || index >= numChannels)
+                continue;
+
+            channels[(size_t) index].loadFromXmlAsync (*channelXml, pluginManager.getFormatManager(),
+                [this, index]
+            {
+                channelStrips[(size_t) index]->refreshFromChannel();
+            });
+        }
+
+        DBG ("Session en cours de chargement...");
+    });
 }
 
 void MainComponent::showBank (int bankIndex)
@@ -277,10 +359,12 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    deviceSettingsButton.setBounds (20, 10, 220, 30);
-    scanPluginsButton.setBounds (260, 10, 220, 30);
-    bankAButton.setBounds (520, 10, 80, 30);
-    bankBButton.setBounds (610, 10, 80, 30);
+    deviceSettingsButton.setBounds (20, 10, 180, 30);
+    scanPluginsButton.setBounds (210, 10, 180, 30);
+    saveSessionButton.setBounds (400, 10, 150, 30);
+    loadSessionButton.setBounds (560, 10, 150, 30);
+    bankAButton.setBounds (730, 10, 70, 30);
+    bankBButton.setBounds (810, 10, 70, 30);
 
     auto area = getLocalBounds();
     area.removeFromTop (50);

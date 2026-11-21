@@ -81,6 +81,19 @@ public:
             slotButtons[(size_t) slotIndex]->setButtonText (text);
     }
 
+    // Remet a jour tous les controles visuels d'apres l'etat actuel du canal
+    // (utilise apres le chargement d'une session).
+    void refreshFromChannel()
+    {
+        inputCombo.setSelectedId (channel.getInputChannelIndex() + 1, juce::dontSendNotification);
+        outputCombo.setSelectedId (channel.getOutputChannelIndex() + 1, juce::dontSendNotification);
+        gainSlider.setValue (channel.getGain(), juce::dontSendNotification);
+        bypassButton.setToggleState (channel.isBypassed(), juce::dontSendNotification);
+
+        for (int slot = 0; slot < numSlotsPerChannel; ++slot)
+            refreshSlotButtonText (slot, channel.getSlot (slot).getDisplayName());
+    }
+
     void updateMeter()
     {
         auto target = channel.getLevel();
