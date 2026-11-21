@@ -9,7 +9,7 @@
 /* Begin PBXAggregateTarget section */
 		5FEA860E39C2AA2AADE81C24 /* ZERO_CHECK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = DC1260942A7A42E0B8681DF5 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildConfigurationList = 335BB50C4224451A8D070DA8 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
 			buildPhases = (
 				87EA97A785A150E68288BB4C /* Generate CMakeFiles/ZERO_CHECK */,
 			);
@@ -20,25 +20,25 @@
 		};
 		65288F9EDCD05588140C1FD2 /* install */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 55D97395420443BCAE0CC398 /* Build configuration list for PBXAggregateTarget "install" */;
+			buildConfigurationList = 8D39B99164F94FA68486988A /* Build configuration list for PBXAggregateTarget "install" */;
 			buildPhases = (
 				31030817BE503C7640C771D3 /* CMake PostBuild Rules */,
 			);
 			dependencies = (
-				415743C34BAD4BD589DEB3EA /* PBXTargetDependency */,
+				0F8223F28FCC4328ABCA5689 /* PBXTargetDependency */,
 			);
 			name = install;
 			productName = install;
 		};
 		DA8074602B8A2F2515493D38 /* ALL_BUILD */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 91EE4AC894EF4C409618C29B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildConfigurationList = 798160170355423B9A115DFE /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
 			buildPhases = (
 				361382F9491498E5234A0F0B /* Generate CMakeFiles/ALL_BUILD */,
 			);
 			dependencies = (
-				7E3F7CD730464A1583654FB2 /* PBXTargetDependency */,
-				CFA1FA0D2CD640C6A35B70C7 /* PBXTargetDependency */,
+				A91538AFD7854561884E2E05 /* PBXTargetDependency */,
+				0F230C3603804B63A56A378B /* PBXTargetDependency */,
 			);
 			name = ALL_BUILD;
 			productName = ALL_BUILD;
@@ -46,56 +46,56 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		162EF71E2858421EA1C91E00 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXBuildFile; fileRef = 89421ED7C09146E2BEC61F9D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */; };
-		1DBA489B640343EBBEDC5261 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXBuildFile; fileRef = 02533E2F16B949A0BFE42D0C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */; };
-		1E1B7ABF9A7742EDA38B0C6B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */ = {isa = PBXBuildFile; fileRef = FE4E761C033248F9A057E179 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */; };
-		25C5B6FDDA184BB3B61365EE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXBuildFile; fileRef = 5A7A627A24664116ABFC3397 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */; };
-		27ABD68E8FAD4BDBAE08197F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXBuildFile; fileRef = 9DB791A26B9E49DA902E03DB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */; };
-		2D0622F718E94A319DDDDCB8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXBuildFile; fileRef = 9AA2B0F3A2A74E6EB21F9916 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */; };
-		440FB222F75A4BD0ACF51E3F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXBuildFile; fileRef = DF9B028975B044F5BBDB4A7B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */; };
-		648563FED5E941E387698D6B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXBuildFile; fileRef = 3FBC23FACE2E43ABA0526AAE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */; };
-		72122098F638475D8CF718DE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXBuildFile; fileRef = C3109A2223804A6CA1F24436 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */; };
-		7888EFD0BFF5408D8BFA67A6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXBuildFile; fileRef = E6E146E906764B47BBBD244C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */; };
-		9F1FF6E7AC944B209F4942B3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXBuildFile; fileRef = 59FF7CA90C514B65955A6FF8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */; };
-		A1E0E3344A784A5FA78768B6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXBuildFile; fileRef = B300AEF4F19D4806941E6898 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */; };
-		A6B2F44504104E62883558AC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXBuildFile; fileRef = FD781413D55F42A982A61EC4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */; };
-		ACB87BBC779B4CCAA21D9E47 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXBuildFile; fileRef = 571FDB532F07423D926F467F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */; };
-		B33B65085FCE4EE5A0F9AA8C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXBuildFile; fileRef = 80A0E467CE434848BF94485E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */; };
-		B72E88CEB5D8434A8E90200F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXBuildFile; fileRef = E58FF71C61B541E69CB2F1FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */; };
-		B84CEC72AFD5448C94A9CD50 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = F839EDE81EC947DC890653CB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */; };
-		BBFE3DAAA95E408582D8E850 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXBuildFile; fileRef = F5E9E5F669864AC69BA8751E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */; };
-		BCDA3B3AEE654983AC3FE298 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXBuildFile; fileRef = C3C5D88F05F14E55AC956623 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */; };
-		CFDDB58A14604D5686F26EA6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXBuildFile; fileRef = 9DA7E86DCCD445C787CC3429 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */; };
-		E470678E310645B386C78771 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */ = {isa = PBXBuildFile; fileRef = 9D7AF7D10B044D6AA477A7A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */; };
-		F052288236F9435E9D48F865 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXBuildFile; fileRef = E8F9AB20AC9D4BC28E004C66 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */; };
-		F1267BE1AEF1425289ADA586 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXBuildFile; fileRef = 06AD79650DC64714846692B2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */; };
-		F4937E2B52484953A848345E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXBuildFile; fileRef = DDCA2902392B4F128D6F21E9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */; };
-		F6FA8EC84B074531A1C9B3C9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXBuildFile; fileRef = EAA802C6BD6849ACB4612CB6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */; };
+		011B940CD56B4C8DB93CBC28 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXBuildFile; fileRef = 5A52626FA72E43B48872D680 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */; };
+		0451A3CA3049465FAC5B9114 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXBuildFile; fileRef = 9788FAAC2C3546F7810EB3B7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */; };
+		1899A05DE61B4403A65AAB81 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXBuildFile; fileRef = 3EDDF73852134FD49E3B981C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */; };
+		1AF5AAFDD4E1426FB56B875E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXBuildFile; fileRef = 48445B147DF149A3948E0E1C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */; };
+		26B3F3892E43432BB234F77F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXBuildFile; fileRef = F966DF74BAAB4329BED59CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */; };
+		2815C7F30DA6414BB945926C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXBuildFile; fileRef = B9C546F1E73746F4896D398F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */; };
+		2F44AF3946734031A9B56598 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXBuildFile; fileRef = 9DBCF8FE9CD04E2EAFCAF3D6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */; };
+		3B6D713841D6465BB8B78398 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXBuildFile; fileRef = FC7F5763DCD2433988E49465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */; };
+		3D81DD8F002F481E90FF6E83 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXBuildFile; fileRef = 9A4E56A3A7EE40D3814D4B1E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */; };
+		56749532E6E944D8B86A6729 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXBuildFile; fileRef = 140F9FCE36354691835E85B1 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */; };
+		62AAE0912DF649D398CA8719 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */ = {isa = PBXBuildFile; fileRef = 06F94326CEB44EB0B07D0851 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */; };
+		7A9EB30FDAF848FEBDBE98FE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXBuildFile; fileRef = B1C9EB0B7FE94DD5A8400AEE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */; };
+		89D13D8A8FB94FCDAC21339E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 79478E266F384C9ABA467BCF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */; };
+		8A8AA0BB5A344D2E83D480E2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXBuildFile; fileRef = 11E544464E5F4404ADA4D037 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */; };
+		8D45703DA1BB45CB81513DB3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXBuildFile; fileRef = 390F101EEB0647E18F2CE41A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */; };
+		9C858FA936FB4212B369A3EA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXBuildFile; fileRef = BFA4459B926A4C8888A468E2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */; };
+		9E851C64E8374C74ACAC40BC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXBuildFile; fileRef = 2C027DA28DBC4CACB97F1559 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */; };
+		A32CE9B182D54B98B4887C4D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXBuildFile; fileRef = 5A3CDAF74FD54377A41A22FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */; };
+		A8193291163C4E16B14E6C60 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXBuildFile; fileRef = 3651DDA02C6D40A59BF37BAF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */; };
+		B0B181FB84774D1DAEB22C1E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXBuildFile; fileRef = BFB180D77A564174BC918664 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */; };
+		BEC1D6FE56294A1DA500CF58 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXBuildFile; fileRef = DD5C67A480544F41B17CB1EF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */; };
+		D04F2774B11442C6B0CD65B5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXBuildFile; fileRef = 80A8D71232FB44F9B48C509D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */; };
+		D4528D672D704113B48A5F43 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */ = {isa = PBXBuildFile; fileRef = 027E1B2197CE49FEB542E5D8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */; };
+		D8DACA6997A7433CB35B3414 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXBuildFile; fileRef = E3590E1A0EA444D6BF154FDF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */; };
+		F6551FD5B97049BE9103042D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXBuildFile; fileRef = 6675F7370A02429591E9D33F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3209ABD73A564A5DA24B2FA2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5FEA860E39C2AA2AADE81C24;
-			remoteInfo = ZERO_CHECK;
-		};
-		4BD233793DBB425EB014E947 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A5722E3164ADF282EB3E7720;
-			remoteInfo = juceaide;
-		};
-		57EA4DC01716402CB567A8A4 /* PBXContainerItemProxy */ = {
+		3C594E918A2141B791F448D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = DA8074602B8A2F2515493D38;
 			remoteInfo = ALL_BUILD;
 		};
-		81D1C7BD9C124B58977325B4 /* PBXContainerItemProxy */ = {
+		778D1D3E962A4A09ABF62737 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5FEA860E39C2AA2AADE81C24;
+			remoteInfo = ZERO_CHECK;
+		};
+		8F6E6C0CB7C642AF915196C7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5722E3164ADF282EB3E7720;
+			remoteInfo = juceaide;
+		};
+		E67D24A712C7429F97D84065 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7546DFD96EF6438A92B9D040 /* Project object */;
 			proxyType = 1;
@@ -105,37 +105,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		02533E2F16B949A0BFE42D0C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_sse41.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c; sourceTree = SOURCE_ROOT; };
-		06AD79650DC64714846692B2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c; sourceTree = SOURCE_ROOT; };
-		3FBC23FACE2E43ABA0526AAE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_lunasvg.c; path = modules/juce_graphics/juce_graphics_lunasvg.c; sourceTree = SOURCE_ROOT; };
-		571FDB532F07423D926F467F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_1.c; path = modules/juce_graphics/juce_graphics_libjpg_1.c; sourceTree = SOURCE_ROOT; };
-		59FF7CA90C514B65955A6FF8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_avx2.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c; sourceTree = SOURCE_ROOT; };
-		5A7A627A24664116ABFC3397 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_sse41.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c; sourceTree = SOURCE_ROOT; };
-		80A0E467CE434848BF94485E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dec.c; path = modules/juce_graphics/juce_graphics_libwebp_dec.c; sourceTree = SOURCE_ROOT; };
-		89421ED7C09146E2BEC61F9D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_avx2.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c; sourceTree = SOURCE_ROOT; };
-		9AA2B0F3A2A74E6EB21F9916 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_enc.c; path = modules/juce_graphics/juce_graphics_libwebp_enc.c; sourceTree = SOURCE_ROOT; };
-		9D7AF7D10B044D6AA477A7A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Main.cpp; path = extras/Build/juceaide/Main.cpp; sourceTree = SOURCE_ROOT; };
-		9DA7E86DCCD445C787CC3429 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_events.mm; path = modules/juce_events/juce_events.mm; sourceTree = SOURCE_ROOT; };
-		9DB791A26B9E49DA902E03DB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_graphics.mm; path = modules/juce_graphics/juce_graphics.mm; sourceTree = SOURCE_ROOT; };
+		027E1B2197CE49FEB542E5D8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Main.cpp; path = extras/Build/juceaide/Main.cpp; sourceTree = SOURCE_ROOT; };
+		06F94326CEB44EB0B07D0851 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_build_tools.cpp; path = extras/Build/juce_build_tools/juce_build_tools.cpp; sourceTree = SOURCE_ROOT; };
+		11E544464E5F4404ADA4D037 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_core.mm; path = modules/juce_core/juce_core.mm; sourceTree = SOURCE_ROOT; };
+		140F9FCE36354691835E85B1 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_lunasvg.c; path = modules/juce_graphics/juce_graphics_lunasvg.c; sourceTree = SOURCE_ROOT; };
+		20492431AF1744FD831E0C23 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		2C027DA28DBC4CACB97F1559 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_sharpyuv.c; path = modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c; sourceTree = SOURCE_ROOT; };
+		3651DDA02C6D40A59BF37BAF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c; sourceTree = SOURCE_ROOT; };
+		390F101EEB0647E18F2CE41A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_sse41.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c; sourceTree = SOURCE_ROOT; };
+		3EDDF73852134FD49E3B981C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_utils.c; path = modules/juce_graphics/juce_graphics_libwebp_utils.c; sourceTree = SOURCE_ROOT; };
+		48445B147DF149A3948E0E1C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_sse41.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c; sourceTree = SOURCE_ROOT; };
+		5A3CDAF74FD54377A41A22FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c; sourceTree = SOURCE_ROOT; };
+		5A52626FA72E43B48872D680 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_core_zlib.c; path = modules/juce_core/juce_core_zlib.c; sourceTree = SOURCE_ROOT; };
+		6675F7370A02429591E9D33F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libpng.c; path = modules/juce_graphics/juce_graphics_libpng.c; sourceTree = SOURCE_ROOT; };
+		79478E266F384C9ABA467BCF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = extras/Build/juceaide/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		80A8D71232FB44F9B48C509D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_enc.c; path = modules/juce_graphics/juce_graphics_libwebp_enc.c; sourceTree = SOURCE_ROOT; };
+		9788FAAC2C3546F7810EB3B7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_graphics.mm; path = modules/juce_graphics/juce_graphics.mm; sourceTree = SOURCE_ROOT; };
+		9A4E56A3A7EE40D3814D4B1E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_core_CompilationTime.cpp; path = modules/juce_core/juce_core_CompilationTime.cpp; sourceTree = SOURCE_ROOT; };
+		9DBCF8FE9CD04E2EAFCAF3D6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dec.c; path = modules/juce_graphics/juce_graphics_libwebp_dec.c; sourceTree = SOURCE_ROOT; };
 		A196C90F1D68C4E2E0D370EA /* juceaide */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = juceaide; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF471879EA4E43429447DFF2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		B300AEF4F19D4806941E6898 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_2.c; path = modules/juce_graphics/juce_graphics_libjpg_2.c; sourceTree = SOURCE_ROOT; };
-		C3109A2223804A6CA1F24436 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libpng.c; path = modules/juce_graphics/juce_graphics_libpng.c; sourceTree = SOURCE_ROOT; };
-		C3C5D88F05F14E55AC956623 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_sharpyuv.c; path = modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c; sourceTree = SOURCE_ROOT; };
-		DDCA2902392B4F128D6F21E9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_core_zlib.c; path = modules/juce_core/juce_core_zlib.c; sourceTree = SOURCE_ROOT; };
-		DF9B028975B044F5BBDB4A7B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_graphics_Harfbuzz.cpp; path = modules/juce_graphics/juce_graphics_Harfbuzz.cpp; sourceTree = SOURCE_ROOT; };
-		E58FF71C61B541E69CB2F1FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_utils.c; path = modules/juce_graphics/juce_graphics_libwebp_utils.c; sourceTree = SOURCE_ROOT; };
-		E6E146E906764B47BBBD244C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_core.mm; path = modules/juce_core/juce_core.mm; sourceTree = SOURCE_ROOT; };
-		E8F9AB20AC9D4BC28E004C66 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_3.c; path = modules/juce_graphics/juce_graphics_libjpg_3.c; sourceTree = SOURCE_ROOT; };
-		EAA802C6BD6849ACB4612CB6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c; sourceTree = SOURCE_ROOT; };
-		F5E9E5F669864AC69BA8751E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_core_CompilationTime.cpp; path = modules/juce_core/juce_core_CompilationTime.cpp; sourceTree = SOURCE_ROOT; };
-		F839EDE81EC947DC890653CB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = extras/Build/juceaide/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		FD781413D55F42A982A61EC4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_Sheenbidi.c; path = modules/juce_graphics/juce_graphics_Sheenbidi.c; sourceTree = SOURCE_ROOT; };
-		FE4E761C033248F9A057E179 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_build_tools.cpp; path = extras/Build/juce_build_tools/juce_build_tools.cpp; sourceTree = SOURCE_ROOT; };
+		B1C9EB0B7FE94DD5A8400AEE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_enc_avx2.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c; sourceTree = SOURCE_ROOT; };
+		B9C546F1E73746F4896D398F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = juce_events.mm; path = modules/juce_events/juce_events.mm; sourceTree = SOURCE_ROOT; };
+		BFA4459B926A4C8888A468E2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = juce_graphics_Harfbuzz.cpp; path = modules/juce_graphics/juce_graphics_Harfbuzz.cpp; sourceTree = SOURCE_ROOT; };
+		BFB180D77A564174BC918664 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libwebp_dsp_dec_avx2.c; path = modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c; sourceTree = SOURCE_ROOT; };
+		DD5C67A480544F41B17CB1EF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_Sheenbidi.c; path = modules/juce_graphics/juce_graphics_Sheenbidi.c; sourceTree = SOURCE_ROOT; };
+		E3590E1A0EA444D6BF154FDF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_1.c; path = modules/juce_graphics/juce_graphics_libjpg_1.c; sourceTree = SOURCE_ROOT; };
+		F966DF74BAAB4329BED59CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_2.c; path = modules/juce_graphics/juce_graphics_libjpg_2.c; sourceTree = SOURCE_ROOT; };
+		FC7F5763DCD2433988E49465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juce_graphics_libjpg_3.c; path = modules/juce_graphics/juce_graphics_libjpg_3.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C3E41F7A8A9B41F8A7971B7F /* Frameworks */ = {
+		4FC243285C2649449F660539 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -145,38 +145,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0A9F0C1B97F940A08641B58E /* Source Files */ = {
+		0F601D09D4CD4E84BF1A95A2 /* ALL_BUILD */ = {
 			isa = PBXGroup;
 			children = (
-				FE4E761C033248F9A057E179 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */,
-				9D7AF7D10B044D6AA477A7A3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */,
-				E6E146E906764B47BBBD244C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
-				F5E9E5F669864AC69BA8751E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
-				DDCA2902392B4F128D6F21E9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
-				9DA7E86DCCD445C787CC3429 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
-				9DB791A26B9E49DA902E03DB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
-				DF9B028975B044F5BBDB4A7B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
-				FD781413D55F42A982A61EC4 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
-				571FDB532F07423D926F467F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
-				B300AEF4F19D4806941E6898 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
-				E8F9AB20AC9D4BC28E004C66 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
-				C3109A2223804A6CA1F24436 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
-				80A0E467CE434848BF94485E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
-				EAA802C6BD6849ACB4612CB6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
-				89421ED7C09146E2BEC61F9D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
-				5A7A627A24664116ABFC3397 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
-				06AD79650DC64714846692B2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
-				59FF7CA90C514B65955A6FF8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
-				02533E2F16B949A0BFE42D0C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
-				9AA2B0F3A2A74E6EB21F9916 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
-				C3C5D88F05F14E55AC956623 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
-				E58FF71C61B541E69CB2F1FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
-				3FBC23FACE2E43ABA0526AAE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
+				5A232D953D5348E0AC5E56C1 /* CMake Rules */,
+				20492431AF1744FD831E0C23 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/CMakeLists.txt */,
 			);
-			name = "Source Files";
+			name = ALL_BUILD;
 			sourceTree = "<group>";
 		};
-		3FE0690E73614C7C9283097B /* Products */ = {
+		1D052141B89347A092870288 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				A196C90F1D68C4E2E0D370EA /* juceaide */,
@@ -184,54 +162,76 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5E0D2A16555B4F7EA77CE920 /* juceaide */ = {
-			isa = PBXGroup;
-			children = (
-				0A9F0C1B97F940A08641B58E /* Source Files */,
-				F839EDE81EC947DC890653CB /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */,
-			);
-			name = juceaide;
-			sourceTree = "<group>";
-		};
-		879923A6301E4077988D1ED1 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		B4641FAC42B7471EA7CA1ADE = {
-			isa = PBXGroup;
-			children = (
-				CBCABB5632064394AA3D6371 /* ALL_BUILD */,
-				5E0D2A16555B4F7EA77CE920 /* juceaide */,
-				3FE0690E73614C7C9283097B /* Products */,
-				B493FCF847E84945AB3FD07D /* Frameworks */,
-				879923A6301E4077988D1ED1 /* Resources */,
-			);
-			sourceTree = "<group>";
-		};
-		B493FCF847E84945AB3FD07D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BED58A7F14B545809026A43E /* CMake Rules */ = {
+		5A232D953D5348E0AC5E56C1 /* CMake Rules */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = "CMake Rules";
 			sourceTree = "<group>";
 		};
-		CBCABB5632064394AA3D6371 /* ALL_BUILD */ = {
+		5A615AF5328843C8B71F53F6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BED58A7F14B545809026A43E /* CMake Rules */,
-				AF471879EA4E43429447DFF2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/CMakeLists.txt */,
 			);
-			name = ALL_BUILD;
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		7341F9900750444AA17089A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		97C338BF009443BF9857DEDE = {
+			isa = PBXGroup;
+			children = (
+				0F601D09D4CD4E84BF1A95A2 /* ALL_BUILD */,
+				C0C432E4F6674019A93F580A /* juceaide */,
+				1D052141B89347A092870288 /* Products */,
+				7341F9900750444AA17089A3 /* Frameworks */,
+				5A615AF5328843C8B71F53F6 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		97D5C7C3C73A48D2AEAE9092 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				06F94326CEB44EB0B07D0851 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */,
+				027E1B2197CE49FEB542E5D8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */,
+				11E544464E5F4404ADA4D037 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
+				9A4E56A3A7EE40D3814D4B1E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
+				5A52626FA72E43B48872D680 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
+				B9C546F1E73746F4896D398F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
+				9788FAAC2C3546F7810EB3B7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
+				BFA4459B926A4C8888A468E2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
+				DD5C67A480544F41B17CB1EF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
+				E3590E1A0EA444D6BF154FDF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
+				F966DF74BAAB4329BED59CA7 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
+				FC7F5763DCD2433988E49465 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
+				6675F7370A02429591E9D33F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
+				9DBCF8FE9CD04E2EAFCAF3D6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
+				5A3CDAF74FD54377A41A22FA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
+				BFB180D77A564174BC918664 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
+				48445B147DF149A3948E0E1C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
+				3651DDA02C6D40A59BF37BAF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
+				B1C9EB0B7FE94DD5A8400AEE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
+				390F101EEB0647E18F2CE41A /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
+				80A8D71232FB44F9B48C509D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
+				2C027DA28DBC4CACB97F1559 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
+				3EDDF73852134FD49E3B981C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
+				140F9FCE36354691835E85B1 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		C0C432E4F6674019A93F580A /* juceaide */ = {
+			isa = PBXGroup;
+			children = (
+				97D5C7C3C73A48D2AEAE9092 /* Source Files */,
+				79478E266F384C9ABA467BCF /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/CMakeLists.txt */,
+			);
+			name = juceaide;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,15 +239,15 @@
 /* Begin PBXNativeTarget section */
 		A5722E3164ADF282EB3E7720 /* juceaide */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 53AC083C2151421B8F7A37FD /* Build configuration list for PBXNativeTarget "juceaide" */;
+			buildConfigurationList = AB498C468E7D452790540221 /* Build configuration list for PBXNativeTarget "juceaide" */;
 			buildPhases = (
-				8EAFC6B3636B4D7D95F0F09B /* Sources */,
-				C3E41F7A8A9B41F8A7971B7F /* Frameworks */,
+				FF45EA0534844F2FB19436A5 /* Sources */,
+				4FC243285C2649449F660539 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				5E363E99BB3C4CEEBC163509 /* PBXTargetDependency */,
+				5DFC21DC53F949BEBF0A25DA /* PBXTargetDependency */,
 			);
 			name = juceaide;
 			productName = juceaide;
@@ -263,12 +263,12 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1240;
 			};
-			buildConfigurationList = D699F10E09134410992E03C1 /* Build configuration list for PBXProject "JUCE" */;
+			buildConfigurationList = 7BD8327A5710479E9C530B4A /* Build configuration list for PBXProject "JUCE" */;
 			buildSettings = {
 			};
 			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 0;
-			mainGroup = B4641FAC42B7471EA7CA1ADE;
+			mainGroup = 97C338BF009443BF9857DEDE;
 			projectDirPath = /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE;
 			projectRoot = "";
 			targets = (
@@ -392,64 +392,136 @@ fi
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8EAFC6B3636B4D7D95F0F09B /* Sources */ = {
+		FF45EA0534844F2FB19436A5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E1B7ABF9A7742EDA38B0C6B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */,
-				E470678E310645B386C78771 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */,
-				7888EFD0BFF5408D8BFA67A6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
-				BBFE3DAAA95E408582D8E850 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
-				F4937E2B52484953A848345E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
-				CFDDB58A14604D5686F26EA6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
-				27ABD68E8FAD4BDBAE08197F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
-				440FB222F75A4BD0ACF51E3F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
-				A6B2F44504104E62883558AC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
-				ACB87BBC779B4CCAA21D9E47 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
-				A1E0E3344A784A5FA78768B6 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
-				F052288236F9435E9D48F865 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
-				72122098F638475D8CF718DE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
-				B33B65085FCE4EE5A0F9AA8C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
-				F6FA8EC84B074531A1C9B3C9 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
-				162EF71E2858421EA1C91E00 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
-				25C5B6FDDA184BB3B61365EE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
-				F1267BE1AEF1425289ADA586 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
-				9F1FF6E7AC944B209F4942B3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
-				1DBA489B640343EBBEDC5261 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
-				2D0622F718E94A319DDDDCB8 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
-				BCDA3B3AEE654983AC3FE298 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
-				B72E88CEB5D8434A8E90200F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
-				648563FED5E941E387698D6B /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
+				62AAE0912DF649D398CA8719 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juce_build_tools/juce_build_tools.cpp */,
+				D4528D672D704113B48A5F43 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/extras/Build/juceaide/Main.cpp */,
+				8A8AA0BB5A344D2E83D480E2 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core.mm */,
+				3D81DD8F002F481E90FF6E83 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_CompilationTime.cpp */,
+				011B940CD56B4C8DB93CBC28 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_core/juce_core_zlib.c */,
+				2815C7F30DA6414BB945926C /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_events/juce_events.mm */,
+				0451A3CA3049465FAC5B9114 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics.mm */,
+				9C858FA936FB4212B369A3EA /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Harfbuzz.cpp */,
+				BEC1D6FE56294A1DA500CF58 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_Sheenbidi.c */,
+				D8DACA6997A7433CB35B3414 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_1.c */,
+				26B3F3892E43432BB234F77F /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_2.c */,
+				3B6D713841D6465BB8B78398 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libjpg_3.c */,
+				F6551FD5B97049BE9103042D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libpng.c */,
+				2F44AF3946734031A9B56598 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dec.c */,
+				A32CE9B182D54B98B4887C4D /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec.c */,
+				B0B181FB84774D1DAEB22C1E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_avx2.c */,
+				1AF5AAFDD4E1426FB56B875E /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_dec_sse41.c */,
+				A8193291163C4E16B14E6C60 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc.c */,
+				7A9EB30FDAF848FEBDBE98FE /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_avx2.c */,
+				8D45703DA1BB45CB81513DB3 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_dsp_enc_sse41.c */,
+				D04F2774B11442C6B0CD65B5 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_enc.c */,
+				9E851C64E8374C74ACAC40BC /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_sharpyuv.c */,
+				1899A05DE61B4403A65AAB81 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_libwebp_utils.c */,
+				56749532E6E944D8B86A6729 /* /Users/lebatarddesmontagnes/Dev/LiveRack/JUCE/modules/juce_graphics/juce_graphics_lunasvg.c */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		415743C34BAD4BD589DEB3EA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DA8074602B8A2F2515493D38 /* ALL_BUILD */;
-			targetProxy = 57EA4DC01716402CB567A8A4 /* PBXContainerItemProxy */;
-		};
-		5E363E99BB3C4CEEBC163509 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5FEA860E39C2AA2AADE81C24 /* ZERO_CHECK */;
-			targetProxy = 3209ABD73A564A5DA24B2FA2 /* PBXContainerItemProxy */;
-		};
-		7E3F7CD730464A1583654FB2 /* PBXTargetDependency */ = {
+		0F230C3603804B63A56A378B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A5722E3164ADF282EB3E7720 /* juceaide */;
-			targetProxy = 4BD233793DBB425EB014E947 /* PBXContainerItemProxy */;
+			targetProxy = 8F6E6C0CB7C642AF915196C7 /* PBXContainerItemProxy */;
 		};
-		CFA1FA0D2CD640C6A35B70C7 /* PBXTargetDependency */ = {
+		0F8223F28FCC4328ABCA5689 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA8074602B8A2F2515493D38 /* ALL_BUILD */;
+			targetProxy = 3C594E918A2141B791F448D3 /* PBXContainerItemProxy */;
+		};
+		5DFC21DC53F949BEBF0A25DA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5FEA860E39C2AA2AADE81C24 /* ZERO_CHECK */;
-			targetProxy = 81D1C7BD9C124B58977325B4 /* PBXContainerItemProxy */;
+			targetProxy = 778D1D3E962A4A09ABF62737 /* PBXContainerItemProxy */;
+		};
+		A91538AFD7854561884E2E05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5FEA860E39C2AA2AADE81C24 /* ZERO_CHECK */;
+			targetProxy = E67D24A712C7429F97D84065 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0E04DAFA382D44249D61E7DB /* Custom */ = {
+		00DEBEE9C0464A7FB5AEF828 /* Custom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Custom;
+		};
+		0BD47EA3A7F64A0A9C9F6A6B /* Custom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/build;
+			};
+			name = Custom;
+		};
+		9709C49900294DEE8DC3163D /* Custom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Custom;
+		};
+		B28DEDC3689D494CBE946D65 /* Custom */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Custom;
+		};
+		C6B2F23490F74D8287C6D678 /* Custom */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -476,117 +548,45 @@ fi
 			};
 			name = Custom;
 		};
-		766CB8E8593D45A28AF8A10B /* Custom */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Custom;
-		};
-		881D903D078C439CB7F05893 /* Custom */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = "";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SYMROOT = /Users/lebatarddesmontagnes/Dev/LiveRack/build/JUCE/tools/build;
-			};
-			name = Custom;
-		};
-		EE7B1171E375493190BEC55B /* Custom */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Custom;
-		};
-		FFAC456CAA134613943CA602 /* Custom */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Custom;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		53AC083C2151421B8F7A37FD /* Build configuration list for PBXNativeTarget "juceaide" */ = {
+		335BB50C4224451A8D070DA8 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0E04DAFA382D44249D61E7DB /* Custom */,
+				00DEBEE9C0464A7FB5AEF828 /* Custom */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Custom;
 		};
-		55D97395420443BCAE0CC398 /* Build configuration list for PBXAggregateTarget "install" */ = {
+		798160170355423B9A115DFE /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EE7B1171E375493190BEC55B /* Custom */,
+				9709C49900294DEE8DC3163D /* Custom */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Custom;
 		};
-		91EE4AC894EF4C409618C29B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+		7BD8327A5710479E9C530B4A /* Build configuration list for PBXProject "JUCE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				766CB8E8593D45A28AF8A10B /* Custom */,
+				0BD47EA3A7F64A0A9C9F6A6B /* Custom */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Custom;
 		};
-		D699F10E09134410992E03C1 /* Build configuration list for PBXProject "JUCE" */ = {
+		8D39B99164F94FA68486988A /* Build configuration list for PBXAggregateTarget "install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				881D903D078C439CB7F05893 /* Custom */,
+				B28DEDC3689D494CBE946D65 /* Custom */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Custom;
 		};
-		DC1260942A7A42E0B8681DF5 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+		AB498C468E7D452790540221 /* Build configuration list for PBXNativeTarget "juceaide" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FFAC456CAA134613943CA602 /* Custom */,
+				C6B2F23490F74D8287C6D678 /* Custom */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Custom;

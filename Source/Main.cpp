@@ -54,11 +54,12 @@ public:
             };
             juce::MenuBarModel::setMacMainMenu (mainMenu.get());
 
-            // Taille minimale garantissant que le vumetre et le fader restent
-            // toujours visibles dans la vue RACK, meme fenetre redimensionnee.
-            setResizeLimits (1300, 650, 10000, 10000);
+            // Taille minimale largement superieure a ce que demandent les
+            // plugins les plus larges (Pro-Q3, etc.), pour que le panneau
+            // OUTPUT garde toujours sa place sans jamais etre recouvert.
+            setResizeLimits (1600, 800, 10000, 10000);
 
-            centreWithSize (1300, 700);
+            centreWithSize (1700, 900);
             setResizable (true, true);
             setVisible (true);
         }

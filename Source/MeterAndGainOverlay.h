@@ -2,15 +2,20 @@
 #include <JuceHeader.h>
 #include "AudioChannel.h"
 
-// Le vumetre, le fader de gain et le bouton IN d'un canal, concus pour etre
-// ajoutes en dernier a la fenetre principale : ainsi ils restent toujours
-// au premier plan, par-dessus n'importe quel editeur de plugin, meme si
-// celui-ci deborde visuellement de son emplacement prevu.
+// Panneau "OUTPUT" complet : titre, vumetre, fader et bouton IN, dans un
+// cadre distinct, toujours ajoute en dernier a la fenetre principale pour
+// rester au premier plan devant n'importe quel editeur de plugin.
 class MeterAndGainOverlay : public juce::Component
 {
 public:
     MeterAndGainOverlay()
     {
+        titleLabel.setText ("OUTPUT", juce::dontSendNotification);
+        titleLabel.setFont (juce::Font (12.0f, juce::Font::bold));
+        titleLabel.setJustificationType (juce::Justification::centred);
+        titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xff8a92a0));
+        addAndMakeVisible (titleLabel);
+
         gainSlider.setSliderStyle (juce::Slider::LinearVertical);
         gainSlider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 60, 20);
         gainSlider.setRange (0.0, 2.0, 0.01);
@@ -32,8 +37,6 @@ public:
             addAndMakeVisible (*lbl);
             meterScaleLabels.push_back (std::move (lbl));
         }
-
-        setInterceptsMouseClicks (false, true);
     }
 
     void setChannel (AudioChannel* newChannel)
@@ -80,6 +83,15 @@ public:
 
     void paint (juce::Graphics& g) override
     {
+        // Le panneau complet : fond legerement distinct, bordure, comme un
+        // vrai module "OUTPUT" separe du reste de l'interface.
+        auto panelBounds = getLocalBounds().toFloat();
+
+        g.setColour (juce::Colour (0xff1e2227));
+        g.fillRoundedRectangle (panelBounds, 6.0f);
+        g.setColour (juce::Colour (0xff3d434d));
+        g.drawRoundedRectangle (panelBounds.reduced (0.5f), 6.0f, 1.0f);
+
         auto meterArea = meterBounds.toFloat();
 
         g.setColour (juce::Colour (0xff0d0f11));
@@ -105,11 +117,14 @@ public:
 
     void resized() override
     {
-        auto area = getLocalBounds();
+        auto area = getLocalBounds().reduced (8);
 
-        auto scaleColumn = area.removeFromLeft (30);
-        area.removeFromLeft (6);
-        auto meterColumn = area.removeFromLeft (36);
+        titleLabel.setBounds (area.removeFromTop (18));
+        area.removeFromTop (8);
+
+        auto scaleColumn = area.removeFromLeft (28);
+        area.removeFromLeft (4);
+        auto meterColumn = area.removeFromLeft (34);
 
         auto meterHeight = area.getHeight() - 70;
         meterBounds = meterColumn.withHeight (meterHeight).withY (area.getY());
@@ -120,7 +135,7 @@ public:
             meterScaleLabels[i]->setBounds (scaleColumn.getX(), y, scaleColumn.getWidth(), 14);
         }
 
-        area.removeFromLeft (10);
+        area.removeFromLeft (8);
         gainSlider.setBounds (area.withHeight (meterHeight));
         inButton.setBounds (area.withY (area.getY() + meterHeight + 10).withHeight (30));
     }
@@ -130,6 +145,7 @@ private:
     float displayedLevel = 0.0f;
     juce::Rectangle<int> meterBounds;
 
+    juce::Label titleLabel;
     juce::Slider gainSlider;
     juce::TextButton inButton;
     std::vector<std::unique_ptr<juce::Label>> meterScaleLabels;
