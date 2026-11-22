@@ -54,6 +54,8 @@ private:
     void loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex);
     void addCurrentSlotToHotPlugins (int channelIndex, int slotIndex);
     void loadHotPluginIntoSlot (int channelIndex, int slotIndex, int hotIndex);
+    void showHotPluginPicker (int hotIndex);
+    void renameHotPlugin (int hotIndex);
     void clearHotPlugin (int hotIndex);
     void showBank (int bankIndex);
     void saveSession();

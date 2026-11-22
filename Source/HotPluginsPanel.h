@@ -4,6 +4,7 @@
 
 // Une case individuelle du panneau Hot Plugins : affiche le nom du plugin
 // sauvegarde et sa miniature (reutilisee depuis le slot d'origine).
+// Clic gauche = charger ; clic droit = vider ; double-clic = renommer.
 class HotPluginButton : public juce::Component
 {
 public:
@@ -26,6 +27,15 @@ public:
         {
             if (onClick != nullptr)
                 onClick();
+        }
+    }
+
+    void mouseDoubleClick (const juce::MouseEvent& e) override
+    {
+        if (! e.mods.isRightButtonDown())
+        {
+            if (onDoubleClick != nullptr)
+                onDoubleClick();
         }
     }
 
@@ -75,6 +85,7 @@ public:
 
     std::function<void()> onClick;
     std::function<void()> onRightClick;
+    std::function<void()> onDoubleClick;
 
 private:
     juce::String displayName;
@@ -83,9 +94,12 @@ private:
 };
 
 // Panneau de raccourcis "Hot Plugins" (favoris), visible en permanence a
-// droite de l'ecran (OVERVIEW et RACK). Le chargement d'un Hot Plugin dans
-// un slot se fait via le menu habituel d'un emplacement (clic sur un
-// emplacement vide, ou clic droit) ; clic droit ici vide ce Hot Plugin.
+// droite de l'ecran (OVERVIEW et RACK).
+// - Clic gauche sur une case (vide ou pleine) : ouvre la liste des autres
+//   Hot Plugins deja sauvegardes, juste en dessous de la case, pour en
+//   dupliquer un dans celle-ci.
+// - Clic droit : vide cette case Hot Plugin.
+// - Double-clic : renomme ce Hot Plugin.
 class HotPluginsPanel : public juce::Component
 {
 public:
@@ -99,10 +113,20 @@ public:
             auto btn = std::make_unique<HotPluginButton>();
             auto indexCopy = i;
 
+            btn->onClick = [this, indexCopy]
+            {
+                if (onSlotClicked != nullptr)
+                    onSlotClicked (indexCopy);
+            };
             btn->onRightClick = [this, indexCopy]
             {
                 if (onSlotRightClicked != nullptr)
                     onSlotRightClicked (indexCopy);
+            };
+            btn->onDoubleClick = [this, indexCopy]
+            {
+                if (onSlotRenameRequested != nullptr)
+                    onSlotRenameRequested (indexCopy);
             };
 
             addAndMakeVisible (*btn);
@@ -116,6 +140,15 @@ public:
             return;
 
         slotButtons[(size_t) index]->setData (data.displayName, data.thumbnail, data.hasPlugin);
+    }
+
+    // Position a l'ecran de la case (pour ancrer un menu juste en dessous).
+    juce::Rectangle<int> getSlotScreenBounds (int index) const
+    {
+        if (index < 0 || index >= (int) slotButtons.size())
+            return {};
+
+        return slotButtons[(size_t) index]->getScreenBounds();
     }
 
     void paint (juce::Graphics& g) override
@@ -133,7 +166,7 @@ public:
         area.removeFromTop (20);
 
         constexpr int gap = 6;
-        constexpr int rowHeight = 60;
+        constexpr int rowHeight = 90;
         auto numRows = (numSlots + numColumns - 1) / numColumns;
         auto colWidth = (area.getWidth() - gap * (numColumns - 1)) / numColumns;
 
@@ -158,7 +191,9 @@ public:
         }
     }
 
+    std::function<void (int index)> onSlotClicked;
     std::function<void (int index)> onSlotRightClicked;
+    std::function<void (int index)> onSlotRenameRequested;
 
 private:
     std::vector<std::unique_ptr<HotPluginButton>> slotButtons;

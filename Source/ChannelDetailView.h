@@ -4,12 +4,6 @@
 #include "RackSlotComponent.h"
 #include "CompressorEditor.h"
 
-// Vue detaillee d'un seul canal : entree/sortie en haut, pile de slots
-// composites a gauche (nom+selecteur, IN, mini-vumetre, miniature),
-// editeur du plugin selectionne encastre a droite, a sa taille reelle
-// (pas de mise a l'echelle). getRequiredWidth()/getRequiredHeight()
-// permettent a MainComponent d'agrandir toute la fenetre du programme
-// quand le plugin a besoin de plus de place.
 class ChannelDetailView : public juce::Component,
                            private juce::ComponentListener
 {
@@ -83,20 +77,16 @@ public:
 
     juce::Rectangle<int> getInputPanelBounds() const  { return inputPanelBounds; }
     juce::Rectangle<int> getOutputPanelBounds() const { return outputPanelBounds; }
+    int getSelectedSlot() const { return selectedSlot; }
 
     int getRequiredWidth() const
     {
-        // 20 (marge gauche) + 170 (IN) + 20 (gap) + 280 (slots) + 20 (gap)
-        // + 170 (OUT) + 20 (gap) + 20 (marge droite) = 720, plus la largeur
-        // reelle du plugin actuellement affiche (ou la largeur par defaut).
         constexpr int fixedWidth = 720;
         return fixedWidth + pluginDisplayArea.getWidth();
     }
 
     int getRequiredHeight() const
     {
-        // 20+20 (marges haut/bas) + 40 (en-tete) + 16 (gap) = 96, plus le
-        // plus grand entre la hauteur de la colonne de slots et celle du plugin.
         constexpr int verticalChrome = 96;
         return verticalChrome + juce::jmax (lastSlotsColumnHeight, pluginDisplayArea.getHeight());
     }

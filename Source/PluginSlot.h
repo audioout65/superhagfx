@@ -78,12 +78,18 @@ public:
         thumbnailImage = juce::Image();
     }
 
+    // captureThumbnailOnLoad = false quand l'appelant va appliquer un etat
+    // sauvegarde juste apres et fera lui-meme la capture : cela evite de
+    // lancer deux captures concurrentes sur le meme plugin (ce qui faisait
+    // planter le host en creant deux editeurs/deux fenetres de capture pour
+    // la meme instance en meme temps).
     void loadVst3Async (const juce::PluginDescription& desc,
                         juce::AudioPluginFormatManager& formatManager,
-                        std::function<void (bool success, juce::String error)> onDone)
+                        std::function<void (bool success, juce::String error)> onDone,
+                        bool captureThumbnailOnLoad = true)
     {
         formatManager.createPluginInstanceAsync (desc, currentSampleRate, currentBlockSize,
-            [this, desc, onDone] (std::unique_ptr<juce::AudioPluginInstance> instance, const juce::String& error)
+            [this, desc, onDone, captureThumbnailOnLoad] (std::unique_ptr<juce::AudioPluginInstance> instance, const juce::String& error)
             {
                 if (instance == nullptr)
                 {
@@ -102,7 +108,8 @@ public:
                     contentType = SlotContentType::vst3;
                 }
 
-                startThumbnailCapture();
+                if (captureThumbnailOnLoad)
+                    startThumbnailCapture();
 
                 if (onDone != nullptr)
                     onDone (true, {});
@@ -235,6 +242,11 @@ public:
             if (stateBase64.isNotEmpty())
                 state.fromBase64Encoding (stateBase64);
 
+            // Si un etat sauvegarde doit etre reapplique, on demande a
+            // loadVst3Async de NE PAS capturer tout de suite : on appliquera
+            // l'etat puis on capturera nous-memes, une seule fois.
+            auto shouldCaptureImmediately = (state.getSize() == 0);
+
             loadVst3Async (desc, formatManager, [this, state, onDone] (bool success, juce::String)
             {
                 if (success && state.getSize() > 0)
@@ -250,7 +262,7 @@ public:
 
                 if (onDone != nullptr)
                     onDone();
-            });
+            }, shouldCaptureImmediately);
             return;
         }
 

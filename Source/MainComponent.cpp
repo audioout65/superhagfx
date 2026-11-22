@@ -25,6 +25,8 @@ MainComponent::MainComponent()
         hotPluginsPanel.refreshSlot (i, hotPlugins[(size_t) i]);
 
     hotPluginsPanel.onSlotRightClicked = [this] (int index) { clearHotPlugin (index); };
+    hotPluginsPanel.onSlotClicked = [this] (int index) { showHotPluginPicker (index); };
+    hotPluginsPanel.onSlotRenameRequested = [this] (int index) { renameHotPlugin (index); };
 
     for (int ch = 0; ch < numChannels; ++ch)
     {
@@ -301,8 +303,11 @@ void MainComponent::loadSession()
             {
                 channelStrips[(size_t) index]->refreshFromChannel();
 
-                if (detailViewOpen && detailChannelIndex == index)
-                    channelDetailView.refreshSlots();
+                juce::Timer::callAfterDelay (900, [this, index]
+                {
+                    if (detailViewOpen && detailChannelIndex == index)
+                        channelDetailView.refreshSlots();
+                });
             });
         }
 
@@ -575,6 +580,105 @@ void MainComponent::loadHotPluginIntoSlot (int channelIndex, int slotIndex, int 
                 channelDetailView.refreshSlots (slotIndex);
         });
     });
+}
+
+// Clic gauche sur une case des Hot Plugins (vide OU deja remplie) : propose
+// la liste des AUTRES Hot Plugins deja sauvegardes, ancree juste en dessous
+// de la case cliquee, et copie celui choisi dans cette case (remplace le
+// preset present si elle etait pleine). Independant de RACK / du slot
+// selectionne : fonctionne pareil en OVERVIEW et en RACK.
+void MainComponent::showHotPluginPicker (int hotIndex)
+{
+    if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+        return;
+
+    juce::PopupMenu menu;
+    bool hasAnyOther = false;
+
+    for (int i = 0; i < (int) hotPlugins.size(); ++i)
+    {
+        if (i == hotIndex)
+            continue;
+
+        auto& other = hotPlugins[(size_t) i];
+
+        if (! other.hasPlugin)
+            continue;
+
+        hasAnyOther = true;
+        menu.addItem (i + 1, other.displayName);
+    }
+
+    if (! hasAnyOther)
+        return;
+
+    auto targetBounds = hotPluginsPanel.getSlotScreenBounds (hotIndex);
+
+    menu.showMenuAsync (juce::PopupMenu::Options().withTargetScreenArea (targetBounds),
+                        [this, hotIndex] (int result)
+    {
+        if (result <= 0)
+            return;
+
+        auto sourceIndex = result - 1;
+
+        if (sourceIndex < 0 || sourceIndex >= (int) hotPlugins.size())
+            return;
+
+        auto& source = hotPlugins[(size_t) sourceIndex];
+
+        if (! source.hasPlugin)
+            return;
+
+        auto& dest = hotPlugins[(size_t) hotIndex];
+        dest.setFromPlugin (source.displayName, source.description, source.state, source.thumbnail);
+
+        hotPluginsPanel.refreshSlot (hotIndex, dest);
+        saveHotPlugins (hotPlugins);
+    });
+}
+
+void MainComponent::renameHotPlugin (int hotIndex)
+{
+    if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+        return;
+
+    auto& hotPlugin = hotPlugins[(size_t) hotIndex];
+
+    if (! hotPlugin.hasPlugin)
+        return;
+
+    auto* nameWindow = new juce::AlertWindow ("Renommer le Hot Plugin",
+                                              "Nouveau nom :",
+                                              juce::AlertWindow::NoIcon);
+    nameWindow->addTextEditor ("name", hotPlugin.displayName, "Nom");
+    nameWindow->addButton ("OK", 1, juce::KeyPress (juce::KeyPress::returnKey));
+    nameWindow->addButton ("Annuler", 0, juce::KeyPress (juce::KeyPress::escapeKey));
+
+    nameWindow->enterModalState (true, juce::ModalCallbackFunction::create (
+        [this, hotIndex, nameWindow] (int result)
+    {
+        std::unique_ptr<juce::AlertWindow> windowDeleter (nameWindow);
+
+        if (result == 0)
+            return;
+
+        auto chosenName = nameWindow->getTextEditorContents ("name").trim();
+
+        if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+            return;
+
+        auto& hp = hotPlugins[(size_t) hotIndex];
+
+        if (! hp.hasPlugin)
+            return;
+
+        if (chosenName.isNotEmpty())
+            hp.displayName = chosenName;
+
+        hotPluginsPanel.refreshSlot (hotIndex, hp);
+        saveHotPlugins (hotPlugins);
+    }), true);
 }
 
 void MainComponent::clearHotPlugin (int hotIndex)
