@@ -1,5 +1,6 @@
 #pragma once
 #include <JuceHeader.h>
+#include <cstdint>
 #include "Compressor.h"
 #include "NativeWindowCapture.h"
 
@@ -109,7 +110,7 @@ public:
                 }
 
                 if (captureThumbnailOnLoad)
-                    startThumbnailCapture();
+                    refreshThumbnailFromCacheOrCapture (desc, {});
 
                 if (onDone != nullptr)
                     onDone (true, {});
@@ -145,8 +146,10 @@ public:
     }
 
     // Applique un etat sauvegarde (reglages d'un Hot Plugin par exemple) sur
-    // le plugin deja charge, puis relance une capture de miniature pour que
-    // l'image affichee corresponde bien a ces nouveaux reglages.
+    // le plugin deja charge, puis met a jour la miniature (depuis le cache
+    // disque si elle existe deja pour ce plugin + cet etat exact, sinon en
+    // relancant une capture, qui sera alors mise en cache pour la prochaine
+    // fois).
     void applyStateAndRecapture (const juce::MemoryBlock& state)
     {
         {
@@ -156,7 +159,7 @@ public:
         }
 
         if (state.getSize() > 0)
-            startThumbnailCapture();
+            refreshThumbnailFromCacheOrCapture (lastPluginDescription, state);
     }
 
     void saveToXml (juce::XmlElement& xml) const
@@ -244,10 +247,11 @@ public:
 
             // Si un etat sauvegarde doit etre reapplique, on demande a
             // loadVst3Async de NE PAS capturer tout de suite : on appliquera
-            // l'etat puis on capturera nous-memes, une seule fois.
+            // l'etat puis on mettra a jour la miniature nous-memes, une
+            // seule fois (depuis le cache si possible).
             auto shouldCaptureImmediately = (state.getSize() == 0);
 
-            loadVst3Async (desc, formatManager, [this, state, onDone] (bool success, juce::String)
+            loadVst3Async (desc, formatManager, [this, desc, state, onDone] (bool success, juce::String)
             {
                 if (success && state.getSize() > 0)
                 {
@@ -257,7 +261,7 @@ public:
                             vstInstance->setStateInformation (state.getData(), (int) state.getSize());
                     }
 
-                    startThumbnailCapture();
+                    refreshThumbnailFromCacheOrCapture (desc, state);
                 }
 
                 if (onDone != nullptr)
@@ -308,15 +312,95 @@ private:
         }
     }
 
+    // --- Cache disque des miniatures -------------------------------------
+    // Cle = hash FNV-1a (64 bits) de (identifiant du plugin + etat exact).
+    // Deux chargements du meme plugin avec les memes reglages partagent
+    // donc la meme image en cache, et on evite de recreer un editeur et une
+    // fenetre de capture a chaque fois (plus rapide, et plus sur au
+    // chargement d'une session avec plusieurs plugins). Pas de dependance a
+    // juce_cryptography : hash fait maison, suffisant pour une cle de cache.
+    static juce::File getThumbnailCacheDir()
+    {
+        auto dir = juce::File::getSpecialLocation (juce::File::userApplicationDataDirectory)
+                      .getChildFile ("LiveRack")
+                      .getChildFile ("ThumbnailCache");
+        dir.createDirectory();
+        return dir;
+    }
+
+    static juce::String makeThumbnailCacheKey (const juce::PluginDescription& desc, const juce::MemoryBlock& state)
+    {
+        auto idString = desc.createIdentifierString();
+
+        juce::MemoryBlock combined;
+        combined.append (idString.toRawUTF8(), idString.getNumBytesAsUTF8());
+        combined.append (state.getData(), state.getSize());
+
+        uint64_t hash = 1469598103934665603ULL;
+        constexpr uint64_t prime = 1099511628211ULL;
+
+        auto* bytes = static_cast<const uint8_t*> (combined.getData());
+
+        for (size_t i = 0; i < combined.getSize(); ++i)
+        {
+            hash ^= bytes[i];
+            hash *= prime;
+        }
+
+        return juce::String::toHexString (&hash, (int) sizeof (hash));
+    }
+
+    static juce::Image loadThumbnailFromCache (const juce::String& key)
+    {
+        auto file = getThumbnailCacheDir().getChildFile (key + ".png");
+
+        if (! file.existsAsFile())
+            return {};
+
+        return juce::ImageFileFormat::loadFrom (file);
+    }
+
+    static void saveThumbnailToCache (const juce::String& key, const juce::Image& image)
+    {
+        if (! image.isValid())
+            return;
+
+        auto file = getThumbnailCacheDir().getChildFile (key + ".png");
+        file.deleteFile();
+
+        juce::FileOutputStream stream (file);
+
+        if (stream.openedOk())
+        {
+            juce::PNGImageFormat png;
+            png.writeImageToStream (image, stream);
+        }
+    }
+
+    // Utilise l'image en cache si elle existe deja pour ce plugin + cet
+    // etat, sinon relance une vraie capture (qui alimentera le cache a son
+    // tour).
+    void refreshThumbnailFromCacheOrCapture (const juce::PluginDescription& desc, const juce::MemoryBlock& state)
+    {
+        auto key = makeThumbnailCacheKey (desc, state);
+        auto cached = loadThumbnailFromCache (key);
+
+        if (cached.isValid())
+            thumbnailImage = cached;
+        else
+            startThumbnailCapture (key);
+    }
+
     // Affiche brievement l'editeur dans une vraie fenetre visible a l'ecran,
     // a pleine opacite, puis capture et referme aussitot. Resynchronise la
     // taille de la fenetre juste avant la capture car certains plugins
     // (Ozone, RC 48...) redimensionnent leur editeur apres sa creation.
-    void startThumbnailCapture()
+    // Si cacheKey est fourni, le resultat est aussi sauvegarde sur disque.
+    void startThumbnailCapture (juce::String cacheKey = {})
     {
         if (! juce::MessageManager::getInstance()->isThisTheMessageThread())
         {
-            juce::MessageManager::callAsync ([this] { startThumbnailCapture(); });
+            juce::MessageManager::callAsync ([this, cacheKey] { startThumbnailCapture (cacheKey); });
             return;
         }
 
@@ -350,7 +434,7 @@ private:
                             .getChildFile ("liverack_thumb_" + juce::String (juce::Random::getSystemRandom().nextInt()) + ".png");
         auto tempPath = tempFile.getFullPathName().toStdString();
 
-        juce::Timer::callAfterDelay (300, [this, editor, window, tempFile, tempPath]
+        juce::Timer::callAfterDelay (300, [this, editor, window, tempFile, tempPath, cacheKey]
         {
             auto realWidth  = editor->getWidth();
             auto realHeight = editor->getHeight();
@@ -358,7 +442,7 @@ private:
             if (realWidth > 0 && realHeight > 0)
                 window->setBounds (20, 20, realWidth, realHeight);
 
-            juce::Timer::callAfterDelay (200, [this, editor, window, tempFile, tempPath]
+            juce::Timer::callAfterDelay (200, [this, editor, window, tempFile, tempPath, cacheKey]
             {
                 auto* peer = editor->getPeer();
                 auto nativeHandle = peer != nullptr ? peer->getNativeHandle() : nullptr;
@@ -368,7 +452,12 @@ private:
                     auto captureOk = captureNativeWindowToFile (nativeHandle, tempPath);
 
                     if (captureOk)
+                    {
                         thumbnailImage = juce::ImageFileFormat::loadFrom (tempFile);
+
+                        if (cacheKey.isNotEmpty())
+                            saveThumbnailToCache (cacheKey, thumbnailImage);
+                    }
                 }
 
                 tempFile.deleteFile();
