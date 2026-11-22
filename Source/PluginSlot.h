@@ -124,6 +124,7 @@ public:
     }
 
     const juce::Image& getThumbnail() const { return thumbnailImage; }
+    const juce::PluginDescription& getPluginDescription() const { return lastPluginDescription; }
 
     void setBypassed (bool shouldBeBypassed) { bypassed = shouldBeBypassed; }
     bool isBypassed() const                   { return bypassed; }
@@ -134,6 +135,21 @@ public:
     {
         const juce::SpinLock::ScopedLockType lock (pluginLock);
         return vstInstance.get();
+    }
+
+    // Applique un etat sauvegarde (reglages d'un Hot Plugin par exemple) sur
+    // le plugin deja charge, puis relance une capture de miniature pour que
+    // l'image affichee corresponde bien a ces nouveaux reglages.
+    void applyStateAndRecapture (const juce::MemoryBlock& state)
+    {
+        {
+            const juce::SpinLock::ScopedLockType lock (pluginLock);
+            if (vstInstance != nullptr && state.getSize() > 0)
+                vstInstance->setStateInformation (state.getData(), (int) state.getSize());
+        }
+
+        if (state.getSize() > 0)
+            startThumbnailCapture();
     }
 
     void saveToXml (juce::XmlElement& xml) const
@@ -281,14 +297,9 @@ private:
     }
 
     // Affiche brievement l'editeur dans une vraie fenetre visible a l'ecran,
-    // a pleine opacite (necessaire pour que les pixels captures ne soient pas
-    // transparents), puis capture et referme aussitot.
-    //
-    // Certains plugins (Ozone, RC 48...) redimensionnent leur editeur juste
-    // apres sa creation (taille initiale = placeholder, taille finale posee
-    // un peu plus tard par le plugin lui-meme). On resynchronise donc la
-    // taille de la fenetre juste avant la capture, avec un court delai
-    // supplementaire pour laisser ce redimensionnement se produire.
+    // a pleine opacite, puis capture et referme aussitot. Resynchronise la
+    // taille de la fenetre juste avant la capture car certains plugins
+    // (Ozone, RC 48...) redimensionnent leur editeur apres sa creation.
     void startThumbnailCapture()
     {
         if (! juce::MessageManager::getInstance()->isThisTheMessageThread())
@@ -327,9 +338,6 @@ private:
                             .getChildFile ("liverack_thumb_" + juce::String (juce::Random::getSystemRandom().nextInt()) + ".png");
         auto tempPath = tempFile.getFullPathName().toStdString();
 
-        // Etape 1 (300ms) : laisser l'editeur finir son premier affichage
-        // et son eventuel auto-redimensionnement, puis resynchroniser la
-        // fenetre sur sa taille reelle actuelle.
         juce::Timer::callAfterDelay (300, [this, editor, window, tempFile, tempPath]
         {
             auto realWidth  = editor->getWidth();
@@ -338,8 +346,6 @@ private:
             if (realWidth > 0 && realHeight > 0)
                 window->setBounds (20, 20, realWidth, realHeight);
 
-            // Etape 2 (200ms de plus) : laisser ce resize se composer
-            // reellement a l'ecran avant de capturer les pixels.
             juce::Timer::callAfterDelay (200, [this, editor, window, tempFile, tempPath]
             {
                 auto* peer = editor->getPeer();

@@ -23,6 +23,8 @@ target_sources(LiveRack PRIVATE
     Source/PluginSlot.h
     Source/SlotButton.h
     Source/RackSlotComponent.h
+    Source/HotPluginsPanel.h
+    Source/HotPluginSlot.h
     Source/NativeWindowCapture.h
     Source/CompressorEditor.h
     Source/ChannelStripComponent.h

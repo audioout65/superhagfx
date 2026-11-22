@@ -9,6 +9,7 @@
 #include "InputPanelComponent.h"
 #include "LeftSidebarComponent.h"
 #include "HotPluginsPanel.h"
+#include "HotPluginSlot.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -51,6 +52,9 @@ private:
     void openSlotEditor (int channelIndex, int slotIndex);
     void refreshSlotButtonText (int channelIndex, int slotIndex);
     void loadVst3IntoSlot (int channelIndex, int slotIndex, int pluginListIndex);
+    void addCurrentSlotToHotPlugins (int channelIndex, int slotIndex);
+    void loadHotPluginIntoSlot (int channelIndex, int slotIndex, int hotIndex);
+    void clearHotPlugin (int hotIndex);
     void showBank (int bankIndex);
     void saveSession();
     void loadSession();
@@ -58,6 +62,7 @@ private:
     void openChannelDetail (int channelIndex);
     void closeChannelDetail();
     void updatePanelPositions();
+    void growWindowToFitIfNeeded();
     void setInterfaceLocked (bool shouldBeLocked);
     void changeBufferSize (int newBufferSize);
 
@@ -66,6 +71,7 @@ private:
     TopBarComponent topBar;
     LeftSidebarComponent leftSidebar;
     HotPluginsPanel hotPluginsPanel;
+    std::array<HotPluginSlot, HotPluginsPanel::numSlots> hotPlugins;
     int currentBank = 0;
     bool interfaceLocked = false;
 

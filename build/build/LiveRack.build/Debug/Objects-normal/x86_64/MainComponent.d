@@ -583,13 +583,17 @@ dependencies: \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/AudioChannel.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/PluginSlot.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/Compressor.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/NativeWindowCapture.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/PluginManager.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/ChannelStripComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/SlotButton.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/ChannelDetailView.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/RackSlotComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/CompressorEditor.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/TopBarComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MeterAndGainOverlay.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/InputPanelComponent.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/LeftSidebarComponent.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/HotPluginsPanel.h \
+  /Users/lebatarddesmontagnes/Dev/LiveRack/Source/HotPluginSlot.h \
   /Users/lebatarddesmontagnes/Dev/LiveRack/Source/MainMenu.h

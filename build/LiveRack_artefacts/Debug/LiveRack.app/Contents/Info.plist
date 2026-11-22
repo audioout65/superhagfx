@@ -46,5 +46,7 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>LiveRack a besoin des entrees audio pour traiter le son en direct.</string>
 </dict>
 </plist>

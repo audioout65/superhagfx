@@ -6,8 +6,12 @@
 
 // Vue detaillee d'un seul canal : entree/sortie en haut, pile de slots
 // composites a gauche (nom+selecteur, IN, mini-vumetre, miniature),
-// editeur du plugin selectionne a droite.
-class ChannelDetailView : public juce::Component
+// editeur du plugin selectionne encastre a droite, a sa taille reelle
+// (pas de mise a l'echelle). getRequiredWidth()/getRequiredHeight()
+// permettent a MainComponent d'agrandir toute la fenetre du programme
+// quand le plugin a besoin de plus de place.
+class ChannelDetailView : public juce::Component,
+                           private juce::ComponentListener
 {
 public:
     ChannelDetailView()
@@ -54,9 +58,12 @@ public:
             slotComponents.push_back (std::move (slotComp));
         }
 
-        pluginViewport.setViewedComponent (&pluginDisplayArea, false);
-        pluginViewport.setScrollBarsShown (true, true);
-        addAndMakeVisible (pluginViewport);
+        addAndMakeVisible (pluginDisplayArea);
+    }
+
+    ~ChannelDetailView() override
+    {
+        clearPluginDisplay();
     }
 
     void setChannel (int newChannelIndex, AudioChannel& newChannel)
@@ -77,7 +84,30 @@ public:
     juce::Rectangle<int> getInputPanelBounds() const  { return inputPanelBounds; }
     juce::Rectangle<int> getOutputPanelBounds() const { return outputPanelBounds; }
 
-    void refreshSlots()
+    int getRequiredWidth() const
+    {
+        // 20 (marge gauche) + 170 (IN) + 20 (gap) + 280 (slots) + 20 (gap)
+        // + 170 (OUT) + 20 (gap) + 20 (marge droite) = 720, plus la largeur
+        // reelle du plugin actuellement affiche (ou la largeur par defaut).
+        constexpr int fixedWidth = 720;
+        return fixedWidth + pluginDisplayArea.getWidth();
+    }
+
+    int getRequiredHeight() const
+    {
+        // 20+20 (marges haut/bas) + 40 (en-tete) + 16 (gap) = 96, plus le
+        // plus grand entre la hauteur de la colonne de slots et celle du plugin.
+        constexpr int verticalChrome = 96;
+        return verticalChrome + juce::jmax (lastSlotsColumnHeight, pluginDisplayArea.getHeight());
+    }
+
+    void prepareForSlotReplace (int slotIndex)
+    {
+        if (selectedSlot == slotIndex)
+            clearPluginDisplay();
+    }
+
+    void refreshSlots (int slotIndexThatChanged = -1)
     {
         if (channel == nullptr)
             return;
@@ -97,7 +127,7 @@ public:
                 slotComponents[(size_t) slot]->clearThumbnail();
         }
 
-        if (selectedSlot >= 0)
+        if (selectedSlot >= 0 && (slotIndexThatChanged < 0 || slotIndexThatChanged == selectedSlot))
             selectSlotForDisplay (selectedSlot);
     }
 
@@ -114,8 +144,6 @@ public:
 
     void updateSlotMeters()
     {
-        // Pas de vumetre par plugin individuel pour l'instant : on reutilise
-        // le niveau global du canal comme approximation visuelle simple.
         if (channel == nullptr)
             return;
 
@@ -138,6 +166,9 @@ public:
         if (slot.isEmpty())
         {
             layoutEmptyDisplay();
+            outputPanelBounds = defaultOutputPanelBounds;
+            if (onPanelBoundsChanged != nullptr)
+                onPanelBoundsChanged();
             repaint();
             return;
         }
@@ -164,7 +195,17 @@ public:
             return;
 
         pluginDisplayArea.addAndMakeVisible (*editorComponent);
+        editorComponent->setTopLeftPosition (0, 0);
+        editorComponent->addComponentListener (this);
+
         layoutPluginEditor (*editorComponent);
+
+        juce::Component::SafePointer<juce::Component> safeEditor (editorComponent);
+        juce::Timer::callAfterDelay (300, [this, safeEditor]
+        {
+            if (safeEditor != nullptr)
+                layoutPluginEditor (*safeEditor);
+        });
 
         repaint();
     }
@@ -174,14 +215,14 @@ public:
         g.fillAll (juce::Colour (0xff1a1d21));
 
         g.setColour (juce::Colour (0xff22262b));
-        g.fillRoundedRectangle (pluginViewport.getBounds().toFloat(), 6.0f);
+        g.fillRoundedRectangle (pluginDisplayArea.getBounds().toFloat(), 6.0f);
 
         if (selectedSlot < 0 || channel == nullptr || channel->getSlot (selectedSlot).isEmpty())
         {
             g.setColour (juce::Colour (0xff5a6472));
             g.setFont (14.0f);
             g.drawText ("Selectionnez un emplacement pour voir ses reglages",
-                        pluginViewport.getBounds(), juce::Justification::centred);
+                        pluginDisplayArea.getBounds(), juce::Justification::centred);
         }
     }
 
@@ -199,31 +240,38 @@ public:
         inputPanelBounds = area.removeFromLeft (170);
         area.removeFromLeft (20);
 
-        outputPanelBounds = area.removeFromRight (170);
+        defaultOutputPanelBounds = area.removeFromRight (170);
         area.removeFromRight (20);
 
-        // Colonne de slots composites : large et assez haute pour que la
-        // miniature du plugin soit bien lisible.
         constexpr int slotHeight = 150;
         constexpr int slotGap = 10;
 
         auto slotsColumn = area.removeFromLeft (280);
+        lastSlotsColumnHeight = 0;
 
         for (auto& slotComp : slotComponents)
         {
             slotComp->setBounds (slotsColumn.removeFromTop (slotHeight));
             slotsColumn.removeFromTop (slotGap);
+            lastSlotsColumnHeight += slotHeight + slotGap;
         }
 
         area.removeFromLeft (20);
-        pluginViewport.setBounds (area);
+        pluginAreaTopLeft = area.getPosition();
+        pluginAreaMaxBounds = area;
 
         if (currentEditor != nullptr)
             layoutPluginEditor (*currentEditor);
         else if (currentInternalEditor != nullptr)
             layoutPluginEditor (*currentInternalEditor);
         else
+        {
             layoutEmptyDisplay();
+            outputPanelBounds = defaultOutputPanelBounds;
+        }
+
+        if (onPanelBoundsChanged != nullptr)
+            onPanelBoundsChanged();
     }
 
     std::function<void()> onPrevious;
@@ -232,31 +280,54 @@ public:
     std::function<void()> onPanelBoundsChanged;
 
 private:
+    void componentMovedOrResized (juce::Component& component, bool /*wasMoved*/, bool wasResized) override
+    {
+        if (! wasResized)
+            return;
+
+        if (&component == currentEditor.get() || &component == currentInternalEditor.get())
+            layoutPluginEditor (component);
+    }
+
     void layoutEmptyDisplay()
     {
-        pluginDisplayArea.setBounds (0, 0, pluginViewport.getWidth(), pluginViewport.getHeight());
+        pluginDisplayArea.setBounds (pluginAreaTopLeft.x, pluginAreaTopLeft.y,
+                                     pluginAreaMaxBounds.getWidth(), pluginAreaMaxBounds.getHeight());
     }
 
     void layoutPluginEditor (juce::Component& editor)
     {
-        auto viewportWidth = pluginViewport.getWidth();
-        auto viewportHeight = pluginViewport.getHeight();
-
+        editor.setTopLeftPosition (0, 0);
         auto editorWidth = editor.getWidth();
         auto editorHeight = editor.getHeight();
 
-        auto areaWidth = juce::jmax (editorWidth, viewportWidth);
-        auto areaHeight = juce::jmax (editorHeight, viewportHeight);
+        if (editorWidth <= 0 || editorHeight <= 0)
+        {
+            layoutEmptyDisplay();
+            return;
+        }
 
-        pluginDisplayArea.setBounds (0, 0, areaWidth, areaHeight);
+        pluginDisplayArea.setBounds (pluginAreaTopLeft.x, pluginAreaTopLeft.y, editorWidth, editorHeight);
 
-        auto x = (areaWidth - editorWidth) / 2;
-        auto y = (areaHeight - editorHeight) / 2;
-        editor.setTopLeftPosition (x, y);
+        constexpr int outputGap = 20;
+        constexpr int outputWidth = 170;
+
+        outputPanelBounds = juce::Rectangle<int> (pluginDisplayArea.getRight() + outputGap,
+                                                   defaultOutputPanelBounds.getY(),
+                                                   outputWidth,
+                                                   defaultOutputPanelBounds.getHeight());
+
+        if (onPanelBoundsChanged != nullptr)
+            onPanelBoundsChanged();
     }
 
     void clearPluginDisplay()
     {
+        if (currentEditor != nullptr)
+            currentEditor->removeComponentListener (this);
+        if (currentInternalEditor != nullptr)
+            currentInternalEditor->removeComponentListener (this);
+
         currentEditor.reset();
         currentInternalEditor.reset();
     }
@@ -264,13 +335,15 @@ private:
     int channelIndex = 0;
     AudioChannel* channel = nullptr;
     int selectedSlot = -1;
-    juce::Rectangle<int> inputPanelBounds, outputPanelBounds;
+    juce::Rectangle<int> inputPanelBounds, outputPanelBounds, defaultOutputPanelBounds;
+    juce::Point<int> pluginAreaTopLeft;
+    juce::Rectangle<int> pluginAreaMaxBounds;
+    int lastSlotsColumnHeight = 0;
 
     juce::TextButton prevButton, nextButton;
     juce::Label channelNameLabel;
     std::vector<std::unique_ptr<RackSlotComponent>> slotComponents;
 
-    juce::Viewport pluginViewport;
     juce::Component pluginDisplayArea;
     std::unique_ptr<juce::AudioProcessorEditor> currentEditor;
     std::unique_ptr<CompressorEditor> currentInternalEditor;

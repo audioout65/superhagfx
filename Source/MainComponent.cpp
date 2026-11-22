@@ -20,6 +20,12 @@ MainComponent::MainComponent()
 
     addAndMakeVisible (hotPluginsPanel);
 
+    loadHotPlugins (hotPlugins);
+    for (int i = 0; i < (int) hotPlugins.size(); ++i)
+        hotPluginsPanel.refreshSlot (i, hotPlugins[(size_t) i]);
+
+    hotPluginsPanel.onSlotRightClicked = [this] (int index) { clearHotPlugin (index); };
+
     for (int ch = 0; ch < numChannels; ++ch)
     {
         channels[(size_t) ch].setInputChannelIndex (ch);
@@ -163,6 +169,27 @@ void MainComponent::updatePanelPositions()
     auto outputTopLeft = channelDetailView.getPosition() + outputBoundsInView.getPosition();
     outputPanel.setBounds (outputTopLeft.x, outputTopLeft.y,
                            outputBoundsInView.getWidth(), outputBoundsInView.getHeight());
+
+    growWindowToFitIfNeeded();
+}
+
+void MainComponent::growWindowToFitIfNeeded()
+{
+    if (! detailViewOpen)
+        return;
+
+    constexpr int leftSidebarWidth = 100;
+    constexpr int hotPluginsWidth = 220;
+    constexpr int topBarHeight = 44;
+
+    auto requiredWidth = leftSidebarWidth + channelDetailView.getRequiredWidth() + hotPluginsWidth;
+    auto requiredHeight = topBarHeight + channelDetailView.getRequiredHeight();
+
+    auto newWidth = juce::jmax (getWidth(), requiredWidth);
+    auto newHeight = juce::jmax (getHeight(), requiredHeight);
+
+    if (newWidth != getWidth() || newHeight != getHeight())
+        setSize (newWidth, newHeight);
 }
 
 void MainComponent::openChannelDetail (int channelIndex)
@@ -319,6 +346,9 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
 {
     juce::PopupMenu menu;
 
+    auto& currentSlot = channels[(size_t) channelIndex].getSlot (slotIndex);
+    auto slotHasPlugin = ! currentSlot.isEmpty();
+
     menu.addSectionHeader ("Effets internes");
     menu.addItem (1, "Compressor");
 
@@ -350,12 +380,43 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
         }
     }
 
-    menu.addSeparator();
-    menu.addItem (2, "Vider cet emplacement");
+    bool anyHotPlugin = false;
+    for (auto& hp : hotPlugins)
+        if (hp.hasPlugin)
+            anyHotPlugin = true;
+
+    if (anyHotPlugin)
+    {
+        menu.addSeparator();
+        menu.addSectionHeader ("Hot Plugins");
+
+        for (int i = 0; i < (int) hotPlugins.size(); ++i)
+            if (hotPlugins[(size_t) i].hasPlugin)
+                menu.addItem (2000 + i, hotPlugins[(size_t) i].displayName);
+    }
+
+    if (slotHasPlugin)
+    {
+        menu.addSeparator();
+        menu.addItem (3, "Ajouter aux Hot Plugins");
+        menu.addItem (2, "Vider cet emplacement");
+    }
 
     menu.showMenuAsync (juce::PopupMenu::Options(), [this, channelIndex, slotIndex] (int result)
     {
+        if (result == 0)
+            return;
+
         auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+        if (result == 3)
+        {
+            addCurrentSlotToHotPlugins (channelIndex, slotIndex);
+            return;
+        }
+
+        if (detailViewOpen && detailChannelIndex == channelIndex)
+            channelDetailView.prepareForSlotReplace (slotIndex);
 
         if (result == 1)
         {
@@ -363,7 +424,7 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
             refreshSlotButtonText (channelIndex, slotIndex);
 
             if (detailViewOpen && detailChannelIndex == channelIndex)
-                channelDetailView.refreshSlots();
+                channelDetailView.refreshSlots (slotIndex);
         }
         else if (result == 2)
         {
@@ -371,7 +432,11 @@ void MainComponent::showSlotMenu (int channelIndex, int slotIndex)
             refreshSlotButtonText (channelIndex, slotIndex);
 
             if (detailViewOpen && detailChannelIndex == channelIndex)
-                channelDetailView.refreshSlots();
+                channelDetailView.refreshSlots (slotIndex);
+        }
+        else if (result >= 2000)
+        {
+            loadHotPluginIntoSlot (channelIndex, slotIndex, result - 2000);
         }
         else if (result >= 1000)
         {
@@ -404,18 +469,122 @@ void MainComponent::loadVst3IntoSlot (int channelIndex, int slotIndex, int plugi
 
         refreshSlotButtonText (channelIndex, slotIndex);
 
-        if (detailViewOpen && detailChannelIndex == channelIndex)
-            channelDetailView.refreshSlots();
+        juce::Timer::callAfterDelay (900, [this, channelIndex, slotIndex]
+        {
+            if (detailViewOpen && detailChannelIndex == channelIndex)
+                channelDetailView.refreshSlots (slotIndex);
+        });
+    });
+}
+
+void MainComponent::addCurrentSlotToHotPlugins (int channelIndex, int slotIndex)
+{
+    auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+    if (slot.isEmpty() || ! slot.isVst3())
+        return;
+
+    auto* instance = slot.getVstInstance();
+    if (instance == nullptr)
+        return;
+
+    auto* nameWindow = new juce::AlertWindow ("Ajouter aux Hot Plugins",
+                                              "Nom pour ce Hot Plugin :",
+                                              juce::AlertWindow::NoIcon);
+    nameWindow->addTextEditor ("name", slot.getDisplayName(), "Nom");
+    nameWindow->addButton ("OK", 1, juce::KeyPress (juce::KeyPress::returnKey));
+    nameWindow->addButton ("Annuler", 0, juce::KeyPress (juce::KeyPress::escapeKey));
+
+    nameWindow->enterModalState (true, juce::ModalCallbackFunction::create (
+        [this, channelIndex, slotIndex, nameWindow] (int result)
+    {
+        std::unique_ptr<juce::AlertWindow> windowDeleter (nameWindow);
+
+        if (result == 0)
+            return;
+
+        auto chosenName = nameWindow->getTextEditorContents ("name").trim();
+
+        auto& slotRef = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+        if (slotRef.isEmpty() || ! slotRef.isVst3())
+            return;
+
+        auto* inst = slotRef.getVstInstance();
+        if (inst == nullptr)
+            return;
+
+        if (chosenName.isEmpty())
+            chosenName = slotRef.getDisplayName();
+
+        juce::MemoryBlock state;
+        inst->getStateInformation (state);
+
+        int targetIndex = 0;
+        for (int i = 0; i < (int) hotPlugins.size(); ++i)
+        {
+            if (! hotPlugins[(size_t) i].hasPlugin)
+            {
+                targetIndex = i;
+                break;
+            }
+        }
+
+        hotPlugins[(size_t) targetIndex].setFromPlugin (chosenName, slotRef.getPluginDescription(),
+                                                         state, slotRef.getThumbnail());
+
+        hotPluginsPanel.refreshSlot (targetIndex, hotPlugins[(size_t) targetIndex]);
+        saveHotPlugins (hotPlugins);
+    }), true);
+}
+
+void MainComponent::loadHotPluginIntoSlot (int channelIndex, int slotIndex, int hotIndex)
+{
+    if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+        return;
+
+    auto& hotPlugin = hotPlugins[(size_t) hotIndex];
+
+    if (! hotPlugin.hasPlugin)
+        return;
+
+    auto& slot = channels[(size_t) channelIndex].getSlot (slotIndex);
+
+    channelStrips[(size_t) channelIndex]->refreshSlotButtonText (slotIndex, "Chargement...");
+
+    auto savedState = hotPlugin.state;
+
+    slot.loadVst3Async (hotPlugin.description, pluginManager.getFormatManager(),
+                        [this, channelIndex, slotIndex, savedState] (bool success, juce::String error)
+    {
+        if (! success)
+        {
+            DBG ("Echec du chargement du Hot Plugin : " << error);
+            channelStrips[(size_t) channelIndex]->refreshSlotButtonText (slotIndex, "+");
+            return;
+        }
+
+        auto& slotRef = channels[(size_t) channelIndex].getSlot (slotIndex);
+        slotRef.applyStateAndRecapture (savedState);
+
+        refreshSlotButtonText (channelIndex, slotIndex);
 
         juce::Timer::callAfterDelay (900, [this, channelIndex, slotIndex]
         {
-            auto& slotRef = channels[(size_t) channelIndex].getSlot (slotIndex);
-            auto thumb = slotRef.getThumbnail();
-
             if (detailViewOpen && detailChannelIndex == channelIndex)
-                channelDetailView.refreshSlotThumbnail (slotIndex, thumb);
+                channelDetailView.refreshSlots (slotIndex);
         });
     });
+}
+
+void MainComponent::clearHotPlugin (int hotIndex)
+{
+    if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+        return;
+
+    hotPlugins[(size_t) hotIndex].clear();
+    hotPluginsPanel.refreshSlot (hotIndex, hotPlugins[(size_t) hotIndex]);
+    saveHotPlugins (hotPlugins);
 }
 
 void MainComponent::openSlotEditor (int channelIndex, int slotIndex)
@@ -528,7 +697,7 @@ void MainComponent::resized()
 
     leftSidebar.setBounds (fullArea.removeFromLeft (100));
 
-    hotPluginsPanel.setBounds (fullArea.removeFromRight (160));
+    hotPluginsPanel.setBounds (fullArea.removeFromRight (220));
 
     channelsHolder.setBounds (fullArea);
     channelsHolder.resized();
