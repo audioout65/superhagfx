@@ -97,6 +97,12 @@ MainComponent::MainComponent()
     addChildComponent (inputPanel);
     addChildComponent (outputPanel);
 
+    outputPanel.onChannelChanged = [this]
+    {
+        if (detailViewOpen)
+            channelStrips[(size_t) detailChannelIndex]->refreshFromChannel();
+    };
+
     addChildComponent (showView);
     addChildComponent (patchView);
 
@@ -129,6 +135,24 @@ MainComponent::MainComponent()
     {
         confirmAndDeleteFile (file, "Supprimer ce snapshot ?");
     };
+
+    for (int i = 0; i < PatchView::numLinkGroups; ++i)
+        linkGroups[(size_t) i].name = "Link " + juce::String (i + 1);
+
+    patchView.onGroupToggled = [this] (int groupIndex, bool isOn)
+    {
+        linkGroups[(size_t) groupIndex].isOn = isOn;
+    };
+    patchView.onGroupRenamed = [this] (int groupIndex, juce::String newName)
+    {
+        linkGroups[(size_t) groupIndex].name = newName;
+    };
+    patchView.onCellToggled = [this] (int groupIndex, int channel, bool nowMember)
+    {
+        linkGroups[(size_t) groupIndex].members[(size_t) channel] = nowMember;
+    };
+
+    refreshChannelLabels();
 
     showBank (0);
     updateSelectedChannelDisplay (0);
@@ -373,10 +397,24 @@ void MainComponent::showPatchTab()
 
     showView.setVisible (false);
     patchView.setVisible (true);
+    refreshChannelLabels();
 
     topBar.setActiveTab (3);
 
     resized();
+}
+
+void MainComponent::refreshChannelLabels()
+{
+    for (int ch = 0; ch < numChannels; ++ch)
+    {
+        auto name = channels[(size_t) ch].getCustomName();
+
+        if (name.isEmpty())
+            name = "Ch " + juce::String (ch + 1);
+
+        patchView.setChannelLabel (ch, name);
+    }
 }
 
 void MainComponent::writeSessionXmlTo (const juce::File& file)

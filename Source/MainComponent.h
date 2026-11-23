@@ -24,13 +24,18 @@ public:
         auto area = getLocalBounds();
         if (strips.empty())
             return;
-
         auto width = area.getWidth() / (int) strips.size();
         for (auto* strip : strips)
             strip->setBounds (area.removeFromLeft (width));
     }
-
     std::vector<ChannelStripComponent*> strips;
+};
+
+struct LinkGroup
+{
+    juce::String name;
+    bool isOn = false;
+    std::array<bool, numChannels> members {};
 };
 
 class MainComponent : public juce::AudioAppComponent, private juce::Timer
@@ -81,6 +86,7 @@ private:
     juce::File getSnapshotsFolder();
     void refreshShowView();
     void confirmAndDeleteFile (const juce::File& file, const juce::String& message);
+    void refreshChannelLabels();
 
     std::array<AudioChannel, numChannels> channels;
     TopBarComponent topBar;
@@ -102,6 +108,7 @@ private:
     int detailChannelIndex = 0;
     ShowView showView;
     PatchView patchView;
+    std::array<LinkGroup, PatchView::numLinkGroups> linkGroups;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

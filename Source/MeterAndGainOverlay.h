@@ -62,17 +62,32 @@ public:
             gainKnob.onValueChange = [this]
             {
                 if (channel != nullptr)
+                {
                     channel->setOutputGainDb ((float) gainKnob.getValue());
+
+                    if (onChannelChanged != nullptr)
+                        onChannelChanged();
+                }
             };
             muteButton.onClick = [this]
             {
                 if (channel != nullptr)
+                {
                     channel->setOutputMuted (muteButton.getToggleState());
+
+                    if (onChannelChanged != nullptr)
+                        onChannelChanged();
+                }
             };
             outputCombo.onChange = [this]
             {
                 if (channel != nullptr)
+                {
                     channel->setOutputChannelIndex (outputCombo.getSelectedId() - 1);
+
+                    if (onChannelChanged != nullptr)
+                        onChannelChanged();
+                }
             };
         }
 
@@ -161,6 +176,10 @@ public:
         bottomArea.removeFromTop (16);
         muteButton.setBounds (bottomArea.removeFromTop (30));
     }
+
+    // Appele apres chaque changement (mute, gain, routing de sortie), pour
+    // que MainComponent puisse resynchroniser la vignette OVERVIEW.
+    std::function<void()> onChannelChanged;
 
 private:
     AudioChannel* channel = nullptr;
