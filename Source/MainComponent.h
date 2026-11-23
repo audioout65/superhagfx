@@ -10,6 +10,8 @@
 #include "LeftSidebarComponent.h"
 #include "HotPluginsPanel.h"
 #include "HotPluginSlot.h"
+#include "ShowView.h"
+#include "PatchView.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -20,29 +22,27 @@ public:
     void resized() override
     {
         auto area = getLocalBounds();
-        auto stripWidth = area.getWidth() / juce::jmax (1, (int) strips.size());
+        if (strips.empty())
+            return;
 
+        auto width = area.getWidth() / (int) strips.size();
         for (auto* strip : strips)
-            strip->setBounds (area.removeFromLeft (stripWidth));
+            strip->setBounds (area.removeFromLeft (width));
     }
 
     std::vector<ChannelStripComponent*> strips;
 };
 
-class MainComponent : public juce::AudioAppComponent,
-                       private juce::Timer
+class MainComponent : public juce::AudioAppComponent, private juce::Timer
 {
 public:
     MainComponent();
     ~MainComponent() override;
-
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override;
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override;
     void releaseResources() override;
-
     void paint (juce::Graphics&) override;
     void resized() override;
-
     void handleMenuCommand (int menuItemID);
 
 private:
@@ -64,6 +64,8 @@ private:
     void openAudioSettings();
     void openChannelDetail (int channelIndex);
     void closeChannelDetail();
+    void showShowTab();
+    void showPatchTab();
     void updatePanelPositions();
     void growWindowToFitIfNeeded();
     void setInterfaceLocked (bool shouldBeLocked);
@@ -72,8 +74,15 @@ private:
     void navigateSelectedChannel (int direction);
     void showChannelPicker();
 
-    std::array<AudioChannel, numChannels> channels;
+    void writeSessionXmlTo (const juce::File& file);
+    void loadSessionXmlFrom (const juce::File& file);
+    void recallSnapshotFast (const juce::File& file);
+    void promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder, std::function<void()> afterSave);
+    juce::File getSnapshotsFolder();
+    void refreshShowView();
+    void confirmAndDeleteFile (const juce::File& file, const juce::String& message);
 
+    std::array<AudioChannel, numChannels> channels;
     TopBarComponent topBar;
     LeftSidebarComponent leftSidebar;
     HotPluginsPanel hotPluginsPanel;
@@ -81,21 +90,18 @@ private:
     int currentBank = 0;
     bool interfaceLocked = false;
     int selectedChannelIndex = 0;
-
     std::unique_ptr<juce::AudioDeviceSelectorComponent> deviceSelector;
-
     std::unique_ptr<juce::FileChooser> fileChooser;
-
     PluginManager pluginManager;
-
     ChannelsHolder channelsHolder;
     std::vector<std::unique_ptr<ChannelStripComponent>> channelStrips;
-
     ChannelDetailView channelDetailView;
     InputPanelComponent inputPanel;
     MeterAndGainOverlay outputPanel;
     bool detailViewOpen = false;
     int detailChannelIndex = 0;
+    ShowView showView;
+    PatchView patchView;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

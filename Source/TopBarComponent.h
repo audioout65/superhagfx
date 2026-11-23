@@ -226,9 +226,9 @@ public:
     }
 };
 
-// Un seul onglet (OVERVIEW ou RACK) dans la pilule partagee : pas de fond
-// propre ni de coins arrondis (la pilule parente dessine deja le cadre),
-// juste le texte et un petit trait d'accent sous l'onglet actif.
+// Un seul onglet dans la pilule partagee : pas de fond propre ni de coins
+// arrondis (la pilule parente dessine deja le cadre), juste le texte et
+// un petit trait d'accent sous l'onglet actif.
 class TabButton : public juce::TextButton
 {
 public:
@@ -243,34 +243,34 @@ public:
         }
 
         g.setColour (getToggleState() ? juce::Colours::white : juce::Colour (0xff8a92a0));
-        g.setFont (juce::Font (14.0f, juce::Font::bold));
+        g.setFont (juce::Font (13.0f, juce::Font::bold));
         g.drawText (getButtonText(), getLocalBounds(), juce::Justification::centred);
 
         if (getToggleState())
         {
             auto bounds = getLocalBounds().toFloat();
             g.setColour (juce::Colour (0xff4ea1ff));
-            g.fillRect (juce::Rectangle<float> (bounds.getX() + 14.0f, bounds.getBottom() - 4.0f,
-                                                juce::jmax (0.0f, bounds.getWidth() - 28.0f), 3.0f));
+            g.fillRect (juce::Rectangle<float> (bounds.getX() + 10.0f, bounds.getBottom() - 4.0f,
+                                                juce::jmax (0.0f, bounds.getWidth() - 20.0f), 3.0f));
         }
     }
 };
 
-// Pilule partagee pour OVERVIEW et RACK : un seul cadre arrondi, un trait
-// vertical fin au milieu pour separer les deux onglets.
+// Pilule partagee pour les 4 onglets (OVERVIEW / RACK / SHOW / PATCH) :
+// un seul cadre arrondi, des traits verticaux fins pour les separer.
 class TabsPillGroup : public juce::Component
 {
 public:
     TabsPillGroup()
     {
-        overviewButton.setClickingTogglesState (true);
-        overviewButton.setRadioGroupId (2001);
-        overviewButton.setToggleState (true, juce::dontSendNotification);
-        addAndMakeVisible (overviewButton);
+        for (auto* btn : { &overviewButton, &rackButton, &showButton, &patchButton })
+        {
+            btn->setClickingTogglesState (true);
+            btn->setRadioGroupId (2001);
+            addAndMakeVisible (*btn);
+        }
 
-        rackButton.setClickingTogglesState (true);
-        rackButton.setRadioGroupId (2001);
-        addAndMakeVisible (rackButton);
+        overviewButton.setToggleState (true, juce::dontSendNotification);
     }
 
     void paint (juce::Graphics& g) override
@@ -281,27 +281,33 @@ public:
         g.setColour (juce::Colour (0xff3d434d));
         g.drawRoundedRectangle (bounds, 10.0f, 1.0f);
 
-        auto midX = bounds.getCentreX();
-        g.drawLine (midX, bounds.getY() + 10.0f, midX, bounds.getBottom() - 10.0f, 1.0f);
+        auto quarter = bounds.getWidth() / 4.0f;
+        for (int i = 1; i < 4; ++i)
+        {
+            auto x = bounds.getX() + quarter * (float) i;
+            g.drawLine (x, bounds.getY() + 10.0f, x, bounds.getBottom() - 10.0f, 1.0f);
+        }
     }
 
     void resized() override
     {
         auto area = getLocalBounds().reduced (2);
-        auto half = area.getWidth() / 2;
-        overviewButton.setBounds (area.removeFromLeft (half));
-        rackButton.setBounds (area);
+        auto quarter = area.getWidth() / 4;
+        overviewButton.setBounds (area.removeFromLeft (quarter));
+        rackButton.setBounds (area.removeFromLeft (quarter));
+        showButton.setBounds (area.removeFromLeft (quarter));
+        patchButton.setBounds (area);
     }
 
     TabButton overviewButton { "OVERVIEW" };
     TabButton rackButton { "RACK" };
+    TabButton showButton { "SHOW" };
+    TabButton patchButton { "PATCH" };
 };
 
 // La barre superieure de l'application : logo, navigateur de chaine
-// (cadre avec < Nom v >), Link/Latency discrets empiles, onglets
-// OVERVIEW/RACK partages, BPM/CPU empiles et TAP/horloge empiles,
-// verrouillage -- dans un style compact de pilules, inspire des
-// consoles professionnelles.
+// (cadre avec < Nom v >), Link/Latency discrets empiles, 4 onglets
+// partages, BPM/CPU empiles et TAP/horloge empiles, verrouillage.
 class TopBarComponent : public juce::Component,
                         private juce::Timer
 {
@@ -332,6 +338,8 @@ public:
 
         tabsPill.overviewButton.onClick = [this] { if (onOverviewTabClicked != nullptr) onOverviewTabClicked(); };
         tabsPill.rackButton.onClick = [this] { if (onRackTabClicked != nullptr) onRackTabClicked(); };
+        tabsPill.showButton.onClick = [this] { if (onShowTabClicked != nullptr) onShowTabClicked(); };
+        tabsPill.patchButton.onClick = [this] { if (onPatchTabClicked != nullptr) onPatchTabClicked(); };
         addAndMakeVisible (tabsPill);
 
         // --- Pilule BPM/CPU/TAP/horloge, en deux colonnes empilees ---
@@ -374,10 +382,13 @@ public:
         return bpmEditor.getText().getDoubleValue();
     }
 
-    void setActiveTab (bool rackTabActive)
+    // tabIndex : 0 = OVERVIEW, 1 = RACK, 2 = SHOW, 3 = PATCH
+    void setActiveTab (int tabIndex)
     {
-        tabsPill.overviewButton.setToggleState (! rackTabActive, juce::dontSendNotification);
-        tabsPill.rackButton.setToggleState (rackTabActive, juce::dontSendNotification);
+        tabsPill.overviewButton.setToggleState (tabIndex == 0, juce::dontSendNotification);
+        tabsPill.rackButton.setToggleState (tabIndex == 1, juce::dontSendNotification);
+        tabsPill.showButton.setToggleState (tabIndex == 2, juce::dontSendNotification);
+        tabsPill.patchButton.setToggleState (tabIndex == 3, juce::dontSendNotification);
     }
 
     void paint (juce::Graphics& g) override
@@ -415,7 +426,7 @@ public:
         infoPill.setBounds (infoSlot.withSizeKeepingCentre (190, 84));
         area.removeFromRight (20);
 
-        auto tabsArea = area.withSizeKeepingCentre (juce::jmin (180, area.getWidth()), 72);
+        auto tabsArea = area.withSizeKeepingCentre (juce::jmin (320, area.getWidth()), 72);
         tabsPill.setBounds (tabsArea);
 
         // --- Interieur de la pilule : BPM/CPU a gauche (empiles), TAP/horloge a droite (empiles) ---
@@ -435,6 +446,8 @@ public:
 
     std::function<void()> onOverviewTabClicked;
     std::function<void()> onRackTabClicked;
+    std::function<void()> onShowTabClicked;
+    std::function<void()> onPatchTabClicked;
     std::function<void (bool linkEnabled)> onLinkToggled;
     std::function<void (bool locked)> onLockToggled;
     std::function<void (int newBufferSize)> onLatencyChanged;

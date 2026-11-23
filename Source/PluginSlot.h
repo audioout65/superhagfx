@@ -275,6 +275,86 @@ public:
             onDone();
     }
 
+    // Rappel a chaud : si le plugin demande est deja celui charge dans cet
+    // emplacement, on se contente de lui appliquer le nouvel etat (reglages)
+    // sans le detruire ni le recreer. Beaucoup plus rapide, et pas de
+    // coupure audio. Si le plugin est different (ou l'emplacement est
+    // vide/un autre type), on retombe sur le chargement complet habituel.
+    void loadFromXmlFast (const juce::XmlElement& xml,
+                         juce::AudioPluginFormatManager& formatManager,
+                         std::function<void()> onDone)
+    {
+        bypassed = xml.getBoolAttribute ("bypassed", false);
+
+        auto type = xml.getStringAttribute ("type", "empty");
+
+        if (type == "compressor")
+        {
+            if (auto* compXml = xml.getChildByName ("Compressor"))
+                compressor.loadFromXml (*compXml);
+
+            loadInternalCompressor();
+
+            if (onDone != nullptr)
+                onDone();
+            return;
+        }
+
+        if (type == "vst3")
+        {
+            juce::PluginDescription desc;
+            bool descLoaded = false;
+
+            for (auto* child : xml.getChildIterator())
+            {
+                if (child->hasTagName ("PLUGIN"))
+                {
+                    descLoaded = desc.loadFromXml (*child);
+                    break;
+                }
+            }
+
+            if (! descLoaded)
+            {
+                if (onDone != nullptr)
+                    onDone();
+                return;
+            }
+
+            juce::MemoryBlock state;
+            auto stateBase64 = xml.getStringAttribute ("state");
+            if (stateBase64.isNotEmpty())
+                state.fromBase64Encoding (stateBase64);
+
+            bool samePluginAlreadyLoaded = false;
+            {
+                const juce::SpinLock::ScopedLockType lock (pluginLock);
+                samePluginAlreadyLoaded = (contentType == SlotContentType::vst3
+                                           && vstInstance != nullptr
+                                           && lastPluginDescription.createIdentifierString() == desc.createIdentifierString());
+            }
+
+            if (samePluginAlreadyLoaded)
+            {
+                if (state.getSize() > 0)
+                    applyStateAndRecapture (state);
+
+                if (onDone != nullptr)
+                    onDone();
+                return;
+            }
+
+            // Pas de raccourci possible (plugin different ou pas encore
+            // charge) : on passe par le chargement complet habituel.
+            loadFromXmlAsync (xml, formatManager, onDone);
+            return;
+        }
+
+        clear();
+        if (onDone != nullptr)
+            onDone();
+    }
+
 private:
     void processVst3 (float* samples, int numSamples)
     {

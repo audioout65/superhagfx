@@ -1,5 +1,4 @@
 #include "MainComponent.h"
-#include "CompressorEditor.h"
 #include "MainMenu.h"
 
 MainComponent::MainComponent()
@@ -9,6 +8,8 @@ MainComponent::MainComponent()
     addAndMakeVisible (topBar);
     topBar.onOverviewTabClicked = [this] { closeChannelDetail(); };
     topBar.onRackTabClicked = [this] { openChannelDetail (detailChannelIndex); };
+    topBar.onShowTabClicked = [this] { showShowTab(); };
+    topBar.onPatchTabClicked = [this] { showPatchTab(); };
     topBar.onLockToggled = [this] (bool locked) { setInterfaceLocked (locked); };
     topBar.onLatencyChanged = [this] (int newBufferSize) { changeBufferSize (newBufferSize); };
     topBar.onPreviousChannel = [this] { navigateSelectedChannel (-1); };
@@ -95,6 +96,39 @@ MainComponent::MainComponent()
 
     addChildComponent (inputPanel);
     addChildComponent (outputPanel);
+
+    addChildComponent (showView);
+    addChildComponent (patchView);
+
+    showView.onSaveSessionRequested = [this]
+    {
+        promptForNameAndSave ("Enregistrer la session",
+                              juce::File::getSpecialLocation (juce::File::userDocumentsDirectory),
+                              [this] { refreshShowView(); });
+    };
+    showView.onLoadSessionRequested = [this] (juce::File file)
+    {
+        loadSessionXmlFrom (file);
+    };
+    showView.onDeleteSessionRequested = [this] (juce::File file)
+    {
+        confirmAndDeleteFile (file, "Supprimer cette session ?");
+    };
+
+    showView.onSaveSnapshotRequested = [this]
+    {
+        promptForNameAndSave ("Enregistrer un snapshot",
+                              getSnapshotsFolder(),
+                              [this] { refreshShowView(); });
+    };
+    showView.onRecallSnapshotRequested = [this] (juce::File file)
+    {
+        recallSnapshotFast (file);
+    };
+    showView.onDeleteSnapshotRequested = [this] (juce::File file)
+    {
+        confirmAndDeleteFile (file, "Supprimer ce snapshot ?");
+    };
 
     showBank (0);
     updateSelectedChannelDisplay (0);
@@ -268,6 +302,8 @@ void MainComponent::openChannelDetail (int channelIndex)
     channelDetailView.setVisible (true);
     channelsHolder.setVisible (false);
     leftSidebar.setVisible (false);
+    showView.setVisible (false);
+    patchView.setVisible (false);
 
     inputPanel.setChannel (&channels[(size_t) channelIndex]);
     inputPanel.setVisible (true);
@@ -275,7 +311,7 @@ void MainComponent::openChannelDetail (int channelIndex)
     outputPanel.setChannel (&channels[(size_t) channelIndex]);
     outputPanel.setVisible (true);
 
-    topBar.setActiveTab (true);
+    topBar.setActiveTab (1);
 
     resized();
 }
@@ -286,6 +322,8 @@ void MainComponent::closeChannelDetail()
     channelDetailView.setVisible (false);
     channelsHolder.setVisible (true);
     leftSidebar.setVisible (true);
+    showView.setVisible (false);
+    patchView.setVisible (false);
 
     inputPanel.setVisible (false);
     inputPanel.setChannel (nullptr);
@@ -293,9 +331,213 @@ void MainComponent::closeChannelDetail()
     outputPanel.setVisible (false);
     outputPanel.setChannel (nullptr);
 
-    topBar.setActiveTab (false);
+    topBar.setActiveTab (0);
 
     resized();
+}
+
+void MainComponent::showShowTab()
+{
+    detailViewOpen = false;
+    channelDetailView.setVisible (false);
+    channelsHolder.setVisible (false);
+    leftSidebar.setVisible (false);
+
+    inputPanel.setVisible (false);
+    inputPanel.setChannel (nullptr);
+
+    outputPanel.setVisible (false);
+    outputPanel.setChannel (nullptr);
+
+    patchView.setVisible (false);
+    showView.setVisible (true);
+    refreshShowView();
+
+    topBar.setActiveTab (2);
+
+    resized();
+}
+
+void MainComponent::showPatchTab()
+{
+    detailViewOpen = false;
+    channelDetailView.setVisible (false);
+    channelsHolder.setVisible (false);
+    leftSidebar.setVisible (false);
+
+    inputPanel.setVisible (false);
+    inputPanel.setChannel (nullptr);
+
+    outputPanel.setVisible (false);
+    outputPanel.setChannel (nullptr);
+
+    showView.setVisible (false);
+    patchView.setVisible (true);
+
+    topBar.setActiveTab (3);
+
+    resized();
+}
+
+void MainComponent::writeSessionXmlTo (const juce::File& file)
+{
+    juce::XmlElement root ("LiveRackSession");
+
+    for (int ch = 0; ch < numChannels; ++ch)
+    {
+        auto* channelXml = root.createNewChildElement ("Channel");
+        channelXml->setAttribute ("index", ch);
+        channels[(size_t) ch].saveToXml (*channelXml);
+    }
+
+    if (root.writeTo (file))
+        DBG ("Sauvegarde ecrite : " << file.getFullPathName());
+    else
+        DBG ("Echec de l'ecriture : " << file.getFullPathName());
+}
+
+void MainComponent::loadSessionXmlFrom (const juce::File& file)
+{
+    auto xml = juce::parseXML (file);
+
+    if (xml == nullptr || ! xml->hasTagName ("LiveRackSession"))
+    {
+        DBG ("Fichier invalide : " << file.getFullPathName());
+        return;
+    }
+
+    for (auto* channelXml : xml->getChildWithTagNameIterator ("Channel"))
+    {
+        auto index = channelXml->getIntAttribute ("index", -1);
+
+        if (index < 0 || index >= numChannels)
+            continue;
+
+        channels[(size_t) index].loadFromXmlAsync (*channelXml, pluginManager.getFormatManager(),
+            [this, index]
+        {
+            channelStrips[(size_t) index]->refreshFromChannel();
+
+            juce::Timer::callAfterDelay (900, [this, index]
+            {
+                if (detailViewOpen && detailChannelIndex == index)
+                    channelDetailView.refreshSlots();
+            });
+        });
+    }
+
+    DBG ("Chargement en cours depuis : " << file.getFullPathName());
+}
+
+void MainComponent::recallSnapshotFast (const juce::File& file)
+{
+    auto xml = juce::parseXML (file);
+
+    if (xml == nullptr || ! xml->hasTagName ("LiveRackSession"))
+    {
+        DBG ("Fichier invalide : " << file.getFullPathName());
+        return;
+    }
+
+    for (auto* channelXml : xml->getChildWithTagNameIterator ("Channel"))
+    {
+        auto index = channelXml->getIntAttribute ("index", -1);
+
+        if (index < 0 || index >= numChannels)
+            continue;
+
+        channels[(size_t) index].loadFromXmlFast (*channelXml, pluginManager.getFormatManager(),
+            [this, index]
+        {
+            channelStrips[(size_t) index]->refreshFromChannel();
+
+            if (detailViewOpen && detailChannelIndex == index)
+                channelDetailView.refreshSlots();
+        });
+    }
+
+    DBG ("Rappel a chaud depuis : " << file.getFullPathName());
+}
+
+void MainComponent::promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder, std::function<void()> afterSave)
+{
+    targetFolder.createDirectory();
+
+    auto* nameWindow = new juce::AlertWindow (dialogTitle, "Nom :", juce::AlertWindow::NoIcon);
+    nameWindow->addTextEditor ("name", "", "Nom");
+    nameWindow->addButton ("OK", 1, juce::KeyPress (juce::KeyPress::returnKey));
+    nameWindow->addButton ("Annuler", 0, juce::KeyPress (juce::KeyPress::escapeKey));
+
+    nameWindow->enterModalState (true, juce::ModalCallbackFunction::create (
+        [this, nameWindow, targetFolder, afterSave] (int result)
+    {
+        std::unique_ptr<juce::AlertWindow> windowDeleter (nameWindow);
+
+        if (result == 0)
+            return;
+
+        auto chosenName = nameWindow->getTextEditorContents ("name").trim();
+
+        if (chosenName.isEmpty())
+            chosenName = "Sans titre " + juce::Time::getCurrentTime().toString (true, true, false, true);
+
+        auto file = targetFolder.getChildFile (chosenName + ".liverack");
+        writeSessionXmlTo (file);
+
+        if (afterSave != nullptr)
+            afterSave();
+    }), true);
+}
+
+void MainComponent::confirmAndDeleteFile (const juce::File& file, const juce::String& message)
+{
+    auto fullMessage = message + "\n\"" + file.getFileNameWithoutExtension() + "\"\n\nCette action est definitive.";
+
+    juce::NativeMessageBox::showOkCancelBox (juce::AlertWindow::WarningIcon,
+        "Confirmation",
+        fullMessage,
+        nullptr,
+        juce::ModalCallbackFunction::create ([this, file] (int result)
+        {
+            if (result != 1)
+                return;
+
+            file.deleteFile();
+            refreshShowView();
+        }));
+}
+
+juce::File MainComponent::getSnapshotsFolder()
+{
+    return juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile ("LiveRack Snapshots");
+}
+
+void MainComponent::refreshShowView()
+{
+    std::vector<std::pair<juce::String, juce::File>> sessions;
+
+    auto docsFolder = juce::File::getSpecialLocation (juce::File::userDocumentsDirectory);
+    for (auto& file : docsFolder.findChildFiles (juce::File::findFiles, false, "*.liverack"))
+        sessions.push_back ({ file.getFileNameWithoutExtension(), file });
+
+    std::sort (sessions.begin(), sessions.end(), [] (auto& a, auto& b)
+    {
+        return a.first.compareIgnoreCase (b.first) < 0;
+    });
+
+    std::vector<std::pair<juce::String, juce::File>> snapshots;
+
+    auto snapshotsFolder = getSnapshotsFolder();
+    for (auto& file : snapshotsFolder.findChildFiles (juce::File::findFiles, false, "*.liverack"))
+        snapshots.push_back ({ file.getFileNameWithoutExtension(), file });
+
+    std::sort (snapshots.begin(), snapshots.end(), [] (auto& a, auto& b)
+    {
+        return a.first.compareIgnoreCase (b.first) < 0;
+    });
+
+    showView.setSessions (sessions);
+    showView.setSnapshots (snapshots);
 }
 
 void MainComponent::saveSession()
@@ -317,19 +559,7 @@ void MainComponent::saveSession()
         if (! file.hasFileExtension (".liverack"))
             file = file.withFileExtension (".liverack");
 
-        juce::XmlElement root ("LiveRackSession");
-
-        for (int ch = 0; ch < numChannels; ++ch)
-        {
-            auto* channelXml = root.createNewChildElement ("Channel");
-            channelXml->setAttribute ("index", ch);
-            channels[(size_t) ch].saveToXml (*channelXml);
-        }
-
-        if (root.writeTo (file))
-            DBG ("Session sauvegardee : " << file.getFullPathName());
-        else
-            DBG ("Echec de la sauvegarde de session.");
+        writeSessionXmlTo (file);
     });
 }
 
@@ -348,35 +578,7 @@ void MainComponent::loadSession()
         if (file == juce::File())
             return;
 
-        auto xml = juce::parseXML (file);
-
-        if (xml == nullptr || ! xml->hasTagName ("LiveRackSession"))
-        {
-            DBG ("Fichier de session invalide.");
-            return;
-        }
-
-        for (auto* channelXml : xml->getChildWithTagNameIterator ("Channel"))
-        {
-            auto index = channelXml->getIntAttribute ("index", -1);
-
-            if (index < 0 || index >= numChannels)
-                continue;
-
-            channels[(size_t) index].loadFromXmlAsync (*channelXml, pluginManager.getFormatManager(),
-                [this, index]
-            {
-                channelStrips[(size_t) index]->refreshFromChannel();
-
-                juce::Timer::callAfterDelay (900, [this, index]
-                {
-                    if (detailViewOpen && detailChannelIndex == index)
-                        channelDetailView.refreshSlots();
-                });
-            });
-        }
-
-        DBG ("Session en cours de chargement...");
+        loadSessionXmlFrom (file);
     });
 }
 
@@ -885,6 +1087,8 @@ void MainComponent::resized()
     channelsHolder.resized();
 
     channelDetailView.setBounds (fullArea);
+    showView.setBounds (fullArea);
+    patchView.setBounds (fullArea);
 
     updatePanelPositions();
 }

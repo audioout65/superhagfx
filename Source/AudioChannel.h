@@ -161,6 +161,52 @@ public:
         }
     }
 
+    // Rappel a chaud : meme principe que loadFromXmlAsync, mais chaque
+    // emplacement utilise loadFromXmlFast (voir PluginSlot.h), qui evite de
+    // detruire/recreer un plugin deja en place s'il s'agit du meme.
+    void loadFromXmlFast (const juce::XmlElement& xml,
+                         juce::AudioPluginFormatManager& formatManager,
+                         std::function<void()> onAllSlotsDone)
+    {
+        inputChannelIndex = xml.getIntAttribute ("input", inputChannelIndex);
+        outputChannelIndex = xml.getIntAttribute ("output", outputChannelIndex);
+        outputGainDb = (float) xml.getDoubleAttribute ("outputGainDb", outputGainDb);
+        inputGainDb = (float) xml.getDoubleAttribute ("inputGainDb", inputGainDb);
+        inputEnabled = xml.getBoolAttribute ("inputEnabled", inputEnabled);
+        outputMuted = xml.getBoolAttribute ("outputMuted", outputMuted);
+        customName = xml.getStringAttribute ("customName", customName);
+
+        auto remaining = std::make_shared<int>(0);
+
+        for (auto* slotXml : xml.getChildWithTagNameIterator ("Slot"))
+            juce::ignoreUnused (slotXml), (*remaining)++;
+
+        if (*remaining == 0)
+        {
+            if (onAllSlotsDone != nullptr)
+                onAllSlotsDone();
+            return;
+        }
+
+        for (auto* slotXml : xml.getChildWithTagNameIterator ("Slot"))
+        {
+            auto index = slotXml->getIntAttribute ("index", -1);
+
+            if (index < 0 || index >= numSlotsPerChannel)
+            {
+                (*remaining)--;
+                continue;
+            }
+
+            slots[(size_t) index].loadFromXmlFast (*slotXml, formatManager, [remaining, onAllSlotsDone]
+            {
+                (*remaining)--;
+                if (*remaining == 0 && onAllSlotsDone != nullptr)
+                    onAllSlotsDone();
+            });
+        }
+    }
+
 private:
     double currentSampleRate = 44100.0;
     float outputGainDb = 0.0f;
