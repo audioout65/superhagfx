@@ -48,6 +48,9 @@ private:
 // L'interface complete d'un seul canal pour la vue OVERVIEW (texte seul
 // dans les slots, pas de miniature -- celles-ci sont reservees a RACK) :
 // section INPUT en haut, pile de slots au milieu, section OUTPUT en bas.
+// Peut etre "selectionnee" (clic sur la chaine, ou changement d'un
+// selecteur IN/OUT) : cadre blanc autour de la chaine, pour savoir en un
+// coup d'oeil sur laquelle on travaille.
 class ChannelStripComponent : public juce::Component
 {
 public:
@@ -83,6 +86,9 @@ public:
         inputCombo.onChange = [this]
         {
             channel.setInputChannelIndex (inputCombo.getSelectedId() - 1);
+
+            if (onStripSelected != nullptr)
+                onStripSelected();
         };
         addAndMakeVisible (inputCombo);
 
@@ -152,6 +158,9 @@ public:
         outputCombo.onChange = [this]
         {
             channel.setOutputChannelIndex (outputCombo.getSelectedId() - 1);
+
+            if (onStripSelected != nullptr)
+                onStripSelected();
         };
         addAndMakeVisible (outputCombo);
 
@@ -223,16 +232,35 @@ public:
         repaint();
     }
 
+    // Met en surbrillance (cadre blanc) la chaine actuellement selectionnee,
+    // pour savoir en un coup d'oeil sur laquelle on travaille.
+    void setSelected (bool shouldBeSelected)
+    {
+        if (selected == shouldBeSelected)
+            return;
+
+        selected = shouldBeSelected;
+        repaint();
+    }
+
+    bool isChannelSelected() const { return selected; }
+
+    void mouseDown (const juce::MouseEvent&) override
+    {
+        if (onStripSelected != nullptr)
+            onStripSelected();
+    }
+
     void paint (juce::Graphics& g) override
     {
         auto bounds = getLocalBounds().toFloat().reduced (2.0f);
-        g.setColour (juce::Colour (0xff1e2227));
+        g.setColour (selected ? juce::Colour (0xff262c35) : juce::Colour (0xff1e2227));
         g.fillRoundedRectangle (bounds, 6.0f);
-        g.setColour (juce::Colour (0xff3d434d));
-        g.drawRoundedRectangle (bounds, 6.0f, 1.0f);
+        g.setColour (selected ? juce::Colours::white : juce::Colour (0xff3d434d));
+        g.drawRoundedRectangle (bounds, 6.0f, selected ? 2.0f : 1.0f);
 
-        drawMeter (g, inputMeterBounds, inputDisplayedLevel);
-        drawMeter (g, outputMeterBounds, outputDisplayedLevel);
+        drawMeter (g, inputMeterBounds, inputDisplayedLevel, juce::Colours::limegreen);
+        drawMeter (g, outputMeterBounds, outputDisplayedLevel, juce::Colour (0xff4ea1ff));
     }
 
     void resized() override
@@ -313,9 +341,10 @@ public:
     std::function<void (int channelIndex)> onChannelNameClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
+    std::function<void()> onStripSelected;
 
 private:
-    void drawMeter (juce::Graphics& g, juce::Rectangle<int> bounds, float displayedLevel)
+    void drawMeter (juce::Graphics& g, juce::Rectangle<int> bounds, float displayedLevel, juce::Colour baseColour)
     {
         auto meterArea = bounds.toFloat();
 
@@ -329,7 +358,7 @@ private:
         auto filledArea = meterArea.withTop (meterArea.getBottom() - filledHeight);
 
         g.setColour (level > 0.9f ? juce::Colours::red
-                                   : (level > 0.7f ? juce::Colours::orange : juce::Colours::green));
+                                   : (level > 0.7f ? juce::Colours::orange : baseColour));
         g.fillRoundedRectangle (filledArea.reduced (1.5f), 1.5f);
 
         for (int i = 0; i < 6; ++i)
@@ -342,6 +371,7 @@ private:
 
     int channelIndex;
     AudioChannel& channel;
+    bool selected = false;
     float inputDisplayedLevel = 0.0f;
     float outputDisplayedLevel = 0.0f;
     juce::Rectangle<int> inputMeterBounds, outputMeterBounds;

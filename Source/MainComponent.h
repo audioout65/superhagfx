@@ -67,6 +67,9 @@ private:
     void growWindowToFitIfNeeded();
     void setInterfaceLocked (bool shouldBeLocked);
     void changeBufferSize (int newBufferSize);
+    void updateSelectedChannelDisplay (int channelIndex);
+    void navigateSelectedChannel (int direction);
+    void showChannelPicker();
 
     std::array<AudioChannel, numChannels> channels;
 
@@ -76,6 +79,7 @@ private:
     std::array<HotPluginSlot, HotPluginsPanel::numSlots> hotPlugins;
     int currentBank = 0;
     bool interfaceLocked = false;
+    int selectedChannelIndex = 0;
 
     std::unique_ptr<juce::AudioDeviceSelectorComponent> deviceSelector;
 

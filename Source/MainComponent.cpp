@@ -11,6 +11,9 @@ MainComponent::MainComponent()
     topBar.onRackTabClicked = [this] { openChannelDetail (detailChannelIndex); };
     topBar.onLockToggled = [this] (bool locked) { setInterfaceLocked (locked); };
     topBar.onLatencyChanged = [this] (int newBufferSize) { changeBufferSize (newBufferSize); };
+    topBar.onPreviousChannel = [this] { navigateSelectedChannel (-1); };
+    topBar.onNextChannel = [this] { navigateSelectedChannel (1); };
+    topBar.onChannelPickerRequested = [this] { showChannelPicker(); };
 
     if (pluginManager.loadCacheIfAvailable())
         DBG ("Plugins charges depuis le cache, pas besoin de rescanner.");
@@ -57,6 +60,10 @@ MainComponent::MainComponent()
         {
             showSlotMenu (channelIndex, slotIndex);
         };
+        strip->onStripSelected = [this, ch]
+        {
+            updateSelectedChannelDisplay (ch);
+        };
 
         channelsHolder.addChildComponent (*strip);
         channelsHolder.strips.push_back (strip.get());
@@ -89,6 +96,7 @@ MainComponent::MainComponent()
     addChildComponent (outputPanel);
 
     showBank (0);
+    updateSelectedChannelDisplay (0);
 
     setSize (1100, 680);
     startTimerHz (30);
@@ -182,7 +190,7 @@ void MainComponent::growWindowToFitIfNeeded()
 
     constexpr int leftSidebarWidth = 100;
     constexpr int hotPluginsWidth = 220;
-    constexpr int topBarHeight = 44;
+    constexpr int topBarHeight = 128;
 
     auto requiredWidth = leftSidebarWidth + channelDetailView.getRequiredWidth() + hotPluginsWidth;
     auto requiredHeight = topBarHeight + channelDetailView.getRequiredHeight();
@@ -194,8 +202,64 @@ void MainComponent::growWindowToFitIfNeeded()
         setSize (newWidth, newHeight);
 }
 
+void MainComponent::updateSelectedChannelDisplay (int channelIndex)
+{
+    if (channelIndex < 0 || channelIndex >= numChannels)
+        return;
+
+    selectedChannelIndex = channelIndex;
+
+    for (int ch = 0; ch < numChannels; ++ch)
+        channelStrips[(size_t) ch]->setSelected (ch == channelIndex);
+
+    auto displayName = channels[(size_t) channelIndex].getCustomName();
+    if (displayName.isEmpty())
+        displayName = "Ch " + juce::String (channelIndex + 1);
+
+    topBar.setSelectedChannelName (displayName);
+}
+
+void MainComponent::navigateSelectedChannel (int direction)
+{
+    auto newIndex = juce::jlimit (0, numChannels - 1, selectedChannelIndex + direction);
+
+    if (detailViewOpen)
+        openChannelDetail (newIndex);
+    else
+        updateSelectedChannelDisplay (newIndex);
+}
+
+void MainComponent::showChannelPicker()
+{
+    juce::PopupMenu menu;
+
+    for (int ch = 0; ch < numChannels; ++ch)
+    {
+        auto name = channels[(size_t) ch].getCustomName();
+        if (name.isEmpty())
+            name = "Ch " + juce::String (ch + 1);
+
+        menu.addItem (ch + 1, name, true, ch == selectedChannelIndex);
+    }
+
+    menu.showMenuAsync (juce::PopupMenu::Options(), [this] (int result)
+    {
+        if (result <= 0)
+            return;
+
+        auto index = result - 1;
+
+        if (detailViewOpen)
+            openChannelDetail (index);
+        else
+            updateSelectedChannelDisplay (index);
+    });
+}
+
 void MainComponent::openChannelDetail (int channelIndex)
 {
+    updateSelectedChannelDisplay (channelIndex);
+
     detailChannelIndex = channelIndex;
     detailViewOpen = true;
 
@@ -582,11 +646,6 @@ void MainComponent::loadHotPluginIntoSlot (int channelIndex, int slotIndex, int 
     });
 }
 
-// Clic gauche sur une case des Hot Plugins (vide OU deja remplie) : propose
-// la liste des AUTRES Hot Plugins deja sauvegardes, ancree juste en dessous
-// de la case cliquee, et copie celui choisi dans cette case (remplace le
-// preset present si elle etait pleine). Independant de RACK / du slot
-// selectionne : fonctionne pareil en OVERVIEW et en RACK.
 void MainComponent::showHotPluginPicker (int hotIndex)
 {
     if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
@@ -787,7 +846,7 @@ void MainComponent::paint (juce::Graphics& g)
     if (interfaceLocked)
     {
         g.setColour (juce::Colours::black.withAlpha (0.25f));
-        auto overlayArea = getLocalBounds().withTrimmedTop (44);
+        auto overlayArea = getLocalBounds().withTrimmedTop (128);
         g.fillRect (overlayArea);
     }
 }
@@ -796,8 +855,10 @@ void MainComponent::resized()
 {
     auto fullArea = getLocalBounds();
 
-    auto topBarArea = fullArea.removeFromTop (44);
+    auto topBarArea = fullArea.removeFromTop (120);
     topBar.setBounds (topBarArea);
+
+    fullArea.removeFromTop (8);
 
     leftSidebar.setBounds (fullArea.removeFromLeft (100));
 
