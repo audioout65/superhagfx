@@ -58,6 +58,7 @@ private:
     void renameHotPlugin (int hotIndex);
     void clearHotPlugin (int hotIndex);
     void showBank (int bankIndex);
+    void showCustomLayer (const std::array<bool, numChannels>& selection);
     void saveSession();
     void loadSession();
     void openAudioSettings();

@@ -20,6 +20,7 @@ MainComponent::MainComponent()
 
     addAndMakeVisible (leftSidebar);
     leftSidebar.onBankSelected = [this] (int bankIndex) { showBank (bankIndex); };
+    leftSidebar.onCustomLayerSelected = [this] (const std::array<bool, 32>& selection) { showCustomLayer (selection); };
 
     addAndMakeVisible (hotPluginsPanel);
 
@@ -392,6 +393,22 @@ void MainComponent::showBank (int bankIndex)
     for (int ch = 0; ch < numChannels; ++ch)
     {
         auto isVisible = (ch >= firstVisible && ch < lastVisible);
+        channelStrips[(size_t) ch]->setVisible (isVisible);
+
+        if (isVisible)
+            channelsHolder.strips.push_back (channelStrips[(size_t) ch].get());
+    }
+
+    channelsHolder.resized();
+}
+
+void MainComponent::showCustomLayer (const std::array<bool, numChannels>& selection)
+{
+    channelsHolder.strips.clear();
+
+    for (int ch = 0; ch < numChannels; ++ch)
+    {
+        auto isVisible = selection[(size_t) ch];
         channelStrips[(size_t) ch]->setVisible (isVisible);
 
         if (isVisible)
