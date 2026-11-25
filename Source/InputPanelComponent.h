@@ -68,12 +68,22 @@ public:
             gainKnob.onValueChange = [this]
             {
                 if (channel != nullptr)
+                {
                     channel->setInputGainDb ((float) gainKnob.getValue());
+
+                    if (onInputGainChanged != nullptr)
+                        onInputGainChanged();
+                }
             };
             inButton.onClick = [this]
             {
                 if (channel != nullptr)
+                {
                     channel->setInputEnabled (inButton.getToggleState());
+
+                    if (onInputEnabledChanged != nullptr)
+                        onInputEnabledChanged();
+                }
             };
         }
     }
@@ -160,6 +170,14 @@ public:
         bottomArea.removeFromTop (16);
         inButton.setBounds (bottomArea.removeFromTop (30));
     }
+
+    // Appeles apres un changement de gain d'entree ou d'activation IN, pour
+    // que MainComponent puisse propager la valeur aux chaines liees (Phase B).
+    // Le routing (selecteur In 1-32) n'est volontairement PAS concerne : c'est
+    // un reglage materiel propre a chaque chaine, qui ne doit jamais etre
+    // partage entre chaines liees.
+    std::function<void()> onInputGainChanged;
+    std::function<void()> onInputEnabledChanged;
 
 private:
     AudioChannel* channel = nullptr;

@@ -256,14 +256,14 @@ public:
     }
 };
 
-// Pilule partagee pour les 4 onglets (OVERVIEW / RACK / SHOW / PATCH) :
+// Pilule partagee pour les 5 onglets (OVERVIEW / RACK / SHOW / PATCH / SEND) :
 // un seul cadre arrondi, des traits verticaux fins pour les separer.
 class TabsPillGroup : public juce::Component
 {
 public:
     TabsPillGroup()
     {
-        for (auto* btn : { &overviewButton, &rackButton, &showButton, &patchButton })
+        for (auto* btn : { &overviewButton, &rackButton, &showButton, &patchButton, &sendButton })
         {
             btn->setClickingTogglesState (true);
             btn->setRadioGroupId (2001);
@@ -281,10 +281,10 @@ public:
         g.setColour (juce::Colour (0xff3d434d));
         g.drawRoundedRectangle (bounds, 10.0f, 1.0f);
 
-        auto quarter = bounds.getWidth() / 4.0f;
-        for (int i = 1; i < 4; ++i)
+        auto fifth = bounds.getWidth() / 5.0f;
+        for (int i = 1; i < 5; ++i)
         {
-            auto x = bounds.getX() + quarter * (float) i;
+            auto x = bounds.getX() + fifth * (float) i;
             g.drawLine (x, bounds.getY() + 10.0f, x, bounds.getBottom() - 10.0f, 1.0f);
         }
     }
@@ -292,21 +292,23 @@ public:
     void resized() override
     {
         auto area = getLocalBounds().reduced (2);
-        auto quarter = area.getWidth() / 4;
-        overviewButton.setBounds (area.removeFromLeft (quarter));
-        rackButton.setBounds (area.removeFromLeft (quarter));
-        showButton.setBounds (area.removeFromLeft (quarter));
-        patchButton.setBounds (area);
+        auto fifth = area.getWidth() / 5;
+        overviewButton.setBounds (area.removeFromLeft (fifth));
+        rackButton.setBounds (area.removeFromLeft (fifth));
+        showButton.setBounds (area.removeFromLeft (fifth));
+        patchButton.setBounds (area.removeFromLeft (fifth));
+        sendButton.setBounds (area);
     }
 
     TabButton overviewButton { "OVERVIEW" };
     TabButton rackButton { "RACK" };
     TabButton showButton { "SHOW" };
     TabButton patchButton { "PATCH" };
+    TabButton sendButton { "SEND" };
 };
 
 // La barre superieure de l'application : logo, navigateur de chaine
-// (cadre avec < Nom v >), Link/Latency discrets empiles, 4 onglets
+// (cadre avec < Nom v >), Link/Latency discrets empiles, 5 onglets
 // partages, BPM/CPU empiles et TAP/horloge empiles, verrouillage.
 class TopBarComponent : public juce::Component,
                         private juce::Timer
@@ -340,6 +342,7 @@ public:
         tabsPill.rackButton.onClick = [this] { if (onRackTabClicked != nullptr) onRackTabClicked(); };
         tabsPill.showButton.onClick = [this] { if (onShowTabClicked != nullptr) onShowTabClicked(); };
         tabsPill.patchButton.onClick = [this] { if (onPatchTabClicked != nullptr) onPatchTabClicked(); };
+        tabsPill.sendButton.onClick = [this] { if (onSendTabClicked != nullptr) onSendTabClicked(); };
         addAndMakeVisible (tabsPill);
 
         // --- Pilule BPM/CPU/TAP/horloge, en deux colonnes empilees ---
@@ -382,13 +385,14 @@ public:
         return bpmEditor.getText().getDoubleValue();
     }
 
-    // tabIndex : 0 = OVERVIEW, 1 = RACK, 2 = SHOW, 3 = PATCH
+    // tabIndex : 0 = OVERVIEW, 1 = RACK, 2 = SHOW, 3 = PATCH, 4 = SEND
     void setActiveTab (int tabIndex)
     {
         tabsPill.overviewButton.setToggleState (tabIndex == 0, juce::dontSendNotification);
         tabsPill.rackButton.setToggleState (tabIndex == 1, juce::dontSendNotification);
         tabsPill.showButton.setToggleState (tabIndex == 2, juce::dontSendNotification);
         tabsPill.patchButton.setToggleState (tabIndex == 3, juce::dontSendNotification);
+        tabsPill.sendButton.setToggleState (tabIndex == 4, juce::dontSendNotification);
     }
 
     void paint (juce::Graphics& g) override
@@ -426,7 +430,7 @@ public:
         infoPill.setBounds (infoSlot.withSizeKeepingCentre (190, 84));
         area.removeFromRight (20);
 
-        auto tabsArea = area.withSizeKeepingCentre (juce::jmin (320, area.getWidth()), 72);
+        auto tabsArea = area.withSizeKeepingCentre (juce::jmin (380, area.getWidth()), 72);
         tabsPill.setBounds (tabsArea);
 
         // --- Interieur de la pilule : BPM/CPU a gauche (empiles), TAP/horloge a droite (empiles) ---
@@ -448,6 +452,7 @@ public:
     std::function<void()> onRackTabClicked;
     std::function<void()> onShowTabClicked;
     std::function<void()> onPatchTabClicked;
+    std::function<void()> onSendTabClicked;
     std::function<void (bool linkEnabled)> onLinkToggled;
     std::function<void (bool locked)> onLockToggled;
     std::function<void (int newBufferSize)> onLatencyChanged;

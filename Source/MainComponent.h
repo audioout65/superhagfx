@@ -1,6 +1,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "AudioChannel.h"
+#include "PluginSlot.h"
 #include "PluginManager.h"
 #include "ChannelStripComponent.h"
 #include "ChannelDetailView.h"
@@ -12,6 +13,8 @@
 #include "HotPluginSlot.h"
 #include "ShowView.h"
 #include "PatchView.h"
+#include "SendView.h"
+#include "PluginEditorWindow.h"
 
 static constexpr int numChannels = 32;
 static constexpr int channelsPerBank = 16;
@@ -36,6 +39,23 @@ struct LinkGroup
     juce::String name;
     bool isOn = false;
     std::array<bool, numChannels> members {};
+};
+
+// Bus SEND (Phase 1 : donnees et traitement moteur ; Phase 2 : interface
+// SendView). Un seul plugin partage (slot) traite la somme des chaines
+// membres, en pre-effets ou en post-effets selon memberIsPre, puis le
+// resultat est ADDITIONNE (jamais copie) sur son canal de sortie, pour ne
+// pas effacer ce que les chaines normales y ecrivent deja.
+struct SendBus
+{
+    juce::String name;
+    bool isOn = false;
+    std::array<bool, numChannels> members {};
+    std::array<bool, numChannels> memberIsPre {};
+    int outputChannelIndex = 0;
+    float outputGainDb = 0.0f;
+    PluginSlot slot;
+    juce::AudioBuffer<float> busBuffer;
 };
 
 class MainComponent : public juce::AudioAppComponent, private juce::Timer
@@ -71,6 +91,7 @@ private:
     void closeChannelDetail();
     void showShowTab();
     void showPatchTab();
+    void showSendTab();
     void updatePanelPositions();
     void growWindowToFitIfNeeded();
     void setInterfaceLocked (bool shouldBeLocked);
@@ -96,6 +117,27 @@ private:
     void recallPatchSnapshot (const juce::File& file);
     void showPatchSnapshotPicker();
 
+    // Phase B : propage un changement (gain d'entree/sortie, mute, input
+    // enabled) depuis sourceChannel vers toutes les autres chaines membres
+    // d'un meme Link Group actif (ON). N'est jamais appelee pour le routing
+    // ou les parametres internes d'un plugin.
+    void propagateLinkedChange (int sourceChannel, std::function<void (AudioChannel&)> apply);
+
+    // SEND (Phase 2) : gestion du plugin partage d'un bus, meme principe que
+    // showSlotMenu/loadVst3IntoSlot/loadHotPluginIntoSlot/openSlotEditor pour
+    // une chaine.
+    void showBusSlotMenu (int busIndex);
+    void loadVst3IntoBusSlot (int busIndex, int pluginListIndex);
+    void loadHotPluginIntoBusSlot (int busIndex, int hotIndex);
+    void refreshBusPluginButtonText (int busIndex);
+    void openBusSlotEditor (int busIndex);
+
+    // Fenetres flottantes non modales d'editeurs de plugins actuellement
+    // ouvertes (chaines et bus confondus). On garde la liste ici pour que
+    // chaque fenetre reste en vie tant qu'elle n'est pas fermee par
+    // l'utilisateur (closeButtonPressed la retire alors de cette liste).
+    void openFloatingEditor (const juce::String& title, juce::Component* editorToOwn);
+
     std::array<AudioChannel, numChannels> channels;
     TopBarComponent topBar;
     LeftSidebarComponent leftSidebar;
@@ -116,7 +158,10 @@ private:
     int detailChannelIndex = 0;
     ShowView showView;
     PatchView patchView;
+    SendView sendView;
     std::array<LinkGroup, PatchView::numLinkGroups> linkGroups;
+    std::array<SendBus, SendView::numSendBuses> sendBuses;
+    std::vector<std::unique_ptr<PluginEditorWindow>> openPluginEditorWindows;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -101,6 +101,9 @@ public:
         inputGainKnob.onValueChange = [this]
         {
             channel.setInputGainDb ((float) inputGainKnob.getValue());
+
+            if (onInputGainChanged != nullptr)
+                onInputGainChanged (channelIndex);
         };
         addAndMakeVisible (inputGainKnob);
 
@@ -112,6 +115,9 @@ public:
         inButton.onClick = [this]
         {
             channel.setInputEnabled (inButton.getToggleState());
+
+            if (onInputEnabledChanged != nullptr)
+                onInputEnabledChanged (channelIndex);
         };
         addAndMakeVisible (inButton);
 
@@ -173,6 +179,9 @@ public:
         outputGainKnob.onValueChange = [this]
         {
             channel.setOutputGainDb ((float) outputGainKnob.getValue());
+
+            if (onOutputGainChanged != nullptr)
+                onOutputGainChanged (channelIndex);
         };
         addAndMakeVisible (outputGainKnob);
 
@@ -183,6 +192,9 @@ public:
         muteButton.onClick = [this]
         {
             channel.setOutputMuted (muteButton.getToggleState());
+
+            if (onMuteChanged != nullptr)
+                onMuteChanged (channelIndex);
         };
         addAndMakeVisible (muteButton);
 
@@ -342,6 +354,15 @@ public:
     std::function<void (int channelIndex, int slotIndex)> onSlotClicked;
     std::function<void (int channelIndex, int slotIndex)> onSlotRightClicked;
     std::function<void()> onStripSelected;
+
+    // Appeles apres un changement de gain d'entree/sortie, d'activation IN,
+    // ou de MUTE depuis l'OVERVIEW, pour que MainComponent puisse propager
+    // la valeur aux chaines liees (Phase B). Le routing (combos IN/OUT)
+    // reste volontairement exclu : reglage materiel propre a chaque chaine.
+    std::function<void (int channelIndex)> onInputGainChanged;
+    std::function<void (int channelIndex)> onInputEnabledChanged;
+    std::function<void (int channelIndex)> onOutputGainChanged;
+    std::function<void (int channelIndex)> onMuteChanged;
 
 private:
     void drawMeter (juce::Graphics& g, juce::Rectangle<int> bounds, float displayedLevel, juce::Colour baseColour)

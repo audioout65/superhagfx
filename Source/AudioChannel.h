@@ -13,6 +13,7 @@ public:
     {
         currentSampleRate = sampleRate;
         workBuffer.setSize (1, juce::jmax (samplesPerBlock, 32), false, false, true);
+        preFxBuffer.setSize (1, juce::jmax (samplesPerBlock, 32), false, false, true);
 
         for (auto& slot : slots)
             slot.prepare (sampleRate, samplesPerBlock);
@@ -27,20 +28,30 @@ public:
         {
             workBuffer.clear (0, 0, numSamples);
             inputLevel = 0.0f;
-            return;
+        }
+        else
+        {
+            workBuffer.copyFrom (0, 0, deviceBuffer, inputChannelIndex, startSample, numSamples);
+
+            auto inputGainLinear = juce::Decibels::decibelsToGain (inputGainDb, -60.0f);
+            auto* samples = workBuffer.getWritePointer (0);
+
+            for (int i = 0; i < numSamples; ++i)
+                samples[i] *= inputGainLinear;
+
+            inputLevel = 0.0f;
+            for (int i = 0; i < numSamples; ++i)
+                inputLevel = juce::jmax (inputLevel, std::abs (samples[i]));
         }
 
-        workBuffer.copyFrom (0, 0, deviceBuffer, inputChannelIndex, startSample, numSamples);
+        // Instantane "pre-effets" (juste apres le gain d'entree, avant le
+        // gain de sortie et les propres plugins de la chaine) : permet a un
+        // bus SEND de recuperer ce point precis, independamment de ce que
+        // fait ensuite processAndWriteOutput() sur workBuffer.
+        if (preFxBuffer.getNumSamples() < numSamples)
+            preFxBuffer.setSize (1, numSamples, false, false, true);
 
-        auto inputGainLinear = juce::Decibels::decibelsToGain (inputGainDb, -60.0f);
-        auto* samples = workBuffer.getWritePointer (0);
-
-        for (int i = 0; i < numSamples; ++i)
-            samples[i] *= inputGainLinear;
-
-        inputLevel = 0.0f;
-        for (int i = 0; i < numSamples; ++i)
-            inputLevel = juce::jmax (inputLevel, std::abs (samples[i]));
+        preFxBuffer.copyFrom (0, 0, workBuffer, 0, 0, numSamples);
     }
 
     void processAndWriteOutput (juce::AudioBuffer<float>& deviceBuffer, int startSample, int numSamples)
@@ -70,6 +81,26 @@ public:
 
         if (outputChannelIndex >= 0 && outputChannelIndex < deviceBuffer.getNumChannels())
             deviceBuffer.copyFrom (outputChannelIndex, startSample, workBuffer, 0, 0, numSamples);
+    }
+
+    // --- Sends vers un bus SEND (Phase 1 : plomberie moteur) ----------------
+    // Additionnent (jamais ne remplacent) le signal de cette chaine dans le
+    // buffer mono d'un bus, en pre-effets ou en post-effets. Une chaine en
+    // MUTE n'envoie rien, ni en pre ni en post.
+    void addPreFxSendTo (juce::AudioBuffer<float>& dest, int destChannel, int numSamples) const
+    {
+        if (outputMuted)
+            return;
+
+        dest.addFrom (destChannel, 0, preFxBuffer, 0, 0, numSamples);
+    }
+
+    void addPostFxSendTo (juce::AudioBuffer<float>& dest, int destChannel, int numSamples) const
+    {
+        if (outputMuted)
+            return;
+
+        dest.addFrom (destChannel, 0, workBuffer, 0, 0, numSamples);
     }
 
     void setOutputGainDb (float newGainDb) { outputGainDb = newGainDb; }
@@ -222,5 +253,6 @@ private:
     juce::String customName;
 
     juce::AudioBuffer<float> workBuffer;
+    juce::AudioBuffer<float> preFxBuffer;
     std::array<PluginSlot, numSlotsPerChannel> slots;
 };

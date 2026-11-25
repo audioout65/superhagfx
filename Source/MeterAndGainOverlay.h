@@ -67,6 +67,9 @@ public:
 
                     if (onChannelChanged != nullptr)
                         onChannelChanged();
+
+                    if (onOutputGainChanged != nullptr)
+                        onOutputGainChanged();
                 }
             };
             muteButton.onClick = [this]
@@ -77,6 +80,9 @@ public:
 
                     if (onChannelChanged != nullptr)
                         onChannelChanged();
+
+                    if (onMuteChanged != nullptr)
+                        onMuteChanged();
                 }
             };
             outputCombo.onChange = [this]
@@ -180,6 +186,12 @@ public:
     // Appele apres chaque changement (mute, gain, routing de sortie), pour
     // que MainComponent puisse resynchroniser la vignette OVERVIEW.
     std::function<void()> onChannelChanged;
+
+    // Appeles specifiquement apres un changement de gain de sortie ou de
+    // MUTE (pas le routing), pour que MainComponent puisse propager la
+    // valeur aux chaines liees (Phase B).
+    std::function<void()> onOutputGainChanged;
+    std::function<void()> onMuteChanged;
 
 private:
     AudioChannel* channel = nullptr;

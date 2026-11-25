@@ -10,6 +10,7 @@ MainComponent::MainComponent()
     topBar.onRackTabClicked = [this] { openChannelDetail (detailChannelIndex); };
     topBar.onShowTabClicked = [this] { showShowTab(); };
     topBar.onPatchTabClicked = [this] { showPatchTab(); };
+    topBar.onSendTabClicked = [this] { showSendTab(); };
     topBar.onLockToggled = [this] (bool locked) { setInterfaceLocked (locked); };
     topBar.onLatencyChanged = [this] (int newBufferSize) { changeBufferSize (newBufferSize); };
     topBar.onPreviousChannel = [this] { navigateSelectedChannel (-1); };
@@ -66,6 +67,26 @@ MainComponent::MainComponent()
         {
             updateSelectedChannelDisplay (ch);
         };
+        strip->onInputGainChanged = [this] (int channelIndex)
+        {
+            auto value = channels[(size_t) channelIndex].getInputGainDb();
+            propagateLinkedChange (channelIndex, [value] (AudioChannel& c) { c.setInputGainDb (value); });
+        };
+        strip->onInputEnabledChanged = [this] (int channelIndex)
+        {
+            auto value = channels[(size_t) channelIndex].isInputEnabled();
+            propagateLinkedChange (channelIndex, [value] (AudioChannel& c) { c.setInputEnabled (value); });
+        };
+        strip->onOutputGainChanged = [this] (int channelIndex)
+        {
+            auto value = channels[(size_t) channelIndex].getOutputGainDb();
+            propagateLinkedChange (channelIndex, [value] (AudioChannel& c) { c.setOutputGainDb (value); });
+        };
+        strip->onMuteChanged = [this] (int channelIndex)
+        {
+            auto value = channels[(size_t) channelIndex].isOutputMuted();
+            propagateLinkedChange (channelIndex, [value] (AudioChannel& c) { c.setOutputMuted (value); });
+        };
 
         channelsHolder.addChildComponent (*strip);
         channelsHolder.strips.push_back (strip.get());
@@ -97,14 +118,36 @@ MainComponent::MainComponent()
     addChildComponent (inputPanel);
     addChildComponent (outputPanel);
 
+    inputPanel.onInputGainChanged = [this]
+    {
+        auto value = channels[(size_t) detailChannelIndex].getInputGainDb();
+        propagateLinkedChange (detailChannelIndex, [value] (AudioChannel& c) { c.setInputGainDb (value); });
+    };
+    inputPanel.onInputEnabledChanged = [this]
+    {
+        auto value = channels[(size_t) detailChannelIndex].isInputEnabled();
+        propagateLinkedChange (detailChannelIndex, [value] (AudioChannel& c) { c.setInputEnabled (value); });
+    };
+
     outputPanel.onChannelChanged = [this]
     {
         if (detailViewOpen)
             channelStrips[(size_t) detailChannelIndex]->refreshFromChannel();
     };
+    outputPanel.onOutputGainChanged = [this]
+    {
+        auto value = channels[(size_t) detailChannelIndex].getOutputGainDb();
+        propagateLinkedChange (detailChannelIndex, [value] (AudioChannel& c) { c.setOutputGainDb (value); });
+    };
+    outputPanel.onMuteChanged = [this]
+    {
+        auto value = channels[(size_t) detailChannelIndex].isOutputMuted();
+        propagateLinkedChange (detailChannelIndex, [value] (AudioChannel& c) { c.setOutputMuted (value); });
+    };
 
     addChildComponent (showView);
     addChildComponent (patchView);
+    addChildComponent (sendView);
 
     showView.onSaveSessionRequested = [this]
     {
@@ -187,6 +230,51 @@ MainComponent::MainComponent()
     patchView.onPatchSnapshotRequested = [this]
     {
         showPatchSnapshotPicker();
+    };
+
+    for (int i = 0; i < (int) sendBuses.size(); ++i)
+        sendBuses[(size_t) i].name = "Bus " + juce::String (i + 1);
+
+    sendView.onBusToggled = [this] (int busIndex, bool isOn)
+    {
+        sendBuses[(size_t) busIndex].isOn = isOn;
+    };
+    sendView.onBusRenamed = [this] (int busIndex, juce::String newName)
+    {
+        sendBuses[(size_t) busIndex].name = newName;
+    };
+    sendView.onBusPluginClicked = [this] (int busIndex)
+    {
+        if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+            return;
+
+        if (sendBuses[(size_t) busIndex].slot.isEmpty())
+            showBusSlotMenu (busIndex);
+        else
+            openBusSlotEditor (busIndex);
+    };
+    sendView.onBusPluginRightClicked = [this] (int busIndex)
+    {
+        showBusSlotMenu (busIndex);
+    };
+    sendView.onBusOutputChanged = [this] (int busIndex, int outIndex)
+    {
+        sendBuses[(size_t) busIndex].outputChannelIndex = outIndex;
+    };
+    sendView.onBusGainChanged = [this] (int busIndex, float gainDb)
+    {
+        sendBuses[(size_t) busIndex].outputGainDb = gainDb;
+    };
+    sendView.onCellToggled = [this] (int busIndex, int channel, bool nowMember)
+    {
+        sendBuses[(size_t) busIndex].members[(size_t) channel] = nowMember;
+
+        if (nowMember)
+            sendBuses[(size_t) busIndex].memberIsPre[(size_t) channel] = false;
+    };
+    sendView.onCellPrePostToggled = [this] (int busIndex, int channel, bool nowIsPre)
+    {
+        sendBuses[(size_t) busIndex].memberIsPre[(size_t) channel] = nowIsPre;
     };
 
     refreshChannelLabels();
@@ -365,6 +453,7 @@ void MainComponent::openChannelDetail (int channelIndex)
     leftSidebar.setVisible (false);
     showView.setVisible (false);
     patchView.setVisible (false);
+    sendView.setVisible (false);
 
     inputPanel.setChannel (&channels[(size_t) channelIndex]);
     inputPanel.setVisible (true);
@@ -385,6 +474,7 @@ void MainComponent::closeChannelDetail()
     leftSidebar.setVisible (true);
     showView.setVisible (false);
     patchView.setVisible (false);
+    sendView.setVisible (false);
 
     inputPanel.setVisible (false);
     inputPanel.setChannel (nullptr);
@@ -411,6 +501,7 @@ void MainComponent::showShowTab()
     outputPanel.setChannel (nullptr);
 
     patchView.setVisible (false);
+    sendView.setVisible (false);
     showView.setVisible (true);
     refreshShowView();
 
@@ -433,10 +524,33 @@ void MainComponent::showPatchTab()
     outputPanel.setChannel (nullptr);
 
     showView.setVisible (false);
+    sendView.setVisible (false);
     patchView.setVisible (true);
     refreshChannelLabels();
 
     topBar.setActiveTab (3);
+
+    resized();
+}
+
+void MainComponent::showSendTab()
+{
+    detailViewOpen = false;
+    channelDetailView.setVisible (false);
+    channelsHolder.setVisible (false);
+    leftSidebar.setVisible (false);
+
+    inputPanel.setVisible (false);
+    inputPanel.setChannel (nullptr);
+
+    outputPanel.setVisible (false);
+    outputPanel.setChannel (nullptr);
+
+    showView.setVisible (false);
+    patchView.setVisible (false);
+    sendView.setVisible (true);
+
+    topBar.setActiveTab (4);
 
     resized();
 }
@@ -451,7 +565,254 @@ void MainComponent::refreshChannelLabels()
             name = "Ch " + juce::String (ch + 1);
 
         patchView.setChannelLabel (ch, name);
+        sendView.setChannelLabel (ch, name);
     }
+}
+
+void MainComponent::propagateLinkedChange (int sourceChannel, std::function<void (AudioChannel&)> apply)
+{
+    for (auto& group : linkGroups)
+    {
+        if (! group.isOn || ! group.members[(size_t) sourceChannel])
+            continue;
+
+        for (int ch = 0; ch < numChannels; ++ch)
+        {
+            if (ch == sourceChannel || ! group.members[(size_t) ch])
+                continue;
+
+            apply (channels[(size_t) ch]);
+            channelStrips[(size_t) ch]->refreshFromChannel();
+
+            if (detailViewOpen && detailChannelIndex == ch)
+            {
+                inputPanel.setChannel (&channels[(size_t) ch]);
+                outputPanel.setChannel (&channels[(size_t) ch]);
+            }
+        }
+    }
+}
+
+void MainComponent::showBusSlotMenu (int busIndex)
+{
+    if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+        return;
+
+    juce::PopupMenu menu;
+
+    auto& currentSlot = sendBuses[(size_t) busIndex].slot;
+    auto slotHasPlugin = ! currentSlot.isEmpty();
+
+    menu.addSectionHeader ("Effets internes");
+    menu.addItem (1, "Compressor");
+
+    const auto& plugins = pluginManager.getScannedPlugins();
+
+    if (! plugins.empty())
+    {
+        menu.addSeparator();
+        menu.addSectionHeader ("Plugins VST3 (" + juce::String ((int) plugins.size()) + ")");
+
+        std::map<juce::String, std::vector<int>> byManufacturer;
+
+        for (int i = 0; i < (int) plugins.size(); ++i)
+        {
+            auto manufacturer = plugins[(size_t) i].manufacturerName.isNotEmpty()
+                                    ? plugins[(size_t) i].manufacturerName
+                                    : juce::String ("Autre");
+            byManufacturer[manufacturer].push_back (i);
+        }
+
+        for (auto& entry : byManufacturer)
+        {
+            juce::PopupMenu subMenu;
+
+            for (auto pluginIndex : entry.second)
+                subMenu.addItem (1000 + pluginIndex, plugins[(size_t) pluginIndex].name);
+
+            menu.addSubMenu (entry.first, subMenu);
+        }
+    }
+
+    bool anyHotPlugin = false;
+    for (auto& hp : hotPlugins)
+        if (hp.hasPlugin)
+            anyHotPlugin = true;
+
+    if (anyHotPlugin)
+    {
+        menu.addSeparator();
+        menu.addSectionHeader ("Hot Plugins");
+
+        for (int i = 0; i < (int) hotPlugins.size(); ++i)
+            if (hotPlugins[(size_t) i].hasPlugin)
+                menu.addItem (2000 + i, hotPlugins[(size_t) i].displayName);
+    }
+
+    if (slotHasPlugin)
+    {
+        menu.addSeparator();
+        menu.addItem (2, "Vider cet emplacement");
+    }
+
+    menu.showMenuAsync (juce::PopupMenu::Options(), [this, busIndex] (int result)
+    {
+        if (result == 0)
+            return;
+
+        if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+            return;
+
+        auto& slot = sendBuses[(size_t) busIndex].slot;
+
+        if (result == 1)
+        {
+            slot.loadInternalCompressor();
+            refreshBusPluginButtonText (busIndex);
+        }
+        else if (result == 2)
+        {
+            slot.clear();
+            refreshBusPluginButtonText (busIndex);
+        }
+        else if (result >= 2000)
+        {
+            loadHotPluginIntoBusSlot (busIndex, result - 2000);
+        }
+        else if (result >= 1000)
+        {
+            loadVst3IntoBusSlot (busIndex, result - 1000);
+        }
+    });
+}
+
+void MainComponent::loadVst3IntoBusSlot (int busIndex, int pluginListIndex)
+{
+    const auto& plugins = pluginManager.getScannedPlugins();
+
+    if (pluginListIndex < 0 || pluginListIndex >= (int) plugins.size())
+        return;
+
+    if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+        return;
+
+    const auto& desc = plugins[(size_t) pluginListIndex];
+    auto& slot = sendBuses[(size_t) busIndex].slot;
+
+    sendView.setBusPluginName (busIndex, "Chargement...");
+
+    slot.loadVst3Async (desc, pluginManager.getFormatManager(),
+                        [this, busIndex] (bool success, juce::String error)
+    {
+        if (! success)
+        {
+            DBG ("Echec du chargement VST3 (bus) : " << error);
+            sendView.setBusPluginName (busIndex, "+");
+            return;
+        }
+
+        refreshBusPluginButtonText (busIndex);
+    });
+}
+
+void MainComponent::loadHotPluginIntoBusSlot (int busIndex, int hotIndex)
+{
+    if (hotIndex < 0 || hotIndex >= (int) hotPlugins.size())
+        return;
+
+    if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+        return;
+
+    auto& hotPlugin = hotPlugins[(size_t) hotIndex];
+
+    if (! hotPlugin.hasPlugin)
+        return;
+
+    auto& slot = sendBuses[(size_t) busIndex].slot;
+
+    sendView.setBusPluginName (busIndex, "Chargement...");
+
+    auto savedState = hotPlugin.state;
+
+    slot.loadVst3Async (hotPlugin.description, pluginManager.getFormatManager(),
+                        [this, busIndex, savedState] (bool success, juce::String error)
+    {
+        if (! success)
+        {
+            DBG ("Echec du chargement du Hot Plugin (bus) : " << error);
+            sendView.setBusPluginName (busIndex, "+");
+            return;
+        }
+
+        auto& slotRef = sendBuses[(size_t) busIndex].slot;
+        slotRef.applyStateAndRecapture (savedState);
+
+        refreshBusPluginButtonText (busIndex);
+    });
+}
+
+void MainComponent::refreshBusPluginButtonText (int busIndex)
+{
+    if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+        return;
+
+    sendView.setBusPluginName (busIndex, sendBuses[(size_t) busIndex].slot.getDisplayName());
+}
+
+void MainComponent::openFloatingEditor (const juce::String& title, juce::Component* editorToOwn)
+{
+    // Fenetre non modale (voir PluginEditorWindow.h) : contrairement au
+    // DialogWindow::LaunchOptions::launchAsync() utilise auparavant, elle
+    // ne bloque pas le reste de l'application. On la garde en vie dans
+    // openPluginEditorWindows tant qu'elle n'est pas fermee par
+    // l'utilisateur (closeButtonPressed -> onClosed la retire de la liste).
+    auto window = std::make_unique<PluginEditorWindow> (title, editorToOwn);
+    auto* rawPtr = window.get();
+
+    window->onClosed = [this, rawPtr]
+    {
+        openPluginEditorWindows.erase (
+            std::remove_if (openPluginEditorWindows.begin(), openPluginEditorWindows.end(),
+                            [rawPtr] (const std::unique_ptr<PluginEditorWindow>& p) { return p.get() == rawPtr; }),
+            openPluginEditorWindows.end());
+    };
+
+    openPluginEditorWindows.push_back (std::move (window));
+}
+
+void MainComponent::openBusSlotEditor (int busIndex)
+{
+    if (busIndex < 0 || busIndex >= (int) sendBuses.size())
+        return;
+
+    auto& slot = sendBuses[(size_t) busIndex].slot;
+
+    if (slot.isEmpty())
+        return;
+
+    auto title = sendBuses[(size_t) busIndex].name + " - " + slot.getDisplayName();
+
+    if (slot.isVst3())
+    {
+        auto* instance = slot.getVstInstance();
+
+        if (instance == nullptr)
+            return;
+
+        auto* editor = instance->createEditorIfNeeded();
+
+        if (editor == nullptr)
+        {
+            DBG ("Ce plugin n'a pas d'interface graphique.");
+            return;
+        }
+
+        openFloatingEditor (title, editor);
+        return;
+    }
+
+    auto editor = std::make_unique<CompressorEditor>(slot.getCompressor());
+    openFloatingEditor (title, editor.release());
 }
 
 void MainComponent::loadLinkGroupsFromXml (const juce::XmlElement& rootXml)
@@ -1219,6 +1580,8 @@ void MainComponent::openSlotEditor (int channelIndex, int slotIndex)
     if (slot.isEmpty())
         return;
 
+    auto title = "Ch " + juce::String (channelIndex + 1) + " - " + slot.getDisplayName();
+
     if (slot.isVst3())
     {
         auto* instance = slot.getVstInstance();
@@ -1234,26 +1597,12 @@ void MainComponent::openSlotEditor (int channelIndex, int slotIndex)
             return;
         }
 
-        juce::DialogWindow::LaunchOptions options;
-        options.content.setOwned (editor);
-        options.dialogTitle = "Ch " + juce::String (channelIndex + 1) + " - " + slot.getDisplayName();
-        options.escapeKeyTriggersCloseButton = true;
-        options.useNativeTitleBar = true;
-        options.resizable = true;
-        options.launchAsync();
-
+        openFloatingEditor (title, editor);
         return;
     }
 
     auto editor = std::make_unique<CompressorEditor>(slot.getCompressor());
-
-    juce::DialogWindow::LaunchOptions options;
-    options.content.setOwned (editor.release());
-    options.dialogTitle = "Ch " + juce::String (channelIndex + 1) + " - " + slot.getDisplayName();
-    options.escapeKeyTriggersCloseButton = true;
-    options.useNativeTitleBar = true;
-    options.resizable = false;
-    options.launchAsync();
+    openFloatingEditor (title, editor.release());
 }
 
 void MainComponent::refreshSlotButtonText (int channelIndex, int slotIndex)
@@ -1266,6 +1615,12 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 {
     for (auto& channel : channels)
         channel.prepare (sampleRate, samplesPerBlockExpected);
+
+    for (auto& bus : sendBuses)
+    {
+        bus.busBuffer.setSize (1, juce::jmax (samplesPerBlockExpected, 32), false, false, true);
+        bus.slot.prepare (sampleRate, samplesPerBlockExpected);
+    }
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -1279,6 +1634,43 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
     for (auto& channel : channels)
         channel.processAndWriteOutput (buffer, startSample, numSamples);
+
+    // Bus SEND (Phase 1) : chaque bus actif somme le signal (pre ou post
+    // effets, selon la case) de ses chaines membres, le fait passer dans son
+    // propre plugin partage, puis ADDITIONNE (jamais ne remplace) le
+    // resultat sur son canal de sortie -- pour pouvoir se melanger au son
+    // sec des chaines sur la meme sortie physique, sans l'effacer.
+    for (auto& bus : sendBuses)
+    {
+        if (! bus.isOn)
+            continue;
+
+        if (bus.busBuffer.getNumSamples() < numSamples)
+            bus.busBuffer.setSize (1, numSamples, false, false, true);
+
+        bus.busBuffer.clear (0, 0, numSamples);
+
+        for (int ch = 0; ch < numChannels; ++ch)
+        {
+            if (! bus.members[(size_t) ch])
+                continue;
+
+            if (bus.memberIsPre[(size_t) ch])
+                channels[(size_t) ch].addPreFxSendTo (bus.busBuffer, 0, numSamples);
+            else
+                channels[(size_t) ch].addPostFxSendTo (bus.busBuffer, 0, numSamples);
+        }
+
+        auto* busSamples = bus.busBuffer.getWritePointer (0);
+        bus.slot.process (busSamples, numSamples);
+
+        auto busGainLinear = juce::Decibels::decibelsToGain (bus.outputGainDb, -60.0f);
+        for (int i = 0; i < numSamples; ++i)
+            busSamples[i] *= busGainLinear;
+
+        if (bus.outputChannelIndex >= 0 && bus.outputChannelIndex < buffer.getNumChannels())
+            buffer.addFrom (bus.outputChannelIndex, startSample, bus.busBuffer, 0, 0, numSamples);
+    }
 }
 
 void MainComponent::releaseResources()
@@ -1332,6 +1724,7 @@ void MainComponent::resized()
     channelDetailView.setBounds (fullArea);
     showView.setBounds (fullArea);
     patchView.setBounds (fullArea);
+    sendView.setBounds (fullArea);
 
     updatePanelPositions();
 }
