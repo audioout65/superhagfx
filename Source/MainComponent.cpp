@@ -271,10 +271,15 @@ MainComponent::MainComponent()
 
         if (nowMember)
             sendBuses[(size_t) busIndex].memberIsPre[(size_t) channel] = false;
+
+        channelStrips[(size_t) channel]->setSendBusMembership (busIndex, nowMember,
+                                                               sendBuses[(size_t) busIndex].memberIsPre[(size_t) channel]);
     };
     sendView.onCellPrePostToggled = [this] (int busIndex, int channel, bool nowIsPre)
     {
         sendBuses[(size_t) busIndex].memberIsPre[(size_t) channel] = nowIsPre;
+
+        channelStrips[(size_t) channel]->setSendBusMembership (busIndex, true, nowIsPre);
     };
 
     refreshChannelLabels();

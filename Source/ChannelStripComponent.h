@@ -45,6 +45,59 @@ private:
     bool pendingClick = false;
 };
 
+// Petite rangee de badges montrant, dans OVERVIEW, a quels bus SEND cette
+// chaine appartient (voir MainComponent::sendBuses / SendView -- Phase 3).
+// Case bleue = membre en POST-effets, case orange = membre en PRE-effets,
+// case vide/grise = pas membre de ce bus. Nombre fixe ici (8) pour eviter
+// une dependance a SendView.h ; doit rester synchronise avec
+// SendView::numSendBuses.
+class SendBadgeRow : public juce::Component
+{
+public:
+    static constexpr int numBuses = 8;
+
+    void setMembership (int busIndex, bool isMember, bool isPre)
+    {
+        if (busIndex < 0 || busIndex >= numBuses)
+            return;
+
+        member[(size_t) busIndex] = isMember;
+        pre[(size_t) busIndex] = isPre;
+        repaint();
+    }
+
+    void paint (juce::Graphics& g) override
+    {
+        auto cellWidth = (float) getWidth() / (float) numBuses;
+
+        for (int i = 0; i < numBuses; ++i)
+        {
+            juce::Rectangle<float> cell ((float) i * cellWidth, 0.0f, cellWidth, (float) getHeight());
+            auto inner = cell.reduced (1.0f);
+
+            if (member[(size_t) i])
+            {
+                g.setColour (pre[(size_t) i] ? juce::Colour (0xffd98a3d) : juce::Colour (0xff4ea1ff));
+                g.fillRoundedRectangle (inner, 2.0f);
+                g.setColour (juce::Colours::black.withAlpha (0.6f));
+                g.setFont (juce::Font (8.0f, juce::Font::bold));
+                g.drawText (juce::String (i + 1), inner.toNearestInt(), juce::Justification::centred);
+            }
+            else
+            {
+                g.setColour (juce::Colour (0xff2c313a));
+                g.fillRoundedRectangle (inner, 2.0f);
+                g.setColour (juce::Colour (0xff4a515c));
+                g.drawRoundedRectangle (inner, 2.0f, 0.5f);
+            }
+        }
+    }
+
+private:
+    std::array<bool, numBuses> member {};
+    std::array<bool, numBuses> pre {};
+};
+
 // L'interface complete d'un seul canal pour la vue OVERVIEW (texte seul
 // dans les slots, pas de miniature -- celles-ci sont reservees a RACK) :
 // section INPUT en haut, pile de slots au milieu, section OUTPUT en bas.
@@ -72,6 +125,8 @@ public:
             channel.setCustomName (channelLabel.getText());
         };
         addAndMakeVisible (channelLabel);
+
+        addAndMakeVisible (sendBadges);
 
         inputSectionLabel.setText ("INPUT", juce::dontSendNotification);
         inputSectionLabel.setFont (10.0f);
@@ -233,6 +288,14 @@ public:
             refreshSlotButtonText (slot, channel.getSlot (slot).getDisplayName());
     }
 
+    // SEND (Phase 3) : met a jour l'affichage du badge du bus busIndex pour
+    // cette chaine (appele par MainComponent quand la grille de l'onglet
+    // SEND change).
+    void setSendBusMembership (int busIndex, bool isMember, bool isPre)
+    {
+        sendBadges.setMembership (busIndex, isMember, isPre);
+    }
+
     void updateMeter()
     {
         auto outTarget = channel.getLevel();
@@ -280,7 +343,7 @@ public:
         auto fullArea = getLocalBounds().reduced (10);
 
         auto probe = fullArea;
-        probe.removeFromTop (22 + 6);
+        probe.removeFromTop (22 + 6 + 16 + 4);
         probe.removeFromTop (14 + 4 + 20 + 8);
         auto inputFixedBottom = 66 + 10 + 20 + 10;
         probe.removeFromTop (inputFixedBottom);
@@ -299,6 +362,9 @@ public:
 
         channelLabel.setBounds (area.removeFromTop (22));
         area.removeFromTop (6);
+
+        sendBadges.setBounds (area.removeFromTop (16));
+        area.removeFromTop (4);
 
         inputSectionLabel.setBounds (area.removeFromTop (14));
         area.removeFromTop (4);
@@ -398,6 +464,7 @@ private:
     juce::Rectangle<int> inputMeterBounds, outputMeterBounds;
 
     ChannelNameButton channelLabel;
+    SendBadgeRow sendBadges;
 
     juce::Label inputSectionLabel;
     juce::ComboBox inputCombo;
