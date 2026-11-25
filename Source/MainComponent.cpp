@@ -110,7 +110,13 @@ MainComponent::MainComponent()
     {
         promptForNameAndSave ("Enregistrer la session",
                               juce::File::getSpecialLocation (juce::File::userDocumentsDirectory),
+                              [this] (juce::File f) { writeSessionXmlTo (f); },
                               [this] { refreshShowView(); });
+    };
+    showView.onOverwriteSessionRequested = [this] (juce::File file)
+    {
+        confirmAndOverwriteFile (file, "Ecraser cette session avec l'etat actuel ?",
+                                 [this] (juce::File f) { writeSessionXmlTo (f); });
     };
     showView.onLoadSessionRequested = [this] (juce::File file)
     {
@@ -125,7 +131,13 @@ MainComponent::MainComponent()
     {
         promptForNameAndSave ("Enregistrer un snapshot",
                               getSnapshotsFolder(),
+                              [this] (juce::File f) { writeSessionXmlTo (f); },
                               [this] { refreshShowView(); });
+    };
+    showView.onOverwriteSnapshotRequested = [this] (juce::File file)
+    {
+        confirmAndOverwriteFile (file, "Ecraser ce snapshot avec l'etat actuel ?",
+                                 [this] (juce::File f) { writeSessionXmlTo (f); });
     };
     showView.onRecallSnapshotRequested = [this] (juce::File file)
     {
@@ -134,6 +146,27 @@ MainComponent::MainComponent()
     showView.onDeleteSnapshotRequested = [this] (juce::File file)
     {
         confirmAndDeleteFile (file, "Supprimer ce snapshot ?");
+    };
+
+    showView.onSavePatchSnapshotRequested = [this]
+    {
+        promptForNameAndSave ("Enregistrer un Patch Snapshot",
+                              getPatchSnapshotsFolder(),
+                              [this] (juce::File f) { writePatchSnapshotXmlTo (f); },
+                              [this] { refreshShowView(); });
+    };
+    showView.onOverwritePatchSnapshotRequested = [this] (juce::File file)
+    {
+        confirmAndOverwriteFile (file, "Ecraser ce Patch Snapshot avec la config actuelle ?",
+                                 [this] (juce::File f) { writePatchSnapshotXmlTo (f); });
+    };
+    showView.onRecallPatchSnapshotRequested = [this] (juce::File file)
+    {
+        recallPatchSnapshot (file);
+    };
+    showView.onDeletePatchSnapshotRequested = [this] (juce::File file)
+    {
+        confirmAndDeleteFile (file, "Supprimer ce Patch Snapshot ?");
     };
 
     for (int i = 0; i < PatchView::numLinkGroups; ++i)
@@ -150,6 +183,10 @@ MainComponent::MainComponent()
     patchView.onCellToggled = [this] (int groupIndex, int channel, bool nowMember)
     {
         linkGroups[(size_t) groupIndex].members[(size_t) channel] = nowMember;
+    };
+    patchView.onPatchSnapshotRequested = [this]
+    {
+        showPatchSnapshotPicker();
     };
 
     refreshChannelLabels();
@@ -417,6 +454,119 @@ void MainComponent::refreshChannelLabels()
     }
 }
 
+void MainComponent::loadLinkGroupsFromXml (const juce::XmlElement& rootXml)
+{
+    auto* linkGroupsXml = rootXml.getChildByName ("LinkGroups");
+
+    if (linkGroupsXml == nullptr)
+        return;
+
+    for (auto* groupXml : linkGroupsXml->getChildWithTagNameIterator ("Group"))
+    {
+        auto index = groupXml->getIntAttribute ("index", -1);
+
+        if (index < 0 || index >= PatchView::numLinkGroups)
+            continue;
+
+        auto& group = linkGroups[(size_t) index];
+        group.name = groupXml->getStringAttribute ("name", group.name);
+        group.isOn = groupXml->getBoolAttribute ("isOn", group.isOn);
+
+        auto membersStr = groupXml->getStringAttribute ("members", "");
+
+        for (int ch = 0; ch < numChannels && ch < membersStr.length(); ++ch)
+            group.members[(size_t) ch] = (membersStr[ch] == '1');
+
+        patchView.setGroupName (index, group.name);
+        patchView.setGroupOn (index, group.isOn);
+
+        for (int ch = 0; ch < numChannels; ++ch)
+            patchView.setMember (index, ch, group.members[(size_t) ch]);
+    }
+}
+
+juce::File MainComponent::getPatchSnapshotsFolder()
+{
+    return juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile ("LiveRack Patch Snapshots");
+}
+
+void MainComponent::writePatchSnapshotXmlTo (const juce::File& file)
+{
+    juce::XmlElement root ("LiveRackPatchSnapshot");
+
+    auto* linkGroupsXml = root.createNewChildElement ("LinkGroups");
+
+    for (int i = 0; i < PatchView::numLinkGroups; ++i)
+    {
+        auto* groupXml = linkGroupsXml->createNewChildElement ("Group");
+        groupXml->setAttribute ("index", i);
+        groupXml->setAttribute ("name", linkGroups[(size_t) i].name);
+        groupXml->setAttribute ("isOn", linkGroups[(size_t) i].isOn);
+
+        juce::String membersStr;
+        for (int ch = 0; ch < numChannels; ++ch)
+            membersStr += linkGroups[(size_t) i].members[(size_t) ch] ? "1" : "0";
+
+        groupXml->setAttribute ("members", membersStr);
+    }
+
+    if (root.writeTo (file))
+        DBG ("Patch Snapshot ecrit : " << file.getFullPathName());
+    else
+        DBG ("Echec de l'ecriture du Patch Snapshot : " << file.getFullPathName());
+}
+
+void MainComponent::recallPatchSnapshot (const juce::File& file)
+{
+    auto xml = juce::parseXML (file);
+
+    if (xml == nullptr || ! xml->hasTagName ("LiveRackPatchSnapshot"))
+    {
+        DBG ("Fichier Patch Snapshot invalide : " << file.getFullPathName());
+        return;
+    }
+
+    loadLinkGroupsFromXml (*xml);
+
+    DBG ("Patch Snapshot rappele depuis : " << file.getFullPathName());
+}
+
+void MainComponent::showPatchSnapshotPicker()
+{
+    auto folder = getPatchSnapshotsFolder();
+    auto files = folder.findChildFiles (juce::File::findFiles, false, "*.liverack");
+
+    if (files.isEmpty())
+    {
+        juce::NativeMessageBox::showMessageBoxAsync (juce::AlertWindow::InfoIcon,
+            "Patch Snapshots",
+            "Aucun Patch Snapshot enregistre pour le moment.",
+            nullptr);
+        return;
+    }
+
+    std::sort (files.begin(), files.end(), [] (const juce::File& a, const juce::File& b)
+    {
+        return a.getFileNameWithoutExtension().compareIgnoreCase (b.getFileNameWithoutExtension()) < 0;
+    });
+
+    juce::PopupMenu menu;
+
+    for (int i = 0; i < files.size(); ++i)
+        menu.addItem (i + 1, files[i].getFileNameWithoutExtension());
+
+    menu.showMenuAsync (juce::PopupMenu::Options(), [this, files] (int result)
+    {
+        if (result <= 0)
+            return;
+
+        auto index = result - 1;
+
+        if (index >= 0 && index < files.size())
+            recallPatchSnapshot (files[index]);
+    });
+}
+
 void MainComponent::writeSessionXmlTo (const juce::File& file)
 {
     juce::XmlElement root ("LiveRackSession");
@@ -426,6 +576,22 @@ void MainComponent::writeSessionXmlTo (const juce::File& file)
         auto* channelXml = root.createNewChildElement ("Channel");
         channelXml->setAttribute ("index", ch);
         channels[(size_t) ch].saveToXml (*channelXml);
+    }
+
+    auto* linkGroupsXml = root.createNewChildElement ("LinkGroups");
+
+    for (int i = 0; i < PatchView::numLinkGroups; ++i)
+    {
+        auto* groupXml = linkGroupsXml->createNewChildElement ("Group");
+        groupXml->setAttribute ("index", i);
+        groupXml->setAttribute ("name", linkGroups[(size_t) i].name);
+        groupXml->setAttribute ("isOn", linkGroups[(size_t) i].isOn);
+
+        juce::String membersStr;
+        for (int ch = 0; ch < numChannels; ++ch)
+            membersStr += linkGroups[(size_t) i].members[(size_t) ch] ? "1" : "0";
+
+        groupXml->setAttribute ("members", membersStr);
     }
 
     if (root.writeTo (file))
@@ -464,6 +630,8 @@ void MainComponent::loadSessionXmlFrom (const juce::File& file)
         });
     }
 
+    loadLinkGroupsFromXml (*xml);
+
     DBG ("Chargement en cours depuis : " << file.getFullPathName());
 }
 
@@ -494,10 +662,13 @@ void MainComponent::recallSnapshotFast (const juce::File& file)
         });
     }
 
+    loadLinkGroupsFromXml (*xml);
+
     DBG ("Rappel a chaud depuis : " << file.getFullPathName());
 }
 
-void MainComponent::promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder, std::function<void()> afterSave)
+void MainComponent::promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder,
+                                           std::function<void (juce::File)> saveFunction, std::function<void()> afterSave)
 {
     targetFolder.createDirectory();
 
@@ -507,7 +678,7 @@ void MainComponent::promptForNameAndSave (const juce::String& dialogTitle, const
     nameWindow->addButton ("Annuler", 0, juce::KeyPress (juce::KeyPress::escapeKey));
 
     nameWindow->enterModalState (true, juce::ModalCallbackFunction::create (
-        [this, nameWindow, targetFolder, afterSave] (int result)
+        [this, nameWindow, targetFolder, saveFunction, afterSave] (int result)
     {
         std::unique_ptr<juce::AlertWindow> windowDeleter (nameWindow);
 
@@ -520,11 +691,33 @@ void MainComponent::promptForNameAndSave (const juce::String& dialogTitle, const
             chosenName = "Sans titre " + juce::Time::getCurrentTime().toString (true, true, false, true);
 
         auto file = targetFolder.getChildFile (chosenName + ".liverack");
-        writeSessionXmlTo (file);
+
+        if (saveFunction != nullptr)
+            saveFunction (file);
 
         if (afterSave != nullptr)
             afterSave();
     }), true);
+}
+
+void MainComponent::confirmAndOverwriteFile (const juce::File& file, const juce::String& message, std::function<void (juce::File)> saveFunction)
+{
+    auto fullMessage = message + "\n\"" + file.getFileNameWithoutExtension() + "\"";
+
+    juce::NativeMessageBox::showOkCancelBox (juce::AlertWindow::QuestionIcon,
+        "Confirmation",
+        fullMessage,
+        nullptr,
+        juce::ModalCallbackFunction::create ([this, file, saveFunction] (int result)
+        {
+            if (result != 1)
+                return;
+
+            if (saveFunction != nullptr)
+                saveFunction (file);
+
+            refreshShowView();
+        }));
 }
 
 void MainComponent::confirmAndDeleteFile (const juce::File& file, const juce::String& message)
@@ -574,8 +767,20 @@ void MainComponent::refreshShowView()
         return a.first.compareIgnoreCase (b.first) < 0;
     });
 
+    std::vector<std::pair<juce::String, juce::File>> patchSnapshots;
+
+    auto patchSnapshotsFolder = getPatchSnapshotsFolder();
+    for (auto& file : patchSnapshotsFolder.findChildFiles (juce::File::findFiles, false, "*.liverack"))
+        patchSnapshots.push_back ({ file.getFileNameWithoutExtension(), file });
+
+    std::sort (patchSnapshots.begin(), patchSnapshots.end(), [] (auto& a, auto& b)
+    {
+        return a.first.compareIgnoreCase (b.first) < 0;
+    });
+
     showView.setSessions (sessions);
     showView.setSnapshots (snapshots);
+    showView.setPatchSnapshots (patchSnapshots);
 }
 
 void MainComponent::saveSession()

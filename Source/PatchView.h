@@ -171,7 +171,9 @@ private:
     std::array<juce::String, numChannels> channelLabels;
 };
 
-// Vue PATCH : colonne des groupes a gauche, grille a droite.
+// Vue PATCH : colonne des groupes a gauche, grille a droite. Un bouton en
+// haut permet de rappeler directement un Patch Snapshot (config des
+// groupes uniquement, sans toucher aux plugins) sans passer par SHOW.
 class PatchView : public juce::Component
 {
 public:
@@ -183,6 +185,10 @@ public:
         titleLabel.setFont (juce::Font (13.0f, juce::Font::bold));
         titleLabel.setColour (juce::Label::textColourId, juce::Colour (0xff8a92a0));
         addAndMakeVisible (titleLabel);
+
+        recallPatchSnapshotButton.setButtonText ("Rappeler Patch...");
+        recallPatchSnapshotButton.onClick = [this] { if (onPatchSnapshotRequested != nullptr) onPatchSnapshotRequested(); };
+        addAndMakeVisible (recallPatchSnapshotButton);
 
         for (int i = 0; i < numLinkGroups; ++i)
         {
@@ -226,7 +232,12 @@ public:
     void resized() override
     {
         auto area = getLocalBounds().reduced (16);
-        titleLabel.setBounds (area.removeFromTop (20));
+
+        auto titleArea = area.removeFromTop (22);
+        recallPatchSnapshotButton.setBounds (titleArea.removeFromRight (150));
+        titleArea.removeFromRight (8);
+        titleLabel.setBounds (titleArea);
+
         area.removeFromTop (6);
 
         constexpr int rowHeaderWidth = 150;
@@ -244,9 +255,11 @@ public:
     std::function<void (int groupIndex, bool isOn)> onGroupToggled;
     std::function<void (int groupIndex, juce::String newName)> onGroupRenamed;
     std::function<void (int groupIndex, int channel, bool nowMember)> onCellToggled;
+    std::function<void()> onPatchSnapshotRequested;
 
 private:
     juce::Label titleLabel;
+    juce::TextButton recallPatchSnapshotButton;
     std::vector<std::unique_ptr<LinkGroupRowHeader>> rowHeaders;
     LinkGroupCellGrid grid;
 };

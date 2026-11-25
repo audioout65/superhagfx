@@ -82,11 +82,19 @@ private:
     void writeSessionXmlTo (const juce::File& file);
     void loadSessionXmlFrom (const juce::File& file);
     void recallSnapshotFast (const juce::File& file);
-    void promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder, std::function<void()> afterSave);
+    void promptForNameAndSave (const juce::String& dialogTitle, const juce::File& targetFolder,
+                               std::function<void (juce::File)> saveFunction, std::function<void()> afterSave);
+    void confirmAndOverwriteFile (const juce::File& file, const juce::String& message, std::function<void (juce::File)> saveFunction);
     juce::File getSnapshotsFolder();
     void refreshShowView();
     void confirmAndDeleteFile (const juce::File& file, const juce::String& message);
     void refreshChannelLabels();
+    void loadLinkGroupsFromXml (const juce::XmlElement& rootXml);
+
+    juce::File getPatchSnapshotsFolder();
+    void writePatchSnapshotXmlTo (const juce::File& file);
+    void recallPatchSnapshot (const juce::File& file);
+    void showPatchSnapshotPicker();
 
     std::array<AudioChannel, numChannels> channels;
     TopBarComponent topBar;
